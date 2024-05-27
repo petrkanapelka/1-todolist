@@ -1,9 +1,12 @@
 import { FC } from "react"
 import { Button } from "../button/Button"
+import { FilteredProps } from "../../App"
 
 type ToDoListPropsType = {
     title: string
     tasks: Array<TaskType>
+    removeHandler: (id:number)=>void
+    changeFilter: (status: FilteredProps)=>void
 }
 
 export type TaskType = {
@@ -12,14 +15,15 @@ export type TaskType = {
     isDone: boolean
 }
 
-export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks }: ToDoListPropsType) => {
+export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, removeHandler, changeFilter }: ToDoListPropsType) => {
 
     const taskElements: Array<JSX.Element> | JSX.Element = (tasks.length !== 0)
-        ? tasks.map((task, index) => {
+        ? tasks.map((task) => {
             return (
-                <li key='index'>
+                <li key={task.id}>
                     <input type="checkbox" checked={task.isDone} />
                     <span>{task.title}</span>
+                    <Button title={"x"} onClick={()=>removeHandler(task.id)}/>
                 </li>
             )
         })
@@ -36,9 +40,9 @@ export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks }: ToDoListPropsT
                 {taskElements}
             </ul>
             <div>
-                <Button title="All" />
-                <Button title="Active" />
-                <Button title="Completed" />
+                <Button onClick={()=>{changeFilter('all')}} title="All" />
+                <Button onClick={()=>{changeFilter('active')}} title="Active" />
+                <Button onClick={()=>{changeFilter('completed')}} title="Completed" />
             </div>
         </div>
     );
