@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
 
-export type FilteredProps = 'all' | 'completed' | 'active'
+export type FilteredProps = 'all' | 'completed' | 'active'|'three-tasks'
 
 function App() {
     const toDoListTitle: string = `What to learn?`;
@@ -50,6 +50,10 @@ function App() {
 
   if (filter === 'completed') {
     tasksForTodolist = tasks.filter(task => task.isDone === true)
+  }
+
+  if (filter === 'three-tasks') {
+    tasksForTodolist = tasks.filter(task => task.id <= 3)
   }
 
   const changeFilter = (status: FilteredProps) => {
