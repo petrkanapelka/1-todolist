@@ -27,6 +27,11 @@ function App() {
             title: 'Typescript',
             isDone: false
         },
+        {
+            id: 5,
+            title: 'Styled components',
+            isDone: true
+        },
     ]
 
     const [tasks, setTasks] = useState<Array<TaskType>>(tasks1);
