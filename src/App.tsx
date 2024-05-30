@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
 
-export type FilteredProps = 'all' | 'completed' | 'active'|'three-tasks'
+export type FilteredProps = 'all' | 'completed' | 'active' | 'three-tasks'
 
 function App() {
     const toDoListTitle: string = `What to learn?`;
@@ -46,28 +46,9 @@ function App() {
         setTasks(newTasks);
     }
 
-    const [filter, setFilter] = useState('all')
-
-  let tasksForTodolist = tasks
-  if (filter === 'active') {
-    tasksForTodolist = tasks.filter(task => task.isDone === false)
-  }
-
-  if (filter === 'completed') {
-    tasksForTodolist = tasks.filter(task => task.isDone === true)
-  }
-
-  if (filter === 'three-tasks') {
-    tasksForTodolist = tasks.filter(task => task.id <= 3)
-  }
-
-  const changeFilter = (status: FilteredProps) => {
-    setFilter(status)
-  }
-
     return (
         <div className="App">
-            <ToDoList title={toDoListTitle} tasks={tasksForTodolist} removeHandler={removeHandler} changeFilter={changeFilter} removeAllHandler={removeAllHandler}/>
+            <ToDoList title={toDoListTitle} tasks={tasks} removeHandler={removeHandler} /* changeFilter={changeFilter} */ removeAllHandler={removeAllHandler} />
         </div>
     );
 }
