@@ -45,6 +45,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, removeHandler, c
                 <Button onClick={()=>{changeFilter('all')}} title="All" />
                 <Button onClick={()=>{changeFilter('active')}} title="Active" />
                 <Button onClick={()=>{changeFilter('completed')}} title="Completed" />
+                <Button onClick={()=>{changeFilter('three-tasks')}} title="Show first three tasks" />
             </div>
         </div>
     );
