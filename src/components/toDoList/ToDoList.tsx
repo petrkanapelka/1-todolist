@@ -7,6 +7,7 @@ type ToDoListPropsType = {
     tasks: Array<TaskType>
     removeHandler: (id:number)=>void
     changeFilter: (status: FilteredProps)=>void
+    removeAllHandler:()=>void
 }
 
 export type TaskType = {
@@ -15,7 +16,7 @@ export type TaskType = {
     isDone: boolean
 }
 
-export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, removeHandler, changeFilter }: ToDoListPropsType) => {
+export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, removeHandler, changeFilter, removeAllHandler }: ToDoListPropsType) => {
 
     const taskElements: Array<JSX.Element> | JSX.Element = (tasks.length !== 0)
         ? tasks.map((task) => {
@@ -39,6 +40,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, removeHandler, c
             <ul>
                 {taskElements}
             </ul>
+            <Button onClick={()=>{removeAllHandler()}} title="Delete all tasks" />
             <div>
                 <Button onClick={()=>{changeFilter('all')}} title="All" />
                 <Button onClick={()=>{changeFilter('active')}} title="Active" />
