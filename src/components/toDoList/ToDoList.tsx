@@ -33,7 +33,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, removeHandler, c
     return (
         <div>
             <h3>{title}</h3>
-            <div>
+            <div className="inputField">
                 <input />
                 <Button title="+" />
             </div>
