@@ -36,6 +36,11 @@ function App() {
         setTasks(newTasks);
     }
 
+    const removeAllHandler = () => {
+        const newTasks = tasks.filter(el => !el.id)
+        setTasks(newTasks);
+    }
+
     const [filter, setFilter] = useState('all')
 
   let tasksForTodolist = tasks
@@ -53,7 +58,7 @@ function App() {
 
     return (
         <div className="App">
-            <ToDoList title={toDoListTitle} tasks={tasksForTodolist} removeHandler={removeHandler} changeFilter={changeFilter} />
+            <ToDoList title={toDoListTitle} tasks={tasksForTodolist} removeHandler={removeHandler} changeFilter={changeFilter} removeAllHandler={removeAllHandler}/>
         </div>
     );
 }
