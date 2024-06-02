@@ -1,21 +1,22 @@
-import { FC, useState } from "react"
+import { FC, useState, ChangeEvent, KeyboardEvent } from "react"
 import { Button } from "../button/Button"
 import { FilteredProps } from "../../App"
 
 type ToDoListPropsType = {
     title: string
     tasks: Array<TaskType>
-    removeHandler: (id: number) => void
+    removeHandler: (id: string) => void
     removeAllHandler: () => void
+    addNewTask: (title: string) => void
 }
 
 export type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
 
-export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, removeHandler, removeAllHandler }: ToDoListPropsType) => {
+export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, removeHandler, removeAllHandler, addNewTask }: ToDoListPropsType) => {
 
     const [filter, setFilter] = useState('all')
 
@@ -30,7 +31,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, removeHandler, r
     }
 
     if (filter === 'three-tasks') {
-        tasksForTodolist = tasks.filter(task => task.id <= 3)
+        tasksForTodolist = tasks.filter((task,indx) => indx <= 2)
     }
 
     const changeFilter = (status: FilteredProps) => {
@@ -49,12 +50,30 @@ export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, removeHandler, r
         })
         : <span>Your tasklist is empty</span>
 
+    const [inputValue, setInputValue] = useState('');
+
+    const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.currentTarget.value)
+    }
+
+    const onClickInputHandler = () => {
+        inputValue && addNewTask(inputValue);
+        setInputValue('')
+    }
+
+    const onKeyDownHandler = (e:KeyboardEvent<HTMLInputElement>) => {
+        if(e.key === 'Enter') {
+            inputValue && addNewTask(inputValue);
+            setInputValue('')
+        }
+    }
+
     return (
         <div>
             <h3>{title}</h3>
             <div className="inputField">
-                <input />
-                <Button title="+" />
+                <input value={inputValue} onChange={onChangeInputHandler} onKeyDown={onKeyDownHandler}/>
+                <Button onClick={onClickInputHandler} title="+" />
             </div>
             <ul>
                 {taskElements}
