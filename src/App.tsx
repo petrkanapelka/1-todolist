@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
+import { v1 as uuidv1, v1 } from 'uuid'
 
 export type FilteredProps = 'all' | 'completed' | 'active' | 'three-tasks'
 
@@ -8,27 +9,27 @@ function App() {
     const toDoListTitle: string = `What to learn?`;
     const tasks1: Array<TaskType> = [
         {
-            id: 1,
+            id: v1(),
             title: 'HTML/CSS',
             isDone: true
         },
         {
-            id: 2,
+            id: v1(),
             title: 'Javascript',
             isDone: true
         },
         {
-            id: 3,
+            id: v1(),
             title: 'React',
             isDone: false
         },
         {
-            id: 4,
+            id: v1(),
             title: 'Typescript',
             isDone: false
         },
         {
-            id: 5,
+            id: v1(),
             title: 'Styled components',
             isDone: true
         },
@@ -36,7 +37,7 @@ function App() {
 
     const [tasks, setTasks] = useState<Array<TaskType>>(tasks1);
 
-    const removeHandler = (id: number) => {
+    const removeHandler = (id: string) => {
         const newTasks = tasks.filter(el => el.id !== id)
         setTasks(newTasks);
     }
@@ -46,9 +47,15 @@ function App() {
         setTasks(newTasks);
     }
 
+    const addNewTasks = (title: string) => {
+        const newTask = {id: v1(), title: title, isDone: false}
+        const newTasks = [newTask, ...tasks]
+        setTasks(newTasks);
+    }
+
     return (
         <div className="App">
-            <ToDoList title={toDoListTitle} tasks={tasks} removeHandler={removeHandler} /* changeFilter={changeFilter} */ removeAllHandler={removeAllHandler} />
+            <ToDoList addNewTask={addNewTasks} title={toDoListTitle} tasks={tasks} removeHandler={removeHandler} /* changeFilter={changeFilter} */ removeAllHandler={removeAllHandler} />
         </div>
     );
 }
