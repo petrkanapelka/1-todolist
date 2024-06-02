@@ -1,6 +1,8 @@
 *{
   padding: 0;
   margin: 0;
+  transition: all 0.1s ease-in-out;
+  box-sizing: content-box;
 }
 
 .App {
@@ -15,7 +17,7 @@
   border: 2px solid rgb(104, 103, 103);
   padding: 20px;
   border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
               0 6px 20px rgba(0, 0, 0, 0.1),
               0 10px 30px rgba(0, 0, 0, 0.1),
               0 14px 40px rgba(0, 0, 0, 0.1);
@@ -25,6 +27,19 @@
 button {
   margin-right: 5px;
   margin-bottom: 5px;
+  padding: 3px;
+  border: none;
+
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: green;
+  color: white;
+}
+
+button:active {
+  scale: 0.9;
 }
 
 li {
