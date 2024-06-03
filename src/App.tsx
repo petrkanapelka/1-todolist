@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
-import { v1 as uuidv1, v1 } from 'uuid'
+import { v1 } from 'uuid'
 
 export type FilteredProps = 'all' | 'completed' | 'active' | 'three-tasks'
 
@@ -48,7 +48,7 @@ function App() {
     }
 
     const addNewTasks = (title: string) => {
-        const newTask = {id: v1(), title: title, isDone: false}
+        const newTask = { id: v1(), title, isDone: false }
         const newTasks = [newTask, ...tasks]
         setTasks(newTasks);
     }
