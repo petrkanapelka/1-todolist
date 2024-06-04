@@ -1,7 +1,6 @@
-import { FC, useState, ChangeEvent, KeyboardEvent, useRef } from "react";
+import { FC, useState, ChangeEvent, KeyboardEvent, /* useRef */ } from "react";
 import { Button } from "../button/Button";
 import { FilteredProps } from "../../App";
-import { log } from "console";
 
 type ToDoListPropsType = {
     title: string;
