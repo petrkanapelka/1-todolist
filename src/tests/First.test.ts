@@ -1,3 +1,6 @@
+export {};
+
+
 let a: number, b: number;
 
 beforeEach(() => {
