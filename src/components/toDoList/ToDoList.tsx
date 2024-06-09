@@ -1,6 +1,8 @@
-import { FC, useState, ChangeEvent, KeyboardEvent, /* useRef */ } from "react";
+import { FC, useState, ChangeEvent, KeyboardEvent, ReactNode, /* useRef */ } from "react";
 import { Button } from "../button/Button";
 import { FilteredProps } from "../../App";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 
 type ToDoListPropsType = {
     title: string;
@@ -8,6 +10,7 @@ type ToDoListPropsType = {
     removeHandler: (id: string) => void;
     removeAllHandler: () => void;
     addNewTask: (title: string) => void;
+    children: ReactNode
 };
 
 export type TaskType = {
@@ -22,6 +25,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     removeHandler,
     removeAllHandler,
     addNewTask,
+    children
 }: ToDoListPropsType) => {
     const [filter, setFilter] = useState("all");
 
@@ -80,6 +84,8 @@ export const ToDoList: FC<ToDoListPropsType> = ({
         }
     };
 
+    const [listRef] = useAutoAnimate<HTMLUListElement>()
+
     /* const taskInputRef = useRef<HTMLInputElement>(null);
 
     const addTaskHandler = () => {
@@ -88,6 +94,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
             taskInputRef.current.value = "";
         }
     }; */
+
     return (
         <div>
             <h3>{title}</h3>
@@ -105,7 +112,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                 <Button onClick={addTaskHandler} title="+" disable={!Boolean(taskInputRef.current?.value)}/> */}
             </div>
             {inputValue.length >= 15 && <small style={{ fontSize: '12px', color: 'red' }}>Enter fewer than 15 characters.</small>}
-            <ul>{taskElements}</ul>
+            <ul ref={listRef}>{taskElements}</ul>
             <Button
                 onClick={() => {
                     removeAllHandler();
@@ -138,6 +145,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                     title="Show first three tasks"
                 />
             </div>
+            {children}
         </div>
     );
 };
