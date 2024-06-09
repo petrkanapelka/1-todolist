@@ -55,7 +55,43 @@ function App() {
 
     return (
         <div className="App">
-            <ToDoList addNewTask={addNewTasks} title={toDoListTitle} tasks={tasks} removeHandler={removeHandler} /* changeFilter={changeFilter} */ removeAllHandler={removeAllHandler} />
+            <ToDoList
+                addNewTask={addNewTasks}
+                title={toDoListTitle}
+                tasks={tasks}
+                removeHandler={removeHandler}
+                removeAllHandler={removeAllHandler}>
+
+                    <div>
+                        <div>Many interesting information</div>
+                    </div>
+
+            </ToDoList>
+
+            <ToDoList
+                addNewTask={addNewTasks}
+                title={toDoListTitle}
+                tasks={tasks}
+                removeHandler={removeHandler}
+                removeAllHandler={removeAllHandler}>
+
+                    <div>
+                        <div>Many interesting information</div>
+                        <div>Many interesting information</div>
+                        <div>Many interesting information</div>
+                        <div>Many interesting information</div>
+                        <div>Many interesting information</div>
+                        <div>Many interesting information</div>
+                        <div>Many interesting information</div>
+                        <div>Many interesting information</div>
+                        <button>Button</button>
+                        <button>Button</button>
+                        <button>Button</button>
+                        <button>Button</button>
+                        <button>Button</button>
+                    </div>
+
+            </ToDoList>
         </div>
     );
 }
