@@ -10,6 +10,7 @@ type ToDoListPropsType = {
     removeHandler: (id: string) => void;
     removeAllHandler: () => void;
     addNewTask: (title: string) => void;
+    changeTaskStatus: (taskID: string, newIsDoneValue: boolean) => void
     children: ReactNode
 };
 
@@ -25,9 +26,10 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     removeHandler,
     removeAllHandler,
     addNewTask,
+    changeTaskStatus,
     children
 }: ToDoListPropsType) => {
-    const [filter, setFilter] = useState("all");
+    const [filter, setFilter] = useState<FilteredProps>("all");
 
     let tasksForTodolist = tasks;
 
@@ -50,10 +52,13 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     const taskElements: Array<JSX.Element> | JSX.Element =
         tasks.length !== 0 ? (
             tasksForTodolist.map((task) => {
+                const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                    changeTaskStatus(task.id, e.currentTarget.checked)
+                }
                 return (
                     <li key={task.id}>
-                        <input type="checkbox" checked={task.isDone} />
-                        <span>{task.title}</span>
+                        <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
+                        <span className={task.isDone ? 'task-done' : 'task'}>{task.title}</span>
                         <Button title={"x"} onClick={() => removeHandler(task.id)} />
                     </li>
                 );
@@ -69,22 +74,28 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     };
 
     const onClickInputHandler = () => {
-        if (inputValue.length < 15 && inputValue) {
-            addNewTask(inputValue);
+        if (inputValue.length < 20 && inputValue.trim() !== '') {
+            addNewTask(inputValue.trim());
+            setInputValue("");
+        } else {
+            setError('Title is required');
             setInputValue("");
         }
     };
 
     const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        setError(null)
         if (e.key === "Enter") {
-            if (inputValue.length < 15 && inputValue) {
-                addNewTask(inputValue);
+            if (inputValue.length < 20 && inputValue.trim() !== '') {
+                addNewTask(inputValue.trim());
                 setInputValue("");
             }
         }
     };
 
     const [listRef] = useAutoAnimate<HTMLUListElement>()
+
+    const [error, setError] = useState<string | null>(null)
 
     /* const taskInputRef = useRef<HTMLInputElement>(null);
 
@@ -99,7 +110,12 @@ export const ToDoList: FC<ToDoListPropsType> = ({
         <div>
             <h3>{title}</h3>
             <div className="inputField">
-                <input maxLength={15} value={inputValue} onChange={onChangeInputHandler} onKeyDown={onKeyDownHandler} />
+                <input maxLength={20}
+                    value={inputValue}
+                    onChange={onChangeInputHandler}
+                    onKeyDown={onKeyDownHandler}
+                    className={error ? 'error' : ''}
+                />
                 <Button onClick={onClickInputHandler} title="+" disable={!Boolean(inputValue)} />
                 {/* <input
                     minLength={2}
@@ -111,7 +127,9 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                 />
                 <Button onClick={addTaskHandler} title="+" disable={!Boolean(taskInputRef.current?.value)}/> */}
             </div>
-            {inputValue.length >= 15 && <small style={{ fontSize: '12px', color: 'red' }}>Enter fewer than 15 characters.</small>}
+            {inputValue.length >= 20 && <small className="error-message">Enter fewer than 20 characters.</small>}
+            {error && <div className={'error-message'}>{error}</div>}
+
             <ul ref={listRef}>{taskElements}</ul>
             <Button
                 onClick={() => {
@@ -125,24 +143,28 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                         changeFilter("all");
                     }}
                     title="All"
+                    className={filter === 'all' ? 'active-filter' : ''}
                 />
                 <Button
                     onClick={() => {
                         changeFilter("active");
                     }}
                     title="Active"
+                    className={filter === 'active' ? 'active-filter' : ''}
                 />
                 <Button
                     onClick={() => {
                         changeFilter("completed");
                     }}
                     title="Completed"
+                    className={filter === 'completed' ? 'active-filter' : ''}
                 />
                 <Button
                     onClick={() => {
                         changeFilter("three-tasks");
                     }}
                     title="Show first three tasks"
+                    className={filter === 'three-tasks' ? 'active-filter' : ''}
                 />
             </div>
             {children}
