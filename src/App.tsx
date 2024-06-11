@@ -45,56 +45,54 @@ function App() {
         },
     ]
 
-    //AXIOS///////////////////////////////////////////////////////////////////////////
+    //!AXIOS///////////////////////////////////////////////////////////////////////////
 
-    const [todos, setTodos] = useState<Array<PropsType>>([])
+    // const [todos, setTodos] = useState<Array<PropsType>>([])
 
-    const axiosRequest = () => {
-        axios.get('https://jsonplaceholder.typicode.com/todos')
-            .then((res) => {
-                setTodos(res.data)
-            })
-    }
+    // const axiosRequest = () => {
+    //     axios.get('https://jsonplaceholder.typicode.com/todos')
+    //         .then((res) => {
+    //             setTodos(res.data)
+    //         })
+    // }
 
-    useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/todos')
-            .then(response => response.json())
-            .then(json => setTodos(json))
+    // useEffect(() => {
+    //     fetch('https://jsonplaceholder.typicode.com/todos')
+    //         .then(response => response.json())
+    //         .then(json => setTodos(json))
 
-        axios.get('https://jsonplaceholder.typicode.com/todos')
-            .then((res) => {
-                setTodos(res.data)
-            })
+    //     axios.get('https://jsonplaceholder.typicode.com/todos')
+    //         .then((res) => {
+    //             setTodos(res.data)
+    //         })
 
-        axiosRequest()
-    }, [])
+    //     axiosRequest()
+    // }, [])
 
-    const mapTodos = todos.map(el => {
-        return (
-            <li>
-                <span>{el.id} - </span>
-                <span>{el.title}</span>
-                <span>{el.completed}</span>
-            </li>
-        )
-    })
+    // const mapTodos = todos.map(el => {
+    //     return (
+    //         <li>
+    //             <span>{el.id} - </span>
+    //             <span>{el.title}</span>
+    //             <span>{el.completed}</span>
+    //         </li>
+    //     )
+    // })
 
-    const onClickHandler = () => {
-        setTodos([])
-    }
+    // const onClickHandler = () => {
+    //     setTodos([])
+    // }
 
-    const onClickHandlerForRedisplay = () => {
-        axios.get('https://jsonplaceholder.typicode.com/todos')
-            .then((res) => {
-                setTodos(res.data)
-            })
+    // const onClickHandlerForRedisplay = () => {
+    //     axios.get('https://jsonplaceholder.typicode.com/todos')
+    //         .then((res) => {
+    //             setTodos(res.data)
+    //         })
 
-        axiosRequest()
-    }
+    //     axiosRequest()
+    // }
 
-    ////////////////////////////////////////////////////////////////////////
-
-
+    //!ENDAXIOS/////////////////////////////////////////////////////////////
 
 
     const [tasks, setTasks] = useState<Array<TaskType>>(tasks1);
@@ -115,6 +113,17 @@ function App() {
         setTasks(newTasks);
     }
 
+    const changeTaskStatus = (taskId: string, newIsDoneValue: boolean) => {
+        /* const task: TaskType | undefined = tasks.find(t => t.id === taskId);
+        if(task) {
+            task.isDone = newIsDoneValue;
+            setTasks([...tasks]);
+        } */
+
+        const nextState: Array<TaskType> = tasks.map(t => t.id === taskId? {...t, isDone: newIsDoneValue} : t);
+        setTasks(nextState)
+    }
+
     return (
         <div className="App">
             <ToDoList
@@ -122,14 +131,16 @@ function App() {
                 title={toDoListTitle}
                 tasks={tasks}
                 removeHandler={removeHandler}
-                removeAllHandler={removeAllHandler}>
+                changeTaskStatus={changeTaskStatus}
+                removeAllHandler={removeAllHandler}
+                >
 
                 <div>
                     <div>Many interesting information</div>
                 </div>
 
             </ToDoList>
-
+{/* 
             <ToDoList
                 addNewTask={addNewTasks}
                 title={toDoListTitle}
@@ -153,10 +164,10 @@ function App() {
                     <button>Button</button>
                 </div>
 
-            </ToDoList>
+            </ToDoList> */}
 
 {/* Axios */}
-            <div className="Axios">
+            {/* <div className="Axios">
                 <button onClick={onClickHandler}>CLEAN POSTS</button>
                 <button onClick={onClickHandlerForRedisplay}>REDISPLAY</button>
                 <ul>
@@ -172,7 +183,7 @@ function App() {
 
                     {mapTodos}
                 </ul>
-            </div>
+            </div> */}
 {/* Axios */}
 
         </div>
