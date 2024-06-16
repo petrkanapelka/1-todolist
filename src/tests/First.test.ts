@@ -19,3 +19,4 @@ describe("Arithmetic operations", () => {
     expect(product).toBe(12);
   });
 });
+
