@@ -88,3 +88,9 @@ li {
 .active-filter {
   background-color: lightgreen;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
