@@ -31,19 +31,35 @@ export const ToDoList: FC<ToDoListPropsType> = ({
 }: ToDoListPropsType) => {
     const [filter, setFilter] = useState<FilteredProps>("all");
 
-    let tasksForTodolist = tasks;
+    const filterTasks = () => {
+        let tasksForTodolist = tasks;
 
-    if (filter === "active") {
-        tasksForTodolist = tasks.filter((task) => task.isDone === false);
+        switch (filter) {
+            case 'active':
+                return tasksForTodolist = tasks.filter((task) => task.isDone === false);
+            case 'completed':
+                return tasksForTodolist = tasks.filter((task) => task.isDone === true);
+            case 'three-tasks':
+                return tasksForTodolist = tasks.filter((task, indx) => indx <= 2);;
+            default:
+                return tasksForTodolist;
+        }
+
+
+        // if (filter === "active") {
+        //     return tasksForTodolist = tasks.filter((task) => task.isDone === false);
+        // }
+
+        // if (filter === "completed") {
+        //     return tasksForTodolist = tasks.filter((task) => task.isDone === true);
+        // }
+
+        // if (filter === "three-tasks") {
+        //     return tasksForTodolist = tasks.filter((task, indx) => indx <= 2);
+        // }
+        // return tasksForTodolist;
     }
 
-    if (filter === "completed") {
-        tasksForTodolist = tasks.filter((task) => task.isDone === true);
-    }
-
-    if (filter === "three-tasks") {
-        tasksForTodolist = tasks.filter((task, indx) => indx <= 2);
-    }
 
     const changeFilter = (status: FilteredProps) => {
         setFilter(status);
@@ -51,7 +67,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
 
     const taskElements: Array<JSX.Element> | JSX.Element =
         tasks.length !== 0 ? (
-            tasksForTodolist.map((task) => {
+            filterTasks().map((task) => {
                 const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
                     changeTaskStatus(task.id, e.currentTarget.checked)
                 }
@@ -108,7 +124,15 @@ export const ToDoList: FC<ToDoListPropsType> = ({
 
     return (
         <div>
-            <h3>{title}</h3>
+            <div className="header">
+                <h3>{title}</h3>
+                <Button
+                    onClick={() => {
+                        removeAllHandler();
+                    }}
+                    title="Delete all tasks"
+                />
+            </div>
             <div className="inputField">
                 <input maxLength={20}
                     value={inputValue}
@@ -130,13 +154,6 @@ export const ToDoList: FC<ToDoListPropsType> = ({
             {inputValue.length >= 20 && <small className="error-message">Enter fewer than 20 characters.</small>}
             {error && <div className={'error-message'}>{error}</div>}
 
-            <ul ref={listRef}>{taskElements}</ul>
-            <Button
-                onClick={() => {
-                    removeAllHandler();
-                }}
-                title="Delete all tasks"
-            />
             <div>
                 <Button
                     onClick={() => {
@@ -163,10 +180,13 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                     onClick={() => {
                         changeFilter("three-tasks");
                     }}
-                    title="Show first three tasks"
+                    title="First 3 tasks"
                     className={filter === 'three-tasks' ? 'active-filter' : ''}
                 />
             </div>
+
+            <ul ref={listRef}>{taskElements}</ul>
+
             {children}
         </div>
     );
