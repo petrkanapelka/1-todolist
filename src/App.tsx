@@ -120,7 +120,7 @@ function App() {
             setTasks([...tasks]);
         } */
 
-        const nextState: Array<TaskType> = tasks.map(t => t.id === taskId? {...t, isDone: newIsDoneValue} : t);
+        const nextState: Array<TaskType> = tasks.map(t => t.id === taskId ? { ...t, isDone: newIsDoneValue } : t);
         setTasks(nextState)
     }
 
@@ -133,40 +133,15 @@ function App() {
                 removeHandler={removeHandler}
                 changeTaskStatus={changeTaskStatus}
                 removeAllHandler={removeAllHandler}
-                >
+            >
 
                 <div>
                     <div>Many interesting information</div>
                 </div>
 
             </ToDoList>
-{/* 
-            <ToDoList
-                addNewTask={addNewTasks}
-                title={toDoListTitle}
-                tasks={tasks}
-                removeHandler={removeHandler}
-                removeAllHandler={removeAllHandler}>
 
-                <div>
-                    <div>Many interesting information</div>
-                    <div>Many interesting information</div>
-                    <div>Many interesting information</div>
-                    <div>Many interesting information</div>
-                    <div>Many interesting information</div>
-                    <div>Many interesting information</div>
-                    <div>Many interesting information</div>
-                    <div>Many interesting information</div>
-                    <button>Button</button>
-                    <button>Button</button>
-                    <button>Button</button>
-                    <button>Button</button>
-                    <button>Button</button>
-                </div>
-
-            </ToDoList> */}
-
-{/* Axios */}
+            {/* Axios */}
             {/* <div className="Axios">
                 <button onClick={onClickHandler}>CLEAN POSTS</button>
                 <button onClick={onClickHandlerForRedisplay}>REDISPLAY</button>
@@ -184,7 +159,7 @@ function App() {
                     {mapTodos}
                 </ul>
             </div> */}
-{/* Axios */}
+            {/* Axios */}
 
         </div>
     );

@@ -44,20 +44,6 @@ export const ToDoList: FC<ToDoListPropsType> = ({
             default:
                 return tasksForTodolist;
         }
-
-
-        // if (filter === "active") {
-        //     return tasksForTodolist = tasks.filter((task) => task.isDone === false);
-        // }
-
-        // if (filter === "completed") {
-        //     return tasksForTodolist = tasks.filter((task) => task.isDone === true);
-        // }
-
-        // if (filter === "three-tasks") {
-        //     return tasksForTodolist = tasks.filter((task, indx) => indx <= 2);
-        // }
-        // return tasksForTodolist;
     }
 
 
@@ -89,7 +75,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
         setInputValue(e.currentTarget.value);
     };
 
-    const onClickInputHandler = () => {
+    const validateImput = () => {
         if (inputValue.length < 20 && inputValue.trim() !== '') {
             addNewTask(inputValue.trim());
             setInputValue("");
@@ -97,15 +83,16 @@ export const ToDoList: FC<ToDoListPropsType> = ({
             setError('Title is required');
             setInputValue("");
         }
+    }
+
+    const onClickInputHandler = () => {
+        validateImput()
     };
 
     const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null)
         if (e.key === "Enter") {
-            if (inputValue.length < 20 && inputValue.trim() !== '') {
-                addNewTask(inputValue.trim());
-                setInputValue("");
-            }
+            validateImput()
         }
     };
 
