@@ -6,6 +6,7 @@
 }
 
 .App {
+  gap: 50px;
   padding: 30px;
   display: flex;
   justify-content: center;
@@ -13,7 +14,6 @@
 }
 
 .App>div {
-  margin-right: 50px;
   border: 2px solid rgb(104, 103, 103);
   padding: 20px;
   border-radius: 20px;
@@ -27,16 +27,16 @@
 button {
   margin-right: 5px;
   margin-bottom: 5px;
-  padding: 3px;
+  padding: 4px;
   border: none;
   font-size: 1rem;
+  border-radius: 8px;
 
 }
 
 button:hover {
   cursor: pointer;
-  background-color: green;
-  color: white;
+  background-color: lightgreen;
 }
 
 button:active {
@@ -56,7 +56,7 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0px;
+  margin-bottom: 15px;
 }
 
 .inputField>input {
@@ -93,4 +93,15 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 5px;
+}
+
+.header button {
+  margin: 0;
+}
+
+.todolist-title-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
