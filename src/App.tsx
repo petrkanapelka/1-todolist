@@ -40,67 +40,51 @@ const tasks1: Array<TaskType> = [
     },
 ]
 
+const tasks2: Array<TaskType> = [
+    {
+        id: v1(),
+        title: 'Bread',
+        isDone: true
+    },
+    {
+        id: v1(),
+        title: 'Meat',
+        isDone: true
+    },
+    {
+        id: v1(),
+        title: 'Beer',
+        isDone: false
+    },
+    {
+        id: v1(),
+        title: 'Vodka',
+        isDone: false
+    },
+]
+
 function App() {
 
-    //! Operationns with tasks
-
-    const [tasks, setTasks] = useState<Array<TaskType>>(tasks1);
-
-    const removeHandler = (id: string) => {
-        const newTasks = tasks.filter(el => el.id !== id)
-        setTasks(newTasks);
-    }
-
-    const removeAllHandler = () => {
-        const newTasks = tasks.filter(el => !el.id)
-        setTasks(newTasks);
-    }
-
-    const addNewTasks = (title: string) => {
-        const newTask = { id: v1(), title, isDone: false }
-        const newTasks = [newTask, ...tasks]
-        setTasks(newTasks);
-    }
-
-    const changeTaskStatus = (taskId: string, newIsDoneValue: boolean) => {
-
-        const nextState: Array<TaskType> = tasks.map(t => t.id === taskId ? { ...t, isDone: newIsDoneValue } : t);
-        setTasks(nextState)
-    }
-
-    //! Filtration
-
-    //const [filter, setFilter] = useState<FilterStatusType>('all');
-
-    const filterTasks = (filter:FilterStatusType) => {
-
-        let tasksForTodolist = tasks;
-
-        switch (filter) {
-            case 'active':
-                return tasksForTodolist = tasks.filter((task) => task.isDone === false);
-            case 'completed':
-                return tasksForTodolist = tasks.filter((task) => task.isDone === true);
-            case 'three-tasks':
-                return tasksForTodolist = tasks.filter((task, indx) => indx <= 2);;
-            default:
-                return tasksForTodolist;
-        }
-    }
-
     //! ToDoLists
+    let toDoList1ID = v1()
+    let toDoList2ID = v1()
 
     const toDoList1: ToDoListType = {
-        id: v1(),
+        id: toDoList1ID,
         title: `What to learn?`,
         filter: 'all'
     }
 
     const toDoList2: ToDoListType = {
-        id: v1(),
+        id: toDoList2ID,
         title: `What to buy?`,
         filter: 'active'
     }
+
+    let [tasks, setTasks] = useState({
+        [toDoList1ID]: tasks1,
+        [toDoList2ID]: tasks2,
+    })
 
     const toDoListsDefault: ToDoListType[] = [toDoList1, toDoList2]
 
@@ -113,6 +97,54 @@ function App() {
         setToDoLists(newToDoLists)
     };
 
+    //! Operationns with tasks
+
+    const removeHandler = (id: string, toDoListID: string) => {
+        const removeTask = tasks[toDoListID].filter(el => el.id !== id)
+        tasks[toDoListID] = removeTask
+        setTasks({...tasks});
+    }
+
+    const removeAllHandler = (toDoListID: string) => {
+        const removeTask = tasks[toDoListID].filter(el => !el.id)
+        tasks[toDoListID] = removeTask
+        setTasks({...tasks});
+
+    }
+
+    const addNewTasks = (title: string, toDoListID: string) => {
+        const newTask = { id: v1(), title, isDone: false }
+        const newTasks = [newTask, ...tasks[toDoListID]]
+        tasks[toDoListID] = newTasks
+        setTasks({...tasks});
+    }
+
+    const changeTaskStatus = (taskId: string, newIsDoneValue: boolean, toDoListID: string) => {
+
+        const nextState: Array<TaskType> = tasks[toDoListID].map(t => t.id === taskId ? { ...t, isDone: newIsDoneValue } : t);
+        tasks[toDoListID] = nextState
+        setTasks({...tasks})
+    }
+
+    //! Filtration
+
+
+    const filterTasks = (filter: FilterStatusType, toDoListID: string) => {
+
+        let tasksForTodolist = tasks[toDoListID];
+
+        switch (filter) {
+            case 'active':
+                return tasksForTodolist = tasks[toDoListID].filter((task) => task.isDone === false);
+            case 'completed':
+                return tasksForTodolist = tasks[toDoListID].filter((task) => task.isDone === true);
+            case 'three-tasks':
+                return tasksForTodolist = tasks[toDoListID].filter((task, indx) => indx <= 2);;
+            default:
+                return tasksForTodolist;
+        }
+    }
+
     const mappedToDoLists = toDoLists.map(t => {
         return (
             <ToDoList
@@ -121,7 +153,7 @@ function App() {
                 addNewTask={addNewTasks}
                 title={t.title}
                 filter={t.filter}
-                tasks={tasks}
+                tasks={tasks[t.id]}
                 removeHandler={removeHandler}
                 changeTaskStatus={changeTaskStatus}
                 removeAllHandler={removeAllHandler}
@@ -131,6 +163,8 @@ function App() {
             </ToDoList>
         )
     })
+
+    
 
     return (
         <div className="App">
