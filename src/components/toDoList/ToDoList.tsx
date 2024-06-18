@@ -9,11 +9,11 @@ type ToDoListPropsType = {
     title: string
     tasks: Array<TaskType>
     filter: FilterStatusType
-    removeHandler: (id: string) => void;
-    removeAllHandler: () => void
-    addNewTask: (title: string) => void;
-    changeTaskStatus: (taskID: string, newIsDoneValue: boolean) => void
-    filterTasks: (staus: FilterStatusType) => TaskType[]
+    removeHandler: (id: string, toDoListID: string) => void;
+    removeAllHandler: (toDoListID: string) => void
+    addNewTask: (title: string, toDoListID: string) => void;
+    changeTaskStatus: (taskID: string, newIsDoneValue: boolean, toDoListID: string) => void
+    filterTasks: (status: FilterStatusType, toDoListID: string) => TaskType[]
     changeFilter: (status: FilterStatusType, toDoListId: string) => void
     children?: ReactNode
 };
@@ -40,15 +40,15 @@ export const ToDoList: FC<ToDoListPropsType> = ({
 
     const taskElements: Array<JSX.Element> | JSX.Element =
         tasks.length !== 0 ? (
-            filterTasks(filter).map((task) => {
+            filterTasks(filter, id).map((task) => {
                 const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                    changeTaskStatus(task.id, e.currentTarget.checked)
+                    changeTaskStatus(task.id, e.currentTarget.checked, id)
                 }
                 return (
                     <li key={task.id}>
                         <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
                         <span className={task.isDone ? 'task-done' : 'task'}>{task.title}</span>
-                        <Button title={"x"} onClick={() => removeHandler(task.id)} />
+                        <Button title={"x"} onClick={() => removeHandler(task.id, id)} />
                     </li>
                 );
             })
@@ -64,7 +64,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
 
     const validateImput = () => {
         if (inputValue.length < 20 && inputValue.trim() !== '') {
-            addNewTask(inputValue.trim());
+            addNewTask(inputValue.trim(), id);
             setInputValue("");
         } else {
             setError('Title is required');
@@ -93,7 +93,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                 <h3>{title}</h3>
                 <Button
                     onClick={() => {
-                        removeAllHandler();
+                        removeAllHandler(id);
                     }}
                     title="Delete all tasks"
                 />
