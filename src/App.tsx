@@ -1,99 +1,48 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
 import { v1 } from 'uuid'
-import axios from 'axios';
 
-type PropsType =
+
+export type FilterStatusType = 'all' | 'completed' | 'active' | 'three-tasks';
+
+export type ToDoListType = {
+    id: string
+    title: string
+    filter: FilterStatusType
+}
+
+const tasks1: Array<TaskType> = [
     {
-        userId: number,
-        id: number,
-        title: string,
-        completed: boolean
-    }
-
-
-export type FilteredProps = 'all' | 'completed' | 'active' | 'three-tasks'
+        id: v1(),
+        title: 'HTML/CSS',
+        isDone: true
+    },
+    {
+        id: v1(),
+        title: 'Javascript',
+        isDone: true
+    },
+    {
+        id: v1(),
+        title: 'React',
+        isDone: false
+    },
+    {
+        id: v1(),
+        title: 'Typescript',
+        isDone: false
+    },
+    {
+        id: v1(),
+        title: 'Styled components',
+        isDone: true
+    },
+]
 
 function App() {
-    const toDoListTitle: string = `What to learn?`;
-    const tasks1: Array<TaskType> = [
-        {
-            id: v1(),
-            title: 'HTML/CSS',
-            isDone: true
-        },
-        {
-            id: v1(),
-            title: 'Javascript',
-            isDone: true
-        },
-        {
-            id: v1(),
-            title: 'React',
-            isDone: false
-        },
-        {
-            id: v1(),
-            title: 'Typescript',
-            isDone: false
-        },
-        {
-            id: v1(),
-            title: 'Styled components',
-            isDone: true
-        },
-    ]
 
-    //!AXIOS///////////////////////////////////////////////////////////////////////////
-
-    // const [todos, setTodos] = useState<Array<PropsType>>([])
-
-    // const axiosRequest = () => {
-    //     axios.get('https://jsonplaceholder.typicode.com/todos')
-    //         .then((res) => {
-    //             setTodos(res.data)
-    //         })
-    // }
-
-    // useEffect(() => {
-    //     fetch('https://jsonplaceholder.typicode.com/todos')
-    //         .then(response => response.json())
-    //         .then(json => setTodos(json))
-
-    //     axios.get('https://jsonplaceholder.typicode.com/todos')
-    //         .then((res) => {
-    //             setTodos(res.data)
-    //         })
-
-    //     axiosRequest()
-    // }, [])
-
-    // const mapTodos = todos.map(el => {
-    //     return (
-    //         <li>
-    //             <span>{el.id} - </span>
-    //             <span>{el.title}</span>
-    //             <span>{el.completed}</span>
-    //         </li>
-    //     )
-    // })
-
-    // const onClickHandler = () => {
-    //     setTodos([])
-    // }
-
-    // const onClickHandlerForRedisplay = () => {
-    //     axios.get('https://jsonplaceholder.typicode.com/todos')
-    //         .then((res) => {
-    //             setTodos(res.data)
-    //         })
-
-    //     axiosRequest()
-    // }
-
-    //!ENDAXIOS/////////////////////////////////////////////////////////////
-
+    //! Operationns with tasks
 
     const [tasks, setTasks] = useState<Array<TaskType>>(tasks1);
 
@@ -114,53 +63,78 @@ function App() {
     }
 
     const changeTaskStatus = (taskId: string, newIsDoneValue: boolean) => {
-        /* const task: TaskType | undefined = tasks.find(t => t.id === taskId);
-        if(task) {
-            task.isDone = newIsDoneValue;
-            setTasks([...tasks]);
-        } */
 
         const nextState: Array<TaskType> = tasks.map(t => t.id === taskId ? { ...t, isDone: newIsDoneValue } : t);
         setTasks(nextState)
     }
 
-    return (
-        <div className="App">
+    //! Filtration
+
+    //const [filter, setFilter] = useState<FilterStatusType>('all');
+
+    const filterTasks = (filter:FilterStatusType) => {
+
+        let tasksForTodolist = tasks;
+
+        switch (filter) {
+            case 'active':
+                return tasksForTodolist = tasks.filter((task) => task.isDone === false);
+            case 'completed':
+                return tasksForTodolist = tasks.filter((task) => task.isDone === true);
+            case 'three-tasks':
+                return tasksForTodolist = tasks.filter((task, indx) => indx <= 2);;
+            default:
+                return tasksForTodolist;
+        }
+    }
+
+    //! ToDoLists
+
+    const toDoList1: ToDoListType = {
+        id: v1(),
+        title: `What to learn?`,
+        filter: 'all'
+    }
+
+    const toDoList2: ToDoListType = {
+        id: v1(),
+        title: `What to buy?`,
+        filter: 'active'
+    }
+
+    const toDoListsDefault: ToDoListType[] = [toDoList1, toDoList2]
+
+    const [toDoLists, setToDoLists] = useState<ToDoListType[]>(toDoListsDefault)
+
+    const changeFilter = (status: FilterStatusType, toDoListId: string) => {
+        const newToDoLists = toDoLists.map(t => {
+            return t.id === toDoListId ? { ...t, filter: status } : t
+        })
+        setToDoLists(newToDoLists)
+    };
+
+    const mappedToDoLists = toDoLists.map(t => {
+        return (
             <ToDoList
+                key={t.id}
+                id={t.id}
                 addNewTask={addNewTasks}
-                title={toDoListTitle}
+                title={t.title}
+                filter={t.filter}
                 tasks={tasks}
                 removeHandler={removeHandler}
                 changeTaskStatus={changeTaskStatus}
                 removeAllHandler={removeAllHandler}
+                filterTasks={filterTasks}
+                changeFilter={changeFilter}
             >
-
-                <div>
-                    <div>Many interesting information</div>
-                </div>
-
             </ToDoList>
+        )
+    })
 
-            {/* Axios */}
-            {/* <div className="Axios">
-                <button onClick={onClickHandler}>CLEAN POSTS</button>
-                <button onClick={onClickHandlerForRedisplay}>REDISPLAY</button>
-                <ul>
-                    {todos.map(el => {
-                        return (
-                            <li>
-                                <span>{el.id} - </span>
-                                <span>{el.title}</span>
-                                <span>{el.completed}</span>
-                            </li>
-                        )
-                    })}
-
-                    {mapTodos}
-                </ul>
-            </div> */}
-            {/* Axios */}
-
+    return (
+        <div className="App">
+            {mappedToDoLists}
         </div>
     );
 }
