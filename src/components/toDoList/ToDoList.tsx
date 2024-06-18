@@ -15,6 +15,7 @@ type ToDoListPropsType = {
     changeTaskStatus: (taskID: string, newIsDoneValue: boolean, toDoListID: string) => void
     filterTasks: (status: FilterStatusType, toDoListID: string) => TaskType[]
     changeFilter: (status: FilterStatusType, toDoListId: string) => void
+    removeTodolistHandler: (id: string)=>void
     children?: ReactNode
 };
 
@@ -31,6 +32,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     filter,
     removeHandler,
     removeAllHandler,
+    removeTodolistHandler,
     addNewTask,
     changeTaskStatus,
     filterTasks,
@@ -38,9 +40,12 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     children
 }: ToDoListPropsType) => {
 
+    const filteredTasks = filterTasks(filter, id)
+
+
     const taskElements: Array<JSX.Element> | JSX.Element =
         tasks.length !== 0 ? (
-            filterTasks(filter, id).map((task) => {
+            filteredTasks.map((task) => {
                 const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
                     changeTaskStatus(task.id, e.currentTarget.checked, id)
                 }
@@ -88,9 +93,12 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     const [error, setError] = useState<string | null>(null)
 
     return (
-        <div>
+        <div className="todolist">
             <div className="header">
-                <h3>{title}</h3>
+                <div className={'todolist-title-container'}>
+                    <h3>{title}</h3>
+                    <Button title={'x'} onClick={()=>removeTodolistHandler(id)} />
+                </div>
                 <Button
                     onClick={() => {
                         removeAllHandler(id);
