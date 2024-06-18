@@ -1,17 +1,21 @@
 import { FC, useState, ChangeEvent, KeyboardEvent, ReactNode, /* useRef */ } from "react";
 import { Button } from "../button/Button";
-import { FilteredProps } from "../../App";
+import { FilterStatusType } from "../../App";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 
 type ToDoListPropsType = {
-    title: string;
-    tasks: Array<TaskType>;
+    id: string
+    title: string
+    tasks: Array<TaskType>
+    filter: FilterStatusType
     removeHandler: (id: string) => void;
-    removeAllHandler: () => void;
+    removeAllHandler: () => void
     addNewTask: (title: string) => void;
     changeTaskStatus: (taskID: string, newIsDoneValue: boolean) => void
-    children: ReactNode
+    filterTasks: (staus: FilterStatusType) => TaskType[]
+    changeFilter: (status: FilterStatusType, toDoListId: string) => void
+    children?: ReactNode
 };
 
 export type TaskType = {
@@ -21,39 +25,22 @@ export type TaskType = {
 };
 
 export const ToDoList: FC<ToDoListPropsType> = ({
+    id,
     title,
     tasks,
+    filter,
     removeHandler,
     removeAllHandler,
     addNewTask,
     changeTaskStatus,
+    filterTasks,
+    changeFilter,
     children
 }: ToDoListPropsType) => {
-    const [filter, setFilter] = useState<FilteredProps>("all");
-
-    const filterTasks = () => {
-        let tasksForTodolist = tasks;
-
-        switch (filter) {
-            case 'active':
-                return tasksForTodolist = tasks.filter((task) => task.isDone === false);
-            case 'completed':
-                return tasksForTodolist = tasks.filter((task) => task.isDone === true);
-            case 'three-tasks':
-                return tasksForTodolist = tasks.filter((task, indx) => indx <= 2);;
-            default:
-                return tasksForTodolist;
-        }
-    }
-
-
-    const changeFilter = (status: FilteredProps) => {
-        setFilter(status);
-    };
 
     const taskElements: Array<JSX.Element> | JSX.Element =
         tasks.length !== 0 ? (
-            filterTasks().map((task) => {
+            filterTasks(filter).map((task) => {
                 const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
                     changeTaskStatus(task.id, e.currentTarget.checked)
                 }
@@ -100,15 +87,6 @@ export const ToDoList: FC<ToDoListPropsType> = ({
 
     const [error, setError] = useState<string | null>(null)
 
-    /* const taskInputRef = useRef<HTMLInputElement>(null);
-
-    const addTaskHandler = () => {
-        if (taskInputRef.current) {
-            taskInputRef.current.value && addNewTask(taskInputRef.current.value);
-            taskInputRef.current.value = "";
-        }
-    }; */
-
     return (
         <div>
             <div className="header">
@@ -128,44 +106,40 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                     className={error ? 'error' : ''}
                 />
                 <Button onClick={onClickInputHandler} title="+" disable={!Boolean(inputValue)} />
-                {/* <input
-                    minLength={2}
-                    maxLength={15}
-                    ref={taskInputRef}
-                    value={taskInputRef.current?.value}
-                    onChange={onChangeInputHandler}
-                    onKeyDown={onKeyDownHandler}
-                />
-                <Button onClick={addTaskHandler} title="+" disable={!Boolean(taskInputRef.current?.value)}/> */}
             </div>
+
             {inputValue.length >= 20 && <small className="error-message">Enter fewer than 20 characters.</small>}
+
             {error && <div className={'error-message'}>{error}</div>}
 
             <div>
                 <Button
                     onClick={() => {
-                        changeFilter("all");
+                        changeFilter("all", id);
                     }}
                     title="All"
                     className={filter === 'all' ? 'active-filter' : ''}
                 />
+
                 <Button
                     onClick={() => {
-                        changeFilter("active");
+                        changeFilter("active", id);
                     }}
                     title="Active"
                     className={filter === 'active' ? 'active-filter' : ''}
                 />
+
                 <Button
                     onClick={() => {
-                        changeFilter("completed");
+                        changeFilter("completed", id);
                     }}
                     title="Completed"
                     className={filter === 'completed' ? 'active-filter' : ''}
                 />
+
                 <Button
                     onClick={() => {
-                        changeFilter("three-tasks");
+                        changeFilter("three-tasks", id);
                     }}
                     title="First 3 tasks"
                     className={filter === 'three-tasks' ? 'active-filter' : ''}
