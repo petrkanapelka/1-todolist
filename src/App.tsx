@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
 import { v1 } from 'uuid'
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 
 export type FilterStatusType = 'all' | 'completed' | 'active' | 'three-tasks';
@@ -10,6 +11,10 @@ export type ToDoListType = {
     id: string
     title: string
     filter: FilterStatusType
+}
+
+export type TasksStateType = {
+    [key: string]: TaskType[]
 }
 
 const tasks1: Array<TaskType> = [
@@ -48,7 +53,7 @@ const tasks2: Array<TaskType> = [
     },
     {
         id: v1(),
-        title: 'Meat',
+        title: 'Sausages',
         isDone: true
     },
     {
@@ -61,11 +66,18 @@ const tasks2: Array<TaskType> = [
         title: 'Vodka',
         isDone: false
     },
+    {
+        id: v1(),
+        title: 'Bread',
+        isDone: false
+    },
 ]
 
 function App() {
 
+
     //! ToDoLists
+
     let toDoList1ID = v1()
     let toDoList2ID = v1()
 
@@ -78,10 +90,10 @@ function App() {
     const toDoList2: ToDoListType = {
         id: toDoList2ID,
         title: `What to buy?`,
-        filter: 'active'
+        filter: 'all'
     }
 
-    let [tasks, setTasks] = useState({
+    let [tasks, setTasks] = useState<TasksStateType>({
         [toDoList1ID]: tasks1,
         [toDoList2ID]: tasks2,
     })
@@ -102,13 +114,13 @@ function App() {
     const removeHandler = (id: string, toDoListID: string) => {
         const removeTask = tasks[toDoListID].filter(el => el.id !== id)
         tasks[toDoListID] = removeTask
-        setTasks({...tasks});
+        setTasks({ ...tasks });
     }
 
     const removeAllHandler = (toDoListID: string) => {
         const removeTask = tasks[toDoListID].filter(el => !el.id)
         tasks[toDoListID] = removeTask
-        setTasks({...tasks});
+        setTasks({ ...tasks });
 
     }
 
@@ -116,14 +128,14 @@ function App() {
         const newTask = { id: v1(), title, isDone: false }
         const newTasks = [newTask, ...tasks[toDoListID]]
         tasks[toDoListID] = newTasks
-        setTasks({...tasks});
+        setTasks({ ...tasks });
     }
 
     const changeTaskStatus = (taskId: string, newIsDoneValue: boolean, toDoListID: string) => {
 
         const nextState: Array<TaskType> = tasks[toDoListID].map(t => t.id === taskId ? { ...t, isDone: newIsDoneValue } : t);
         tasks[toDoListID] = nextState
-        setTasks({...tasks})
+        setTasks({ ...tasks })
     }
 
     //! Filtration
@@ -145,6 +157,15 @@ function App() {
         }
     }
 
+    const removeTodolistHandler = (toDoListID: string) => {
+        const updatedToDoLists = toDoLists.filter(t => t.id !== toDoListID);
+        const updatedTasks = { ...tasks };
+        delete updatedTasks[toDoListID];
+        setToDoLists(updatedToDoLists);
+        setTasks(updatedTasks);
+    }
+
+
     const mappedToDoLists = toDoLists.map(t => {
         return (
             <ToDoList
@@ -155,8 +176,9 @@ function App() {
                 filter={t.filter}
                 tasks={tasks[t.id]}
                 removeHandler={removeHandler}
-                changeTaskStatus={changeTaskStatus}
                 removeAllHandler={removeAllHandler}
+                removeTodolistHandler={removeTodolistHandler}
+                changeTaskStatus={changeTaskStatus}
                 filterTasks={filterTasks}
                 changeFilter={changeFilter}
             >
@@ -164,10 +186,11 @@ function App() {
         )
     })
 
-    
+    const [listRef] = useAutoAnimate<HTMLDivElement>()
+
 
     return (
-        <div className="App">
+        <div ref={listRef} className="App">
             {mappedToDoLists}
         </div>
     );
