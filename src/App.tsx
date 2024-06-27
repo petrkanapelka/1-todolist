@@ -3,6 +3,7 @@ import './App.css';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
 import { v1 } from 'uuid'
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { AddItemForm } from './components/addItemForm/AddItemForm';
 
 
 export type FilterStatusType = 'all' | 'completed' | 'active' | 'three-tasks';
@@ -111,6 +112,11 @@ function App() {
 
     //! Operationns with tasks
 
+    const updateTasks = (newTitle: string, id: string, toDoListID: string) => {
+        console.log(newTitle)
+        setTasks({ ...tasks, [toDoListID]: tasks[toDoListID].map(t => t.id === id ? { ...t, title: newTitle } : t) })
+    }
+
     const removeHandler = (id: string, toDoListID: string) => {
         const removeTask = tasks[toDoListID].filter(el => el.id !== id)
         tasks[toDoListID] = removeTask
@@ -165,13 +171,19 @@ function App() {
         setTasks(updatedTasks);
     }
 
+    const addToDoList = (title: string) => {
+        const newToDoList: ToDoListType = { id: v1(), title, filter: 'all' }
+        setToDoLists([...toDoLists, newToDoList])
+        setTasks({ ...tasks, [newToDoList.id]: [] })
+    }
+
 
     const mappedToDoLists = toDoLists.map(t => {
         return (
             <ToDoList
                 key={t.id}
                 id={t.id}
-                addNewTask={addNewTasks}
+                addNewTasks={addNewTasks}
                 title={t.title}
                 filter={t.filter}
                 tasks={tasks[t.id]}
@@ -181,6 +193,7 @@ function App() {
                 changeTaskStatus={changeTaskStatus}
                 filterTasks={filterTasks}
                 changeFilter={changeFilter}
+                updatedTasks={updateTasks}
             >
             </ToDoList>
         )
@@ -191,7 +204,13 @@ function App() {
 
     return (
         <div ref={listRef} className="App">
-            {mappedToDoLists}
+            <div className='addnewtodolist-wrapper'>
+                <h3>Add new ToDoList</h3>
+                <AddItemForm addNewItem={addToDoList} />
+            </div>
+            <div className='todolists-wrapper'>
+                {mappedToDoLists}
+            </div>
         </div>
     );
 }
