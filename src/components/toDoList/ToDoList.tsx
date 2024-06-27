@@ -1,7 +1,9 @@
-import { FC, useState, ChangeEvent, KeyboardEvent, ReactNode, /* useRef */ } from "react";
+import { FC, ChangeEvent, ReactNode, useState, /* useRef */ } from "react";
 import { Button } from "../button/Button";
 import { FilterStatusType } from "../../App";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { AddItemForm } from "../addItemForm/AddItemForm";
+import { EditableSpan } from "../editableSpan/EditableSpan";
 
 
 type ToDoListPropsType = {
@@ -11,11 +13,12 @@ type ToDoListPropsType = {
     filter: FilterStatusType
     removeHandler: (id: string, toDoListID: string) => void;
     removeAllHandler: (toDoListID: string) => void
-    addNewTask: (title: string, toDoListID: string) => void;
+    addNewTasks: (title: string, toDoListID: string) => void;
     changeTaskStatus: (taskID: string, newIsDoneValue: boolean, toDoListID: string) => void
     filterTasks: (status: FilterStatusType, toDoListID: string) => TaskType[]
     changeFilter: (status: FilterStatusType, toDoListId: string) => void
-    removeTodolistHandler: (id: string)=>void
+    removeTodolistHandler: (id: string) => void
+    updatedTasks: (newTitle: string, id: string, toDoListID: string) => void
     children?: ReactNode
 };
 
@@ -33,10 +36,11 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     removeHandler,
     removeAllHandler,
     removeTodolistHandler,
-    addNewTask,
+    addNewTasks,
     changeTaskStatus,
     filterTasks,
     changeFilter,
+    updatedTasks,
     children
 }: ToDoListPropsType) => {
 
@@ -49,10 +53,15 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                 const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
                     changeTaskStatus(task.id, e.currentTarget.checked, id)
                 }
+
+                const updatedTasksHandler = (newTitle: string) => {
+                    updatedTasks(newTitle, task.id, id)
+                }
+
                 return (
                     <li key={task.id}>
                         <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
-                        <span className={task.isDone ? 'task-done' : 'task'}>{task.title}</span>
+                        <EditableSpan title={task.title} isDone={task.isDone} updatedItem={updatedTasksHandler} />
                         <Button title={"x"} onClick={() => removeHandler(task.id, id)} />
                     </li>
                 );
@@ -61,43 +70,22 @@ export const ToDoList: FC<ToDoListPropsType> = ({
             <span>Your tasklist is empty</span>
         );
 
-    const [inputValue, setInputValue] = useState("");
-
-    const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.currentTarget.value);
-    };
-
-    const validateImput = () => {
-        if (inputValue.length < 20 && inputValue.trim() !== '') {
-            addNewTask(inputValue.trim(), id);
-            setInputValue("");
-        } else {
-            setError('Title is required');
-            setInputValue("");
-        }
-    }
-
-    const onClickInputHandler = () => {
-        validateImput()
-    };
-
-    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
-        if (e.key === "Enter") {
-            validateImput()
-        }
-    };
 
     const [listRef] = useAutoAnimate<HTMLUListElement>()
 
-    const [error, setError] = useState<string | null>(null)
+    const addNewTaskHandler = (title: string) => {
+        addNewTasks(title, id)
+    }
+
+    const [toDoTitle, setToDoTitle] = useState(title)
+
 
     return (
         <div className="todolist">
             <div className="header">
                 <div className={'todolist-title-container'}>
-                    <h3>{title}</h3>
-                    <Button title={'x'} onClick={()=>removeTodolistHandler(id)} />
+                    <EditableSpan title={toDoTitle} updatedItem={setToDoTitle}/>
+                    <Button title={'x'} onClick={() => removeTodolistHandler(id)} />
                 </div>
                 <Button
                     onClick={() => {
@@ -106,19 +94,8 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                     title="Delete all tasks"
                 />
             </div>
-            <div className="inputField">
-                <input maxLength={20}
-                    value={inputValue}
-                    onChange={onChangeInputHandler}
-                    onKeyDown={onKeyDownHandler}
-                    className={error ? 'error' : ''}
-                />
-                <Button onClick={onClickInputHandler} title="+" disable={!Boolean(inputValue)} />
-            </div>
 
-            {inputValue.length >= 20 && <small className="error-message">Enter fewer than 20 characters.</small>}
-
-            {error && <div className={'error-message'}>{error}</div>}
+            <AddItemForm addNewItem={addNewTaskHandler} />
 
             <div>
                 <Button
