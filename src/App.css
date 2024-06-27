@@ -11,17 +11,13 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  flex-direction: column;
 }
 
-.App>div {
-  border: 2px solid rgb(104, 103, 103);
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
-    0 6px 20px rgba(0, 0, 0, 0.1),
-    0 10px 30px rgba(0, 0, 0, 0.1),
-    0 14px 40px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease-in-out;
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 button {
@@ -104,4 +100,24 @@ li {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+.todolists-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+
+}
+
+
+.todolist,
+.addnewtodolist-wrapper {
+  border: 2px solid rgb(104, 103, 103);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+    0 6px 20px rgba(0, 0, 0, 0.1),
+    0 10px 30px rgba(0, 0, 0, 0.1),
+    0 14px 40px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
 }
