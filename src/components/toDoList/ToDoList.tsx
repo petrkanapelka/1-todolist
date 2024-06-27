@@ -19,6 +19,7 @@ type ToDoListPropsType = {
     changeFilter: (status: FilterStatusType, toDoListId: string) => void
     removeTodolistHandler: (id: string) => void
     updatedTasks: (newTitle: string, id: string, toDoListID: string) => void
+    updatedToDoLists: (title: string, toDoListId: string) => void,
     children?: ReactNode
 };
 
@@ -41,6 +42,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     filterTasks,
     changeFilter,
     updatedTasks,
+    updatedToDoLists,
     children
 }: ToDoListPropsType) => {
 
@@ -77,14 +79,18 @@ export const ToDoList: FC<ToDoListPropsType> = ({
         addNewTasks(title, id)
     }
 
-    const [toDoTitle, setToDoTitle] = useState(title)
+    // const [toDoTitle, setToDoTitle] = useState(title)
+
+    const updatedToDoListsHandler = (newTitle: string) => {
+        updatedToDoLists(newTitle, id)
+    }
 
 
     return (
         <div className="todolist">
             <div className="header">
                 <div className={'todolist-title-container'}>
-                    <EditableSpan title={toDoTitle} updatedItem={setToDoTitle}/>
+                    <EditableSpan title={title} updatedItem={updatedToDoListsHandler} />
                     <Button title={'x'} onClick={() => removeTodolistHandler(id)} />
                 </div>
                 <Button

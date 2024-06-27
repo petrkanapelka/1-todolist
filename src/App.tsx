@@ -177,6 +177,10 @@ function App() {
         setTasks({ ...tasks, [newToDoList.id]: [] })
     }
 
+    const updatedToDoLists = (title: string, toDoListId: string)=>{
+        setToDoLists(toDoLists.map(tl=>tl.id === toDoListId?{...tl, title}:tl))
+    }
+
 
     const mappedToDoLists = toDoLists.map(t => {
         return (
@@ -194,6 +198,7 @@ function App() {
                 filterTasks={filterTasks}
                 changeFilter={changeFilter}
                 updatedTasks={updateTasks}
+                updatedToDoLists = {updatedToDoLists}
             >
             </ToDoList>
         )
