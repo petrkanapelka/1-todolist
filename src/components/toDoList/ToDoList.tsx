@@ -4,6 +4,7 @@ import { FilterStatusType } from "../../App";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { AddItemForm } from "../addItemForm/AddItemForm";
 import { EditableSpan } from "../editableSpan/EditableSpan";
+import { Task } from "../task/Task";
 
 
 type ToDoListPropsType = {
@@ -60,13 +61,16 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                     updatedTasks(newTitle, task.id, id)
                 }
 
-                return (
-                    <li key={task.id}>
-                        <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
-                        <EditableSpan title={task.title} isDone={task.isDone} updatedItem={updatedTasksHandler} />
-                        <Button title={"x"} onClick={() => removeHandler(task.id, id)} />
-                    </li>
-                );
+                return <Task
+                    key={task.id}
+                    title={task.title}
+                    isDone={task.isDone}
+                    taskID={task.id}
+                    tlID={id}
+                    changeTaskStatusHandler={changeTaskStatusHandler}
+                    updatedTasksHandler={updatedTasksHandler}
+                    removeHandler={removeHandler}
+                />
             })
         ) : (
             <span>Your tasklist is empty</span>
@@ -79,7 +83,6 @@ export const ToDoList: FC<ToDoListPropsType> = ({
         addNewTasks(title, id)
     }
 
-    // const [toDoTitle, setToDoTitle] = useState(title)
 
     const updatedToDoListsHandler = (newTitle: string) => {
         updatedToDoLists(newTitle, id)
