@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, ReactNode, useState, /* useRef */ } from "react";
+import { FC, ChangeEvent, ReactNode } from "react";
 import { Button } from "../button/Button";
 import { FilterStatusType } from "../../App";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
