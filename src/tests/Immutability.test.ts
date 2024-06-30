@@ -1,21 +1,38 @@
-export {};
-
-type Adresstype = {
+export type Adresstype = {
   city: string;
   street: string;
   house: number;
 };
 
-type UserType = {
+export type UserType = {
   name: string;
   age: number;
   adress: Adresstype;
 };
 
-let User: UserType;
+export const changeAge = (user: UserType, age: number): UserType => {
+  return {
+    ...user,
+    age,
+  };
+};
+
+export const changeAdress = (
+  user: UserType,
+  city = user.adress.city,
+  street = user.adress.street,
+  house = user.adress.house
+): UserType => {
+  return {
+    ...user,
+    adress: { ...user.adress, city, street, house },
+  };
+};
+
+let user: UserType;
 
 beforeEach(() => {
-  User = {
+  user = {
     name: 'Pasha',
     age: 35,
     adress: {
@@ -26,36 +43,45 @@ beforeEach(() => {
   };
 });
 
-const changeAge = (user: UserType, age: number) => {
-  return {
-    ...user,
-    age,
-  };
-};
-
-const changeAdress = (
-  user: UserType,
-  city = user.adress.city,
-  street = user.adress.street,
-  house = user.adress.house
-) => {
-  return (user = {
-    ...user,
-    adress: { ...user.adress, city, street, house },
-  });
-};
-
 describe('checked immutabillity', () => {
-  test('shoud be different ages', () => {
-    const growedUser = changeAge(User, 37);
+  test('should be different ages', () => {
+    const growedUser = changeAge(user, 37);
     expect(growedUser.age).toBe(37);
-    expect(User.age).toBe(35);
+    expect(user.age).toBe(35);
   });
-  test('shoud be different adress', () => {
-    const movedUser = changeAdress(User, 'Smorgon', 'Kupala', 22);
+
+  test('should be different address', () => {
+    const movedUser = changeAdress(user, 'Smorgon', 'Kupala', 22);
     expect(movedUser.age).toBe(35);
-    expect(User.age).toBe(35);
-    expect(User.adress).not.toBe(movedUser.adress);
+    expect(user.age).toBe(35);
+    expect(user.adress).not.toBe(movedUser.adress);
     expect(movedUser.adress.city).toBe('Smorgon');
+  });
+
+  test('should change only the city in address', () => {
+    const movedUser = changeAdress(user, 'Grodno');
+    expect(movedUser.adress.city).toBe('Grodno');
+    expect(movedUser.adress.street).toBe(user.adress.street);
+    expect(movedUser.adress.house).toBe(user.adress.house);
+  });
+
+  test('should change only the street in address', () => {
+    const movedUser = changeAdress(user, undefined, 'Mickiewicz');
+    expect(movedUser.adress.street).toBe('Mickiewicz');
+    expect(movedUser.adress.city).toBe(user.adress.city);
+    expect(movedUser.adress.house).toBe(user.adress.house);
+  });
+  test('should change only the house number in address', () => {
+    const movedUser = changeAdress(user, undefined, undefined, 100);
+    expect(movedUser.adress.house).toBe(100);
+    expect(movedUser.adress.city).toBe(user.adress.city);
+    expect(movedUser.adress.street).toBe(user.adress.street);
+  });
+
+  test('should change the name of the user', () => {
+    const renamedUser = { ...user, name: 'Alex' };
+    expect(renamedUser.name).toBe('Alex');
+    expect(renamedUser.age).toBe(user.age);
+    expect(renamedUser.adress).toBe(user.adress);
   });
 });
