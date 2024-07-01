@@ -7,18 +7,20 @@
 
 .App {
   gap: 50px;
-  padding: 30px;
+  min-width: 360px;
+  padding: 0 0 20px 0;
+  /* padding: 30px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  flex-direction: column;
+  flex-direction: column; */
 }
 
-.App {
+/* .App {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 button {
   margin-right: 5px;
@@ -39,7 +41,9 @@ button:active {
   scale: 0.9;
 }
 
-li {
+li,
+.task-item,
+.css-1p823my-MuiListItem-root {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -50,18 +54,19 @@ li {
 .inputField {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
-  margin-bottom: 15px;
+  margin: 7px 0;
 }
 
 .inputField>input {
   width: 80%;
+  margin-right: 10px;
 }
 
 .inputField>button {
   margin: 0;
-  margin-right: 5px;
+  margin-left: 10px;
 }
 
 .error {
@@ -103,21 +108,63 @@ li {
 }
 
 .todolists-wrapper {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-
+  /* display: flex;
+  gap: 15px;
+  flex-wrap:wrap;
+  max-width: fit-content; */
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  max-width: 100%;
+  /* min-width: 360px; */
 }
 
 
-.todolist,
-.addnewtodolist-wrapper {
+.todolist {
   border: 2px solid rgb(104, 103, 103);
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
-    0 6px 20px rgba(0, 0, 0, 0.1),
-    0 10px 30px rgba(0, 0, 0, 0.1),
-    0 14px 40px rgba(0, 0, 0, 0.1);
+  padding: 6px;
+  border-radius: 10px;
+  border-color: #1976D2;
   transition: box-shadow 0.3s ease-in-out;
+  align-self: flex-start;
+}
+
+.addnewtodolist-wrapper {
+  /* border: 2px solid rgb(104, 103, 103); */
+  /* border-color: #1976D2; */
+  padding: 5px 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.addnewtodolist-wrapper>.inputField {
+  justify-content: center;
+}
+
+.filter-buttons {
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px; */
+  display: grid;
+  gap: 2px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  max-width: 100%;
+}
+
+.empty-span {
+  margin: 10px auto;
+  text-align: center;
+  font-size: 16px;
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px 0;
+
 }
