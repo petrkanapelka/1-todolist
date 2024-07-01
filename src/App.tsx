@@ -4,7 +4,16 @@ import { TaskType, ToDoList } from './components/toDoList/ToDoList';
 import { v1 } from 'uuid'
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { AddItemForm } from './components/addItemForm/AddItemForm';
-
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 export type FilterStatusType = 'all' | 'completed' | 'active' | 'three-tasks';
 
@@ -177,30 +186,33 @@ function App() {
         setTasks({ ...tasks, [newToDoList.id]: [] })
     }
 
-    const updatedToDoLists = (title: string, toDoListId: string)=>{
-        setToDoLists(toDoLists.map(tl=>tl.id === toDoListId?{...tl, title}:tl))
+    const updatedToDoLists = (title: string, toDoListId: string) => {
+        setToDoLists(toDoLists.map(tl => tl.id === toDoListId ? { ...tl, title } : tl))
     }
 
 
     const mappedToDoLists = toDoLists.map(t => {
         return (
-            <ToDoList
-                key={t.id}
-                id={t.id}
-                addNewTasks={addNewTasks}
-                title={t.title}
-                filter={t.filter}
-                tasks={tasks[t.id]}
-                removeHandler={removeHandler}
-                removeAllHandler={removeAllHandler}
-                removeTodolistHandler={removeTodolistHandler}
-                changeTaskStatus={changeTaskStatus}
-                filterTasks={filterTasks}
-                changeFilter={changeFilter}
-                updatedTasks={updateTasks}
-                updatedToDoLists = {updatedToDoLists}
-            >
-            </ToDoList>
+            <Grid item>
+                <Paper elevation={3} >
+                    <ToDoList
+                        key={t.id}
+                        id={t.id}
+                        addNewTasks={addNewTasks}
+                        title={t.title}
+                        filter={t.filter}
+                        tasks={tasks[t.id]}
+                        removeHandler={removeHandler}
+                        removeAllHandler={removeAllHandler}
+                        removeTodolistHandler={removeTodolistHandler}
+                        changeTaskStatus={changeTaskStatus}
+                        filterTasks={filterTasks}
+                        changeFilter={changeFilter}
+                        updatedTasks={updateTasks}
+                        updatedToDoLists={updatedToDoLists}
+                    />
+                </Paper>
+            </Grid>
         )
     })
 
@@ -209,13 +221,41 @@ function App() {
 
     return (
         <div ref={listRef} className="App">
-            <div className='addnewtodolist-wrapper'>
-                <h3>Add new ToDoList</h3>
-                <AddItemForm addNewItem={addToDoList} />
-            </div>
-            <div className='todolists-wrapper'>
-                {mappedToDoLists}
-            </div>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ mr: 2 }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            ToDoList
+                        </Typography>
+                        <Button color="inherit">Login</Button>
+                    </Toolbar>
+                </AppBar>
+            </Box>
+            <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent:'center' }}>
+                <Grid key={v1()} container sx={{ display: 'flex', justifyContent:'center' }}>
+                    <div className='addnewtodolist-wrapper'>
+                        <h3>Add new ToDoList</h3>
+                        <AddItemForm addNewItem={addToDoList} />
+                    </div>
+                </Grid>
+            </Container>
+            <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent:'center' }}>
+                <Grid key={v1()} container sx={{ display: 'flex', justifyContent:'center' }}>
+                    <div className='todolists-wrapper'>
+                        {mappedToDoLists}
+                    </div>
+                </Grid>
+            </Container>
+
         </div>
     );
 }
