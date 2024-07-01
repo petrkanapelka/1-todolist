@@ -1,6 +1,11 @@
 import { ChangeEvent } from "react";
 import { Button } from "../button/Button";
 import { EditableSpan } from "../editableSpan/EditableSpan";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Checkbox from '@mui/material/Checkbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 
 type TaskPropsType = {
     title: string
@@ -13,11 +18,21 @@ type TaskPropsType = {
 
 };
 export const Task = (props: TaskPropsType) => {
+    const taskStyle = {
+        width: "100 %",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+    }
     return (
-        <li key={props.taskID}>
-            <input type="checkbox" checked={props.isDone} onChange={props.changeTaskStatusHandler} />
+        <ListItem key={props.taskID} className="task-item" style={taskStyle}>
+            <Checkbox onChange={props.changeTaskStatusHandler} checked={props.isDone} />
+            {/* <input type="checkbox" checked={props.isDone} onChange={props.changeTaskStatusHandler} /> */}
             <EditableSpan title={props.title} isDone={props.isDone} updatedItem={props.updatedTasksHandler} />
-            <Button title={"x"} onClick={() => props.removeHandler(props.taskID, props.tlID)} />
-        </li>
+            {/* <Button title={"x"} onClick={() => props.removeHandler(props.taskID, props.tlID)} /> */}
+            <IconButton aria-label="delete">
+                <DeleteIcon onClick={() => props.removeHandler(props.taskID, props.tlID)} />
+            </IconButton>
+        </ListItem>
     );
 };
