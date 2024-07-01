@@ -1,11 +1,15 @@
 import { FC, ChangeEvent, ReactNode } from "react";
-import { Button } from "../button/Button";
+//import { Button } from "../button/Button";
 import { FilterStatusType } from "../../App";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { AddItemForm } from "../addItemForm/AddItemForm";
 import { EditableSpan } from "../editableSpan/EditableSpan";
 import { Task } from "../task/Task";
-
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 
 type ToDoListPropsType = {
     id: string
@@ -73,7 +77,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
                 />
             })
         ) : (
-            <span>Your tasklist is empty</span>
+            <span className="empty-span">Your tasklist is empty</span>
         );
 
 
@@ -94,53 +98,104 @@ export const ToDoList: FC<ToDoListPropsType> = ({
             <div className="header">
                 <div className={'todolist-title-container'}>
                     <EditableSpan title={title} updatedItem={updatedToDoListsHandler} />
-                    <Button title={'x'} onClick={() => removeTodolistHandler(id)} />
+                    {/* <Button title={'x'} onClick={() => removeTodolistHandler(id)} /> */}
+                    <IconButton aria-label="delete" onClick={() => removeTodolistHandler(id)}>
+                        <DeleteIcon />
+                    </IconButton>
                 </div>
-                <Button
+                {/* <Button
                     onClick={() => {
                         removeAllHandler(id);
                     }}
                     title="Delete all tasks"
-                />
+                /> */}
+                <Button
+                    size='medium'
+                    variant="outlined"
+                    startIcon={<DeleteIcon />}
+                    onClick={() => {
+                        removeAllHandler(id);
+                    }}>
+                    All tasks
+                </Button>
             </div>
 
             <AddItemForm addNewItem={addNewTaskHandler} />
 
-            <div>
-                <Button
+            <div className="filter-buttons">
+                {/* <Button
                     onClick={() => {
                         changeFilter("all", id);
                     }}
                     title="All"
                     className={filter === 'all' ? 'active-filter' : ''}
-                />
+                /> */}
 
                 <Button
+                    onClick={() => {
+                        changeFilter("all", id);
+                    }}
+                    size='small'
+                    variant={filter === 'all' ? 'contained' : 'outlined'}
+                // style={{width: '22%'}}
+                >All</Button>
+
+                {/* <Button
                     onClick={() => {
                         changeFilter("active", id);
                     }}
                     title="Active"
                     className={filter === 'active' ? 'active-filter' : ''}
-                />
+                /> */}
 
                 <Button
+                    onClick={() => {
+                        changeFilter("active", id);
+                    }}
+                    size='small'
+                    variant={filter === 'active' ? 'contained' : 'outlined'}
+                // style={{width: '22%'}}
+
+                >Active</Button>
+
+                {/* <Button
                     onClick={() => {
                         changeFilter("completed", id);
                     }}
                     title="Completed"
                     className={filter === 'completed' ? 'active-filter' : ''}
-                />
+                /> */}
 
                 <Button
+                    onClick={() => {
+                        changeFilter("completed", id);
+                    }}
+                    size='small'
+                    variant={filter === 'completed' ? 'contained' : 'outlined'}
+                // style={{width: '22%'}}
+
+                >Completed</Button>
+
+                {/* <Button
                     onClick={() => {
                         changeFilter("three-tasks", id);
                     }}
                     title="First 3 tasks"
                     className={filter === 'three-tasks' ? 'active-filter' : ''}
-                />
+                /> */}
+
+                <Button
+                    onClick={() => {
+                        changeFilter("three-tasks", id);
+                    }}
+                    size='small'
+                    variant={filter === 'three-tasks' ? 'contained' : 'outlined'}
+                // style={{width: '22%'}}
+                >First three</Button>
+
             </div>
 
-            <ul ref={listRef}>{taskElements}</ul>
+            <List ref={listRef} className="tasks-list">{taskElements}</List>
 
             {children}
         </div>
