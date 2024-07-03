@@ -8,12 +8,15 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import { MenuButton } from './components/menuButton/MenuButton';
+import createTheme from '@mui/material/styles/createTheme';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import Switch from '@mui/material/Switch';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 export type FilterStatusType = 'all' | 'completed' | 'active' | 'three-tasks';
 
@@ -26,6 +29,8 @@ export type ToDoListType = {
 export type TasksStateType = {
     [key: string]: TaskType[]
 }
+
+export type ThemeModeType = 'dark' | 'light';
 
 const tasks1: Array<TaskType> = [
     {
@@ -218,43 +223,64 @@ function App() {
 
     const [listRef] = useAutoAnimate<HTMLDivElement>()
 
+    const [themeMode, setThemeMode] = useState<ThemeModeType>('dark');
+
+    const theme = createTheme({
+        palette: {
+            mode: themeMode === 'dark' ? 'light' : 'dark',
+            primary: {
+                main: '#1976D2',
+            },
+            secondary: {
+                main: '#043463',
+            },
+        },
+    });
+
+    const changeMode = () => {
+        setThemeMode(prevMode => (prevMode === 'dark' ? 'light' : 'dark'));
+    }
 
     return (
         <div ref={listRef} className="App">
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
-                    <Toolbar>
-                        {/* <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        >
-                            <MenuIcon />
-                        </IconButton> */}
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            ToDoList
-                        </Typography>
-                        <Button color="inherit">Login</Button>
-                    </Toolbar>
-                </AppBar>
-            </Box>
-            <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Grid key={v1()} container sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <div className='addnewtodolist-wrapper'>
-                        <h3>Add new ToDoList</h3>
-                        <AddItemForm addNewItem={addToDoList} />
-                    </div>
-                </Grid>
-            </Container>
-            <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Grid key={v1()} container sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <div className='todolists-wrapper'>
-                        {mappedToDoLists}
-                    </div>
-                </Grid>
-            </Container>
+            <ThemeProvider theme={theme}>
+                <CssBaseline/>
+                <Box sx={{ flexGrow: 1 }}>
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                                ToDoList
+                            </Typography>
+                            <MenuButton color="inherit" backgroundColor={theme.palette.primary.light}>Login</MenuButton>
+                            <FormGroup sx={{ marginLeft: '15px' }}>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            onChange={changeMode}
+                                            defaultChecked color="secondary" />
+                                    }
+                                    label={themeMode === 'dark' ? 'light' : 'dark'}
+                                />
+                            </FormGroup>
+                        </Toolbar>
+                    </AppBar>
+                </Box>
+                <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid key={v1()} container sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <div className='addnewtodolist-wrapper'>
+                            <h3>Add new ToDoList</h3>
+                            <AddItemForm addNewItem={addToDoList} />
+                        </div>
+                    </Grid>
+                </Container>
+                <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid key={v1()} container sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <div className='todolists-wrapper'>
+                            {mappedToDoLists}
+                        </div>
+                    </Grid>
+                </Container>
+            </ThemeProvider>
 
         </div>
     );
