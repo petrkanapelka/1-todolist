@@ -92,7 +92,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
 
 
     return (
-        <div className="todolist">
+        <div className="todolist" /* style={{borderColor: theme.main}} */>
             <div className="header">
                 <div className={'todolist-title-container'}>
                     <EditableSpan title={title} updatedItem={updatedToDoListsHandler} />
