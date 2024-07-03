@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
 import { v1 } from 'uuid'
@@ -108,14 +108,40 @@ function App() {
         filter: 'all'
     }
 
-    let [tasks, setTasks] = useState<TasksStateType>({
+    const defaultTasks = {
         [toDoList1ID]: tasks1,
         [toDoList2ID]: tasks2,
-    })
+    }
+
+    const taskStringFromLocalStorage = localStorage.getItem('tasks');
+
+    const taskFromLocalStorage = taskStringFromLocalStorage
+        ? JSON.parse(taskStringFromLocalStorage)
+        : defaultTasks
+
+    let [tasks, setTasks] = useState<TasksStateType>(taskFromLocalStorage)
+
+
+    const tdStringFromLocalStorage = localStorage.getItem('toDoLists');
 
     const toDoListsDefault: ToDoListType[] = [toDoList1, toDoList2]
 
-    const [toDoLists, setToDoLists] = useState<ToDoListType[]>(toDoListsDefault)
+    const tdFromLocalStorage = tdStringFromLocalStorage
+        ? JSON.parse(tdStringFromLocalStorage)
+        : toDoListsDefault
+
+
+    const [toDoLists, setToDoLists] = useState<ToDoListType[]>(tdFromLocalStorage)
+
+
+
+    useEffect(() => {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }, [tasks]);
+
+    useEffect(() => {
+        localStorage.setItem('toDoLists', JSON.stringify(toDoLists));
+    }, [toDoLists]);
 
     const changeFilter = (status: FilterStatusType, toDoListId: string) => {
         const newToDoLists = toDoLists.map(t => {
@@ -244,7 +270,7 @@ function App() {
     return (
         <div ref={listRef} className="App">
             <ThemeProvider theme={theme}>
-                <CssBaseline/>
+                <CssBaseline />
                 <Box sx={{ flexGrow: 1 }}>
                     <AppBar position="static">
                         <Toolbar>
