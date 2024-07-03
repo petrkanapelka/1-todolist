@@ -23,9 +23,10 @@ export const Task = (props: TaskPropsType) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        padding: '0'
     }
     return (
-        <ListItem key={props.taskID} className="task-item" style={taskStyle}>
+        <ListItem key={props.taskID} className="task-item" style={taskStyle} sx={taskStyle}>
             <Checkbox onChange={props.changeTaskStatusHandler} checked={props.isDone} />
             {/* <input type="checkbox" checked={props.isDone} onChange={props.changeTaskStatusHandler} /> */}
             <EditableSpan title={props.title} isDone={props.isDone} updatedItem={props.updatedTasksHandler} />
