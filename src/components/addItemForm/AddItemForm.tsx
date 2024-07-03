@@ -3,6 +3,9 @@ import { FC, useState, ChangeEvent, KeyboardEvent, /* useRef */ } from "react";
 //import { Button } from "../button/Button";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import { Fab, Tooltip } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+
 type AddItemFormType = {
     addNewItem: (title: string) => void;
 };
@@ -38,10 +41,11 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
     };
 
     const buttonStyles = {
-        maxWidth: '30px',
-        maxHeight: '30px',
-        minWidth: '30px',
-        minHeight: '30px',
+        maxWidth: '35px',
+        maxHeight: '35px',
+        minWidth: '35px',
+        minHeight: '35px',
+        // fontSize: '20px'
     }
 
     return (
@@ -70,13 +74,22 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
 
                 {/* <Button onClick={onClickInputHandler} title="+" disable={!Boolean(inputValue)} /> */}
 
-                <Button
+                {/* <Button
                     disabled={inputValue.length >= 15}
                     size='small'
                     variant="contained"
                     onClick={onClickInputHandler}
                     style={buttonStyles}
-                >+</Button>
+                >+</Button> */}
+                <Button
+                    style={buttonStyles}
+                    variant="contained"
+                    size='small'
+                    disabled={inputValue.length >= 15}
+                    color="primary"
+                    onClick={onClickInputHandler}>
+                    <AddIcon />
+                </Button>
             </div>
             {/* {inputValue.length >= 20 && <small className="error-message">Enter fewer than 20 characters.</small>} */}
 
