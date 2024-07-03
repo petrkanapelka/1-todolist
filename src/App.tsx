@@ -182,7 +182,7 @@ function App() {
 
     const addToDoList = (title: string) => {
         const newToDoList: ToDoListType = { id: v1(), title, filter: 'all' }
-        setToDoLists([...toDoLists, newToDoList])
+        setToDoLists([newToDoList, ...toDoLists])
         setTasks({ ...tasks, [newToDoList.id]: [] })
     }
 
@@ -224,7 +224,7 @@ function App() {
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
                     <Toolbar>
-                        <IconButton
+                        {/* <IconButton
                             size="large"
                             edge="start"
                             color="inherit"
@@ -232,7 +232,7 @@ function App() {
                             sx={{ mr: 2 }}
                         >
                             <MenuIcon />
-                        </IconButton>
+                        </IconButton> */}
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             ToDoList
                         </Typography>
@@ -240,16 +240,16 @@ function App() {
                     </Toolbar>
                 </AppBar>
             </Box>
-            <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent:'center' }}>
-                <Grid key={v1()} container sx={{ display: 'flex', justifyContent:'center' }}>
+            <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Grid key={v1()} container sx={{ display: 'flex', justifyContent: 'center' }}>
                     <div className='addnewtodolist-wrapper'>
                         <h3>Add new ToDoList</h3>
                         <AddItemForm addNewItem={addToDoList} />
                     </div>
                 </Grid>
             </Container>
-            <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent:'center' }}>
-                <Grid key={v1()} container sx={{ display: 'flex', justifyContent:'center' }}>
+            <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Grid key={v1()} container sx={{ display: 'flex', justifyContent: 'center' }}>
                     <div className='todolists-wrapper'>
                         {mappedToDoLists}
                     </div>
