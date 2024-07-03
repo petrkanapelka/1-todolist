@@ -9,6 +9,16 @@ type Props = {
 };
 export const EditableSpan = (props: Props) => {
     const [inputValue, setInputValue] = useState(props.title);
+    const [error, setError] = useState<string | null>(null)
+
+    const validateImput = () => {
+        if (inputValue.length <= 15 && inputValue.trim() !== '') {
+            setInputValue("");
+        } else {
+            setError('Title is required');
+            setInputValue("");
+        }
+    }
 
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.currentTarget.value);
@@ -32,11 +42,7 @@ export const EditableSpan = (props: Props) => {
             //     onChange={onChangeInputHandler}
             // />
             <TextField
-                // helperText={inputValue.length >= 20 ? 'Enter fewer than 20 characters' : error}
-                // className={error || inputValue.length >= 20 ? 'error' : ''}
-                // error={!!error}
                 size="small"
-                // onKeyDown={onKeyDownHandler}
                 value={inputValue}
                 onChange={onChangeInputHandler}
                 id="outlined-basic"
@@ -44,6 +50,13 @@ export const EditableSpan = (props: Props) => {
                 variant="outlined"
                 autoFocus
                 onBlur={activeEditeModeHandler}
+
+                type='text'
+                helperText={inputValue.length >= 20 ? 'Enter fewer than 20 characters' : error}
+                className={error || inputValue.length >= 20 ? 'error' : ''}
+                error={!!error || inputValue.length >= 20}
+            // onKeyDown={onKeyDownHandler}
+            // onChange={onChangeInputHandler}
             />
             : <span
                 onDoubleClick={activeEditeModeHandler}
