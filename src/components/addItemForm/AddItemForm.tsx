@@ -3,7 +3,6 @@ import { FC, useState, ChangeEvent, KeyboardEvent, /* useRef */ } from "react";
 //import { Button } from "../button/Button";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-
 type AddItemFormType = {
     addNewItem: (title: string) => void;
 };
@@ -18,7 +17,7 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
 
 
     const validateImput = () => {
-        if (inputValue.length < 20 && inputValue.trim() !== '') {
+        if (inputValue.length < 15 && inputValue.trim() !== '') {
             props.addNewItem(inputValue.trim());
             setInputValue("");
         } else {
@@ -39,10 +38,10 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
     };
 
     const buttonStyles = {
-        maxWidth: '25px',
-        maxHeight: '25px',
-        minWidth: '25px',
-        minHeight: '25px',
+        maxWidth: '30px',
+        maxHeight: '30px',
+        minWidth: '30px',
+        minHeight: '30px',
     }
 
     return (
@@ -55,9 +54,10 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
                     className={error ? 'error' : ''}
                 /> */}
                 <TextField
-                    helperText={inputValue.length >= 20 ? 'Enter fewer than 20 characters' : error}
-                    className={error || inputValue.length >= 20 ? 'error' : ''}
-                    error={!!error}
+                    type='text'
+                    helperText={inputValue.length >= 15 ? 'Enter fewer than 15 characters' : error}
+                    className={error || inputValue.length >= 15 ? 'error' : ''}
+                    error={!!error || inputValue.length >= 15}
                     size="small"
                     onKeyDown={onKeyDownHandler}
                     value={inputValue}
@@ -65,11 +65,18 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
                     id="outlined-basic"
                     label="enter title"
                     variant="outlined"
+                //disabled={inputValue.length >= 14}
                 />
 
                 {/* <Button onClick={onClickInputHandler} title="+" disable={!Boolean(inputValue)} /> */}
 
-                <Button size='small' variant="contained" onClick={onClickInputHandler} style={buttonStyles}>+</Button>
+                <Button
+                    disabled={inputValue.length >= 15}
+                    size='small'
+                    variant="contained"
+                    onClick={onClickInputHandler}
+                    style={buttonStyles}
+                >+</Button>
             </div>
             {/* {inputValue.length >= 20 && <small className="error-message">Enter fewer than 20 characters.</small>} */}
 
