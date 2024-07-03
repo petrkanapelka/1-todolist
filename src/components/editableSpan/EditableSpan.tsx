@@ -32,6 +32,19 @@ export const EditableSpan = (props: Props) => {
             props.updatedItem(inputValue)
         }
     }
+
+    let lastTouchTime = 0;
+    const touchThreshold = 300;
+
+    const touchHandler = () => {
+        const currentTime = new Date().getTime();
+        const timeDifference = currentTime - lastTouchTime;
+        if (timeDifference < touchThreshold && timeDifference > 0) {
+            activeEditeModeHandler()
+        }
+        lastTouchTime = currentTime;
+    }
+
     return (
         editMode ?
             // ? <input
@@ -59,6 +72,7 @@ export const EditableSpan = (props: Props) => {
             // onChange={onChangeInputHandler}
             />
             : <span
+                onTouchStart={touchHandler}
                 onDoubleClick={activeEditeModeHandler}
                 className={props.isDone ? 'task-done' : 'task'}>{props.title}
             </span>
