@@ -1,11 +1,11 @@
 import { ChangeEvent } from "react";
-import { Button } from "../button/Button";
 import { EditableSpan } from "../editableSpan/EditableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
-import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 
 type TaskPropsType = {
     title: string
@@ -25,12 +25,12 @@ export const Task = (props: TaskPropsType) => {
         alignItems: "center",
         padding: '0'
     }
+
+    const [liRef] = useAutoAnimate<HTMLLIElement>()
     return (
-        <ListItem key={props.taskID} className="task-item" style={taskStyle} sx={taskStyle}>
+        <ListItem key={props.taskID} className="task-item" style={taskStyle} ref={liRef}>
             <Checkbox onChange={props.changeTaskStatusHandler} checked={props.isDone} />
-            {/* <input type="checkbox" checked={props.isDone} onChange={props.changeTaskStatusHandler} /> */}
             <EditableSpan title={props.title} isDone={props.isDone} updatedItem={props.updatedTasksHandler} />
-            {/* <Button title={"x"} onClick={() => props.removeHandler(props.taskID, props.tlID)} /> */}
             <IconButton aria-label="delete">
                 <DeleteIcon onClick={() => props.removeHandler(props.taskID, props.tlID)} />
             </IconButton>
