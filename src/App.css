@@ -54,14 +54,14 @@ li,
 .inputField {
   width: 100%;
   display: flex;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   /* align-items: center; */
   margin: 7px 0;
 }
 
 .inputField>input {
   width: 80%;
-  margin-right: 10px;
+  /* margin-right: 10px; */
 }
 
 .inputField>button {
@@ -103,8 +103,11 @@ li,
 
 .todolist-title-container {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 5px;
+  width: 100%;
+  font-size: 18px;
 }
 
 .todolists-wrapper {
@@ -122,11 +125,13 @@ li,
 
 .todolist {
   border: 2px solid rgb(104, 103, 103);
-  padding: 6px;
+  padding: 7px;
   border-radius: 10px;
   border-color: #1976D2;
   transition: box-shadow 0.3s ease-in-out;
   align-self: flex-start;
+  display: flex;
+  flex-direction: column;
 }
 
 .addnewtodolist-wrapper {
