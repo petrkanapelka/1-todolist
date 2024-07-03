@@ -55,13 +55,11 @@ li,
   width: 100%;
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
   margin: 7px 0;
 }
 
 .inputField>input {
   width: 80%;
-  /* margin-right: 10px; */
 }
 
 .inputField>button {
@@ -111,23 +109,17 @@ li,
 }
 
 .todolists-wrapper {
-  /* display: flex;
-  gap: 15px;
-  flex-wrap:wrap;
-  max-width: fit-content; */
   display: grid;
   gap: 15px;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   max-width: 100%;
-  /* min-width: 360px; */
 }
 
 
 .todolist {
-  border: 2px solid rgb(104, 103, 103);
+  border: 2px solid #1976D2;
   padding: 7px;
   border-radius: 10px;
-  border-color: #1976D2;
   transition: box-shadow 0.3s ease-in-out;
   align-self: flex-start;
   display: flex;
@@ -135,8 +127,6 @@ li,
 }
 
 .addnewtodolist-wrapper {
-  /* border: 2px solid rgb(104, 103, 103); */
-  /* border-color: #1976D2; */
   padding: 5px 10px;
   margin-bottom: 20px;
   display: flex;
@@ -150,10 +140,6 @@ li,
 }
 
 .filter-buttons {
-  /* display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 5px; */
   display: grid;
   gap: 2px;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
