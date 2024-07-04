@@ -277,7 +277,7 @@ function App() {
                             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                                 ToDoList
                             </Typography>
-                            <MenuButton color="inherit" backgroundColor={theme.palette.primary.light}>Login</MenuButton>
+                            <MenuButton color="inherit" /* backgroundColor={theme.palette.primary.light} */>Login</MenuButton>
                             <FormGroup sx={{ marginLeft: '15px' }}>
                                 <FormControlLabel
                                     control={
