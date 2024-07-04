@@ -7,7 +7,7 @@ type MenuButtonProps = {
 }
 
 export const MenuButton = styled(Button)<MenuButtonProps>(({ backgroundColor, theme }) => ({
-    backgroundColor: backgroundColor || theme.palette.primary.main,
+    //backgroundColor: backgroundColor || theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
     padding: '12px 24px',
     '&:hover': {
