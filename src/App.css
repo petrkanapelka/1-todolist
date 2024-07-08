@@ -115,16 +115,23 @@ li,
   max-width: 100%;
 }
 
-
 .todolist {
   border: 2px solid #1976D2;
   padding: 7px;
   border-radius: 10px;
   transition: box-shadow 0.3s ease-in-out;
-  align-self: flex-start;
   display: flex;
   flex-direction: column;
+  height: 100%;
+
 }
+
+.paper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 
 .addnewtodolist-wrapper {
   padding: 5px 10px;
