@@ -224,10 +224,9 @@ function App() {
 
     const mappedToDoLists = toDoLists.map(t => {
         return (
-            <Grid item>
-                <Paper elevation={3} >
+            <Grid item key={t.id}>
+                <Paper className="paper" elevation={3}>
                     <ToDoList
-                        key={t.id}
                         id={t.id}
                         addNewTasks={addNewTasks}
                         title={t.title}
@@ -244,8 +243,8 @@ function App() {
                     />
                 </Paper>
             </Grid>
-        )
-    })
+        );
+    });
 
     const [listRef] = useAutoAnimate<HTMLDivElement>()
 
