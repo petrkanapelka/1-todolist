@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import './App.css';
+import { useEffect, useState } from 'react';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
 import { v1 } from 'uuid'
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -142,6 +142,8 @@ function App() {
     useEffect(() => {
         localStorage.setItem('toDoLists', JSON.stringify(toDoLists));
     }, [toDoLists]);
+
+
 
     const changeFilter = (status: FilterStatusType, toDoListId: string) => {
         const newToDoLists = toDoLists.map(t => {
