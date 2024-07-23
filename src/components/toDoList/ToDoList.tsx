@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 
-type ToDoListPropsType = {
+export type ToDoListPropsType = {
     id: string
     title: string
     tasks: Array<TaskType>
