@@ -84,8 +84,8 @@ export const toDoListsReducer = (
     }
 };
 
-export const addTodolistAC = (title: string, id: string): AddTodolistActionType => {
-    return { type: 'ADD-TODOLIST', payload: { title, id } } as const;
+export const addTodolistAC = (title: string /* , id: string */): AddTodolistActionType => {
+    return { type: 'ADD-TODOLIST', payload: { title, id: v1() } } as const;
 };
 
 export const removeTodolistAC = (id: string): RemoveTodolistActionType => {
