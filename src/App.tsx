@@ -152,7 +152,7 @@ function App() {
         setToDoLists(newToDoLists)
     };
 
-    //! Operationns with tasks
+    //! Operations with tasks
 
     const updateTasks = (newTitle: string, id: string, toDoListID: string) => {
         console.log(newTitle)
