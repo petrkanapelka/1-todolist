@@ -28,7 +28,7 @@ test('correct todolist should be removed', () => {
 });
 
 test('correct todolist should be added', () => {
-    const action = addTodolistAC('New Todolist', v1());
+    const action = addTodolistAC('New Todolist');
 
     const endState = toDoListsReducer(startState, action);
     expect(endState.length).toBe(3);
