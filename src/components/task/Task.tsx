@@ -31,8 +31,8 @@ export const Task = (props: TaskPropsType) => {
         <ListItem key={props.taskID} className="task-item" style={taskStyle} ref={liRef}>
             <Checkbox onChange={props.changeTaskStatusHandler} checked={props.isDone} />
             <EditableSpan title={props.title} isDone={props.isDone} updatedItem={props.updatedTasksHandler} />
-            <IconButton aria-label="delete">
-                <DeleteIcon onClick={() => props.removeHandler(props.taskID, props.tlID)} />
+            <IconButton aria-label="delete" onClick={() => props.removeHandler(props.taskID, props.tlID)}>
+                <DeleteIcon />
             </IconButton>
         </ListItem>
     );
