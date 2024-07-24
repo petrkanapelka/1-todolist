@@ -19,7 +19,7 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
     };
 
 
-    const validateImput = () => {
+    const validateInput = () => {
         if (inputValue.length < 15 && inputValue.trim() !== '') {
             props.addNewItem(inputValue.trim());
             setInputValue("");
@@ -30,13 +30,13 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
     }
 
     const onClickInputHandler = () => {
-        validateImput()
+        validateInput()
     };
 
     const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null)
         if (e.key === "Enter") {
-            validateImput()
+            validateInput()
         }
     };
 
@@ -45,18 +45,11 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
         maxHeight: '35px',
         minWidth: '35px',
         minHeight: '35px',
-        // fontSize: '20px'
     }
 
     return (
         <>
             <div className="inputField">
-                {/*  <input maxLength={20}
-                    value={inputValue}
-                    onChange={onChangeInputHandler}
-                    onKeyDown={onKeyDownHandler}
-                    className={error ? 'error' : ''}
-                /> */}
                 <TextField
                     type='text'
                     helperText={inputValue.length >= 15 ? 'Enter fewer than 15 characters' : error}
@@ -69,18 +62,8 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
                     id="outlined-basic"
                     label="enter title"
                     variant="outlined"
-                //disabled={inputValue.length >= 14}
                 />
 
-                {/* <Button onClick={onClickInputHandler} title="+" disable={!Boolean(inputValue)} /> */}
-
-                {/* <Button
-                    disabled={inputValue.length >= 15}
-                    size='small'
-                    variant="contained"
-                    onClick={onClickInputHandler}
-                    style={buttonStyles}
-                >+</Button> */}
                 <Button
                     style={buttonStyles}
                     variant="contained"
@@ -91,9 +74,6 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
                     <AddIcon />
                 </Button>
             </div>
-            {/* {inputValue.length >= 20 && <small className="error-message">Enter fewer than 20 characters.</small>} */}
-
-            {/* {error && <div className={'error-message'}>{error}</div>} */}
         </>
     );
 };
