@@ -1,3 +1,4 @@
 {
-    "cSpell.words": ["TODOLIST", "todolists"]
+    "cSpell.words": ["addnewtodolist", "predeploy", "TODOLIST", "todolists"],
+    "cSpell.enableFiletypes": ["!typescript"]
 }
