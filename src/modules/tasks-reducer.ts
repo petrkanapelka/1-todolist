@@ -5,6 +5,8 @@ import { AddTodolistActionType, RemoveTodolistActionType } from './todolists-red
 
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>;
 
+export type RemoveAllTaskActionType = ReturnType<typeof removeAllTaskAC>;
+
 export type AddTaskActionType = ReturnType<typeof addTaskAC>;
 
 export type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>;
@@ -17,14 +19,24 @@ export type ActionsType =
     | RemoveTaskActionType
     | AddTaskActionType
     | ChangeTaskStatusActionType
-    | ChangeTaskTitleActionType;
+    | ChangeTaskTitleActionType
+    | RemoveAllTaskActionType;
 
-export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksStateType => {
+const initialState: TasksStateType = {};
+
+export const tasksReducer = (state = initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK': {
             return {
                 ...state,
                 [action.todolistID]: state[action.todolistID].filter((t) => t.id !== action.taskID),
+            };
+        }
+
+        case 'REMOVE-ALL-TASK': {
+            return {
+                ...state,
+                [action.todolistID]: [],
             };
         }
 
@@ -78,6 +90,10 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
 
 export const removeTaskAC = (taskID: string, todolistID: string) => {
     return { type: 'REMOVE-TASK', taskID, todolistID } as const;
+};
+
+export const removeAllTaskAC = (todolistID: string) => {
+    return { type: 'REMOVE-ALL-TASK', todolistID } as const;
 };
 
 export const addTaskAC = (title: string, todolistID: string) => {
