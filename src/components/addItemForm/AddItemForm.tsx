@@ -1,16 +1,15 @@
-// import { Button } from "@mui/material";
-import { FC, useState, ChangeEvent, KeyboardEvent, /* useRef */ } from "react";
-//import { Button } from "../button/Button";
+import { FC, useState, ChangeEvent, KeyboardEvent, memo, /* useRef */ } from "react";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { Fab, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 type AddItemFormType = {
     addNewItem: (title: string) => void;
 };
 
-export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
+export const AddItemForm: FC<AddItemFormType> = memo((props: AddItemFormType) => {
+
+
     const [inputValue, setInputValue] = useState("");
     const [error, setError] = useState<string | null>(null)
 
@@ -34,7 +33,7 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
     };
 
     const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+        if (error) setError(null)
         if (e.key === "Enter") {
             validateInput()
         }
@@ -76,4 +75,4 @@ export const AddItemForm: FC<AddItemFormType> = (props: AddItemFormType) => {
             </div>
         </>
     );
-};
+});
