@@ -1,6 +1,5 @@
-import { FC, ChangeEvent, ReactNode } from "react";
+import { FC, ChangeEvent, ReactNode, useCallback, memo } from "react";
 import { FilterStatusType } from "../../App";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { AddItemForm } from "../addItemForm/AddItemForm";
 import { EditableSpan } from "../editableSpan/EditableSpan";
 import { Task } from "../task/Task";
@@ -32,7 +31,7 @@ export type TaskType = {
     isDone: boolean;
 };
 
-export const ToDoList: FC<ToDoListPropsType> = ({
+export const ToDoList: FC<ToDoListPropsType> = memo(({
     id,
     title,
     tasks,
@@ -48,6 +47,8 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     updatedToDoLists,
     children
 }: ToDoListPropsType) => {
+
+    console.log('Todolist called')
 
     const filteredTasks = filterTasks(filter, id)
 
@@ -79,11 +80,10 @@ export const ToDoList: FC<ToDoListPropsType> = ({
         );
 
 
-    const [listRef] = useAutoAnimate<HTMLUListElement>()
 
-    const addNewTaskHandler = (title: string) => {
+    const addNewTaskHandler = useCallback((title: string) => {
         addNewTasks(title, id)
-    }
+    }, [addNewTasks, id])
 
 
     const updatedToDoListsHandler = (newTitle: string) => {
@@ -92,7 +92,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
 
 
     return (
-        <div className="todolist" /* style={{borderColor: theme.main}} */>
+        <div className="todolist" >
             <div className="header">
                 <div className={'todolist-title-container'}>
                     <EditableSpan title={title} updatedItem={updatedToDoListsHandler} />
@@ -142,7 +142,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
 
             </div>
 
-            <List ref={listRef} className="tasks-list">
+            <List className="tasks-list">
                 {taskElements}
             </List>
 
@@ -161,4 +161,4 @@ export const ToDoList: FC<ToDoListPropsType> = ({
             {children}
         </div>
     );
-};
+});
