@@ -1,8 +1,6 @@
 import './App.css';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
-import { v1 } from 'uuid'
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { AddItemForm } from './components/addItemForm/AddItemForm';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -39,6 +37,8 @@ export type ThemeModeType = 'dark' | 'light';
 
 function AppWithRedux() {
 
+    // console.log('App called')
+
     //! ToDoLists
 
     let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
@@ -47,36 +47,36 @@ function AppWithRedux() {
 
     const dispatch = useDispatch();
 
-    const changeFilter = (status: FilterStatusType, toDoListId: string) => {
+    const changeFilter = useCallback((status: FilterStatusType, toDoListId: string) => {
         dispatch(changeToDoListFilterAC(toDoListId, status))
-    };
+    }, [dispatch]);
 
     //! Operations with tasks
 
-    const updateTasks = (newTitle: string, id: string, toDoListID: string) => {
+    const updateTasks = useCallback((newTitle: string, id: string, toDoListID: string) => {
         dispatch(changeTaskTitleAC(id, newTitle, toDoListID))
-    }
+    }, [dispatch])
 
-    const removeHandler = (id: string, toDoListID: string) => {
+    const removeHandler = useCallback((id: string, toDoListID: string) => {
         dispatch(removeTaskAC(id, toDoListID))
-    }
+    }, [dispatch])
 
-    const removeAllHandler = (toDoListID: string) => {
+    const removeAllHandler = useCallback((toDoListID: string) => {
         dispatch(removeAllTaskAC(toDoListID))
-    }
+    }, [dispatch])
 
-    const addNewTasks = (title: string, toDoListID: string) => {
+    const addNewTasks = useCallback((title: string, toDoListID: string) => {
         dispatch(addTaskAC(title, toDoListID))
-    }
+    }, [dispatch])
 
-    const changeTaskStatus = (taskId: string, newIsDoneValue: boolean, toDoListID: string) => {
+    const changeTaskStatus = useCallback((taskId: string, newIsDoneValue: boolean, toDoListID: string) => {
         dispatch(changeTaskStatusAC(taskId, newIsDoneValue, toDoListID))
-    }
+    }, [dispatch])
 
     //! Filtration
 
 
-    const filterTasks = (filter: FilterStatusType, toDoListID: string) => {
+    const filterTasks = useCallback((filter: FilterStatusType, toDoListID: string) => {
 
         let tasksForTodolist = tasks[toDoListID];
 
@@ -90,21 +90,21 @@ function AppWithRedux() {
             default:
                 return tasksForTodolist;
         }
-    }
+    }, [tasks])
 
-    const removeTodolistHandler = (toDoListID: string) => {
+    const removeTodolistHandler = useCallback((toDoListID: string) => {
         let action = removeTodolistAC(toDoListID);
         dispatch(action)
-    }
+    }, [])
 
-    const addToDoList = (title: string) => {
+    const addToDoList = useCallback((title: string) => {
         let action = addTodolistAC(title);
         dispatch(action)
-    }
+    }, [])
 
-    const updatedToDoLists = (title: string, toDoListId: string) => {
+    const updatedToDoLists = useCallback((title: string, toDoListId: string) => {
         dispatch(changeTodolistTitleAC(toDoListId, title))
-    }
+    }, [])
 
 
     const mappedToDoLists = toDoLists.map(t => {
@@ -131,7 +131,6 @@ function AppWithRedux() {
         );
     });
 
-    const [listRef] = useAutoAnimate<HTMLDivElement>()
 
     const [themeMode, setThemeMode] = useState<ThemeModeType>('dark');
 
@@ -152,7 +151,7 @@ function AppWithRedux() {
     }
 
     return (
-        <div ref={listRef} className="App">
+        <div className="App">
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <Box sx={{ flexGrow: 1 }}>
@@ -176,7 +175,7 @@ function AppWithRedux() {
                     </AppBar>
                 </Box>
                 <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Grid key={v1()} container sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid container sx={{ display: 'flex', justifyContent: 'center' }}>
                         <div className='addnewtodolist-wrapper'>
                             <h3>Add new ToDoList</h3>
                             <AddItemForm addNewItem={addToDoList} />
@@ -184,7 +183,7 @@ function AppWithRedux() {
                     </Grid>
                 </Container>
                 <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Grid key={v1()} container sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid container sx={{ display: 'flex', justifyContent: 'center' }}>
                         <div className='todolists-wrapper'>
                             {mappedToDoLists}
                         </div>
