@@ -238,7 +238,7 @@ function App() {
                         removeAllHandler={removeAllHandler}
                         removeTodolistHandler={removeTodolistHandler}
                         changeTaskStatus={changeTaskStatus}
-                        filterTasks={filterTasks}
+                        // filterTasks={filterTasks}
                         changeFilter={changeFilter}
                         updatedTasks={updateTasks}
                         updatedToDoLists={updatedToDoLists}
