@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, memo, useState } from "react";
 import TextField from '@mui/material/TextField';
 
 
@@ -7,18 +7,12 @@ type Props = {
     isDone?: boolean
     updatedItem: (newTitle: string) => void
 };
-export const EditableSpan = (props: Props) => {
-    const [inputValue, setInputValue] = useState(props.title);
-    const [error, setError] = useState<string | null>(null)
 
-    const validateImput = () => {
-        if (inputValue.length <= 15 && inputValue.trim() !== '') {
-            setInputValue("");
-        } else {
-            setError('Title is required');
-            setInputValue("");
-        }
-    }
+export const EditableSpan = memo((props: Props) => {
+    console.log('editable span called')
+    const [inputValue, setInputValue] = useState(props.title);
+
+    let error: string | null = null
 
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.currentTarget.value);
@@ -47,13 +41,6 @@ export const EditableSpan = (props: Props) => {
 
     return (
         editMode ?
-            // ? <input
-            //     type="text"
-            //     value={inputValue}
-            //     autoFocus
-            //     onBlur={activeEditeModeHandler}
-            //     onChange={onChangeInputHandler}
-            // />
             <TextField
                 size="small"
                 value={inputValue}
@@ -68,8 +55,6 @@ export const EditableSpan = (props: Props) => {
                 helperText={inputValue.length >= 20 ? 'Enter fewer than 20 characters' : error}
                 className={error || inputValue.length >= 20 ? 'error' : ''}
                 error={!!error || inputValue.length >= 20}
-            // onKeyDown={onKeyDownHandler}
-            // onChange={onChangeInputHandler}
             />
             : <span
                 onTouchStart={touchHandler}
@@ -77,4 +62,4 @@ export const EditableSpan = (props: Props) => {
                 className={props.isDone ? 'task-done' : 'task'}>{props.title}
             </span>
     );
-};
+});
