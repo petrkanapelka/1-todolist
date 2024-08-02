@@ -1,11 +1,11 @@
-import { FC, ChangeEvent, ReactNode, useCallback, memo } from "react";
+import { FC, ChangeEvent, ReactNode, useCallback, memo, useMemo } from "react";
 import { FilterStatusType } from "../../App";
 import { AddItemForm } from "../addItemForm/AddItemForm";
 import { EditableSpan } from "../editableSpan/EditableSpan";
 import { Task } from "../task/Task";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Button from '@mui/material/Button';
+import Button, { ButtonProps } from '@mui/material/Button';
 import List from '@mui/material/List';
 
 export type ToDoListPropsType = {
@@ -17,7 +17,6 @@ export type ToDoListPropsType = {
     removeAllHandler: (toDoListID: string) => void
     addNewTasks: (title: string, toDoListID: string) => void;
     changeTaskStatus: (taskID: string, newIsDoneValue: boolean, toDoListID: string) => void
-    filterTasks: (status: FilterStatusType, toDoListID: string) => TaskType[]
     changeFilter: (status: FilterStatusType, toDoListId: string) => void
     removeTodolistHandler: (id: string) => void
     updatedTasks: (newTitle: string, id: string, toDoListID: string) => void
@@ -41,7 +40,6 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     removeTodolistHandler,
     addNewTasks,
     changeTaskStatus,
-    filterTasks,
     changeFilter,
     updatedTasks,
     updatedToDoLists,
@@ -50,20 +48,35 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
     console.log('Todolist called')
 
-    const filteredTasks = filterTasks(filter, id)
 
+    const filteredTasks = useMemo(() => {
+        console.log('useMemo')
+        let tasksForTodolist = tasks;
+
+        switch (filter) {
+            case 'active':
+                return tasksForTodolist = tasks.filter((task) => task.isDone === false);
+            case 'completed':
+                return tasksForTodolist = tasks.filter((task) => task.isDone === true);
+            case 'three-tasks':
+                return tasksForTodolist = tasks.filter((task, indx) => indx <= 2);;
+            default:
+                return tasksForTodolist;
+        }
+    }, [filter, tasks])
+
+
+    const changeTaskStatusHandler = useCallback((e: ChangeEvent<HTMLInputElement>, taskId: string) => {
+        changeTaskStatus(taskId, e.currentTarget.checked, id)
+    }, [changeTaskStatus, id])
+
+    const updatedTasksHandler = useCallback((newTitle: string, taskId: string) => {
+        updatedTasks(newTitle, taskId, id)
+    }, [id, updatedTasks])
 
     const taskElements: Array<JSX.Element> | JSX.Element =
         tasks.length !== 0 ? (
             filteredTasks.map((task) => {
-                const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                    changeTaskStatus(task.id, e.currentTarget.checked, id)
-                }
-
-                const updatedTasksHandler = (newTitle: string) => {
-                    updatedTasks(newTitle, task.id, id)
-                }
-
                 return <Task
                     key={task.id}
                     title={task.title}
@@ -86,9 +99,27 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     }, [addNewTasks, id])
 
 
-    const updatedToDoListsHandler = (newTitle: string) => {
+    const updatedToDoListsHandler = useCallback((newTitle: string) => {
         updatedToDoLists(newTitle, id)
-    }
+    }, [id, updatedToDoLists])
+
+    const onClickAllHandler = useCallback(() => {
+        changeFilter("all", id);
+    }, [changeFilter, id])
+    const onClickActiveHandler = useCallback(() => {
+        changeFilter("active", id);
+    }, [changeFilter, id])
+    const onClickCompletedHandler = useCallback(() => {
+        changeFilter("completed", id);
+    }, [changeFilter, id])
+    const onClickFirstThreeHandler = useCallback(() => {
+        changeFilter("three-tasks", id);
+    }, [changeFilter, id])
+    const onClickRemoveAllHandler = useCallback(() => {
+        removeAllHandler(id);
+    }, [id, removeAllHandler])
+
+
 
 
     return (
@@ -106,39 +137,31 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
             <div className="filter-buttons">
 
-                <Button
-                    onClick={() => {
-                        changeFilter("all", id);
-                    }}
+                <UpdateButton
+                    onClick={onClickAllHandler}
                     size='small'
                     variant={filter === 'all' ? 'contained' : 'outlined'}
-                >All</Button>
+                >All</UpdateButton>
 
-                <Button
-                    onClick={() => {
-                        changeFilter("active", id);
-                    }}
+                <UpdateButton
+                    onClick={onClickActiveHandler}
                     size='small'
                     variant={filter === 'active' ? 'contained' : 'outlined'}
 
-                >Active</Button>
+                >Active</UpdateButton>
 
-                <Button
-                    onClick={() => {
-                        changeFilter("completed", id);
-                    }}
+                <UpdateButton
+                    onClick={onClickCompletedHandler}
                     size='small'
                     variant={filter === 'completed' ? 'contained' : 'outlined'}
 
-                >Completed</Button>
+                >Completed</UpdateButton>
 
-                <Button
-                    onClick={() => {
-                        changeFilter("three-tasks", id);
-                    }}
+                <UpdateButton
+                    onClick={onClickFirstThreeHandler}
                     size='small'
                     variant={filter === 'three-tasks' ? 'contained' : 'outlined'}
-                >First three</Button>
+                >First three</UpdateButton>
 
             </div>
 
@@ -146,19 +169,26 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
                 {taskElements}
             </List>
 
-            <Button
+            <UpdateButton
                 disabled={filteredTasks.length === 0}
                 sx={{ alignSelf: 'center' }}
                 size='medium'
                 variant="outlined"
                 startIcon={<DeleteIcon />}
-                onClick={() => {
-                    removeAllHandler(id);
-                }}>
+                onClick={onClickRemoveAllHandler}>
                 Delete all items
-            </Button>
+            </UpdateButton>
 
             {children}
         </div>
     );
 });
+
+
+
+
+const UpdateButton = memo(({ ...props }: ButtonProps) => {
+    return <Button
+        {...props}
+    ></Button>
+})
