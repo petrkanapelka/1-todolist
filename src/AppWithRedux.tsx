@@ -39,7 +39,6 @@ function AppWithRedux() {
 
     // console.log('App called')
 
-    //! ToDoLists
 
     let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
 
@@ -53,8 +52,8 @@ function AppWithRedux() {
 
     //! Operations with tasks
 
-    const updateTasks = useCallback((newTitle: string, id: string, toDoListID: string) => {
-        dispatch(changeTaskTitleAC(id, newTitle, toDoListID))
+    const updateTasks = useCallback((newTitle: string, taskId: string, toDoListID: string) => {
+        dispatch(changeTaskTitleAC(taskId, newTitle, toDoListID))
     }, [dispatch])
 
     const removeHandler = useCallback((id: string, toDoListID: string) => {
@@ -73,38 +72,22 @@ function AppWithRedux() {
         dispatch(changeTaskStatusAC(taskId, newIsDoneValue, toDoListID))
     }, [dispatch])
 
-    //! Filtration
+    //! ToDoLists
 
-
-    const filterTasks = useCallback((filter: FilterStatusType, toDoListID: string) => {
-
-        let tasksForTodolist = tasks[toDoListID];
-
-        switch (filter) {
-            case 'active':
-                return tasksForTodolist = tasks[toDoListID].filter((task) => task.isDone === false);
-            case 'completed':
-                return tasksForTodolist = tasks[toDoListID].filter((task) => task.isDone === true);
-            case 'three-tasks':
-                return tasksForTodolist = tasks[toDoListID].filter((task, indx) => indx <= 2);;
-            default:
-                return tasksForTodolist;
-        }
-    }, [tasks])
 
     const removeTodolistHandler = useCallback((toDoListID: string) => {
         let action = removeTodolistAC(toDoListID);
         dispatch(action)
-    }, [])
+    }, [dispatch])
 
     const addToDoList = useCallback((title: string) => {
         let action = addTodolistAC(title);
         dispatch(action)
-    }, [])
+    }, [dispatch])
 
     const updatedToDoLists = useCallback((title: string, toDoListId: string) => {
         dispatch(changeTodolistTitleAC(toDoListId, title))
-    }, [])
+    }, [dispatch])
 
 
     const mappedToDoLists = toDoLists.map(t => {
@@ -121,7 +104,6 @@ function AppWithRedux() {
                         removeAllHandler={removeAllHandler}
                         removeTodolistHandler={removeTodolistHandler}
                         changeTaskStatus={changeTaskStatus}
-                        filterTasks={filterTasks}
                         changeFilter={changeFilter}
                         updatedTasks={updateTasks}
                         updatedToDoLists={updatedToDoLists}
