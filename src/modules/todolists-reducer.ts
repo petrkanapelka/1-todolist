@@ -59,7 +59,6 @@ export const toDoListsReducer = (state = initialState, action: ActionsType): ToD
 
         case 'CHANGE-TODOLIST-TITLE': {
             const { title, id } = action.payload;
-            console.log('🚀 ~ title ➔', title);
             return state.map((tl) => (tl.id === id ? { ...tl, title } : tl));
         }
 
