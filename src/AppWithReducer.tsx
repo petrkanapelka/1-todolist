@@ -179,21 +179,6 @@ function AppWithReducer() {
     //! Filtration
 
 
-    const filterTasks = (filter: FilterStatusType, toDoListID: string) => {
-
-        let tasksForTodolist = tasks[toDoListID];
-
-        switch (filter) {
-            case 'active':
-                return tasksForTodolist = tasks[toDoListID].filter((task) => task.isDone === false);
-            case 'completed':
-                return tasksForTodolist = tasks[toDoListID].filter((task) => task.isDone === true);
-            case 'three-tasks':
-                return tasksForTodolist = tasks[toDoListID].filter((task, indx) => indx <= 2);;
-            default:
-                return tasksForTodolist;
-        }
-    }
 
     const removeTodolistHandler = (toDoListID: string) => {
         let action = removeTodolistAC(toDoListID);
