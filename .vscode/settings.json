@@ -1,4 +1,13 @@
 {
-    "cSpell.words": ["addnewtodolist", "Edite", "predeploy", "TODOLIST", "todolists", "webfonts"],
+    "cSpell.words": [
+        "addnewtodolist",
+        "autodocs",
+        "Edite",
+        "networkidle",
+        "predeploy",
+        "TODOLIST",
+        "todolists",
+        "webfonts"
+    ],
     "cSpell.enableFiletypes": ["!plaintext", "!typescript"]
 }
