@@ -2,14 +2,13 @@ import { ChangeEvent, memo, useState } from "react";
 import TextField from '@mui/material/TextField';
 
 
-type Props = {
+export type EditableSpanType = {
     title: string
     isDone?: boolean
     updatedItem: (newTitle: string) => void
 };
 
-export const EditableSpan = memo((props: Props) => {
-    console.log('editable span called')
+export const EditableSpan = memo((props: EditableSpanType) => {
     const [inputValue, setInputValue] = useState(props.title);
 
     let error: string | null = null
