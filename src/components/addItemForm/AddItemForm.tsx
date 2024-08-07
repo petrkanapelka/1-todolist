@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 
-type AddItemFormType = {
+export type AddItemFormType = {
     addNewItem: (title: string) => void;
 };
 
