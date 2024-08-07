@@ -35,13 +35,16 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "homepage": "https://petrkanapelka.github.io/1-todolist",
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:storybook/recommended"
     ]
   },
   "browserslist": {
@@ -57,6 +60,20 @@
     ]
   },
   "devDependencies": {
-    "@formkit/auto-animate": "^0.8.2"
+    "@chromatic-com/storybook": "1.6.1",
+    "@formkit/auto-animate": "^0.8.2",
+    "@storybook/addon-essentials": "^8.2.8",
+    "@storybook/addon-interactions": "^8.2.8",
+    "@storybook/addon-links": "^8.2.8",
+    "@storybook/addon-onboarding": "^8.2.8",
+    "@storybook/blocks": "^8.2.8",
+    "@storybook/preset-create-react-app": "^8.2.8",
+    "@storybook/react": "^8.2.8",
+    "@storybook/react-webpack5": "^8.2.8",
+    "@storybook/test": "^8.2.8",
+    "eslint-plugin-storybook": "^0.8.0",
+    "prop-types": "15.8.1",
+    "storybook": "^8.2.8",
+    "webpack": "5.93.0"
   }
 }
