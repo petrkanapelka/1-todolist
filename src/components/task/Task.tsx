@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { changeTaskStatusAC, changeTaskTitleAC } from "../../modules/tasks-reducer";
 
 
-type TaskPropsType = {
+export type TaskPropsType = {
     title: string
     taskID: string
     isDone: boolean
@@ -29,18 +29,7 @@ const taskStyle = {
 
 export const Task = memo((props: TaskPropsType) => {
 
-    console.log('task called')
-
-
     const dispatch = useDispatch();
-
-    // const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    //     props.changeTaskStatusHandler(e, props.taskID)
-    // }, [props])
-
-    // const updatedItemHandler = useCallback((newTitle: string) => {
-    //     props.updatedTasksHandler(newTitle, props.taskID)
-    // }, [props])
 
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         dispatch(changeTaskStatusAC(props.taskID, e.currentTarget.checked, props.tlID))
