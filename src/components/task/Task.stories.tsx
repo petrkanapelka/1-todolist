@@ -6,6 +6,7 @@ import { ReduxStoreProviderDecorator } from '../../stories/ReduxStoreProviderDec
 import { useSelector } from 'react-redux';
 import { AppRootStateType } from '../../modules/store';
 import { TaskType } from '../toDoList/ToDoList';
+import { useState } from 'react';
 
 const tlID = v1();
 const taskID = v1();
@@ -19,8 +20,8 @@ const meta: Meta<typeof Task> = {
     },
     tags: ['autodocs'],
     args: {
-        changeTaskStatusHandler: action('Task status changed'),
-        updatedTasksHandler: action('Task title changed'),
+        changeTaskStatus: action('Task status changed'),
+        updateTaskTitle: action('Task title changed'),
         removeHandler: action('Task deleted'),
         taskID: taskID,
         tlID: tlID,
@@ -32,17 +33,7 @@ const meta: Meta<typeof Task> = {
 export default meta;
 type Story = StoryObj<typeof Task>;
 
-const TaskWithRedux = () => {
-    let task = useSelector<AppRootStateType, TaskType>(state => state.tasks['todolistId1'][0])
-    if (!task) task = { id: v1(), title: 'Title', isDone: false }
-    return <Task
-        title={task.title}
-        isDone={task.isDone}
-        taskID={task.id} tlID={''}
-        changeTaskStatusHandler={() => { }}
-        updatedTasksHandler={() => { }}
-        removeHandler={() => { }} />
-}
+
 
 export const TaskIsNotDoneStory: Story = {
 };
@@ -52,6 +43,18 @@ export const TaskIsDoneStory: Story = {
         isDone: true
     }
 };
+const TaskWithRedux = () => {
+    let task = useSelector<AppRootStateType, TaskType>(state => state.tasks['todolistId1'][0])
+    let [isDone, setIsDone] = useState(task.isDone)
+    return <Task
+        title={task.title}
+        isDone={isDone}
+        taskID={task.id}
+        tlID={'todolistId1'}
+        changeTaskStatus={() => setIsDone(!isDone)}
+        updateTaskTitle={action('Task title changed')}
+        removeHandler={action('Task deleted')} />
+}
 
 export const TaskToggleStory = {
     render: () => {
