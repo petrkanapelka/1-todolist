@@ -5,7 +5,6 @@ import { combineReducers, legacy_createStore } from "redux";
 import { v1 } from "uuid";
 import { toDoListsReducer } from '../modules/todolists-reducer';
 import { tasksReducer } from '../modules/tasks-reducer';
-import { AppRootStateType } from '../modules/store';
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
