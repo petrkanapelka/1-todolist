@@ -1,11 +1,11 @@
 import { v1 } from 'uuid';
-import { ToDoListType } from '../App';
 import {
     removeTodolistAC,
     addTodolistAC,
     changeTodolistTitleAC,
     toDoListsReducer,
     changeToDoListFilterAC,
+    ToDoListType,
 } from './todolists-reducer';
 
 let startState: ToDoListType[];

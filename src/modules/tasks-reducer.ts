@@ -1,7 +1,7 @@
 import { v1 } from 'uuid';
-import { TasksStateType } from '../App';
 import { TaskType } from '../components/toDoList/ToDoList';
 import { AddTodolistActionType, RemoveTodolistActionType } from './todolists-reducer';
+import { TasksStateType } from '../AppWithRedux';
 
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>;
 
@@ -108,4 +108,3 @@ export const changeTaskTitleAC = (taskID: string, title: string, todolistID: str
     return { type: 'CHANGE-TITLE-TASK', taskID, title, todolistID } as const;
 };
 export type { TasksStateType };
-

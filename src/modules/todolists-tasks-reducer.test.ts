@@ -1,5 +1,4 @@
-import { TasksStateType } from '../App';
-import { tasksReducer } from './tasks-reducer';
+import { tasksReducer, TasksStateType } from './tasks-reducer';
 import { addTodolistAC, removeTodolistAC, toDoListsReducer } from './todolists-reducer';
 import { ToDoListPropsType } from '../components/toDoList/ToDoList';
 
