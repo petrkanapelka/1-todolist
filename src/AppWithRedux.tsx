@@ -37,9 +37,6 @@ export type ThemeModeType = 'dark' | 'light';
 
 function AppWithRedux() {
 
-    // console.log('App called')
-
-
     let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
 
     let toDoLists = useSelector<AppRootStateType, ToDoListType[]>(state => state.todolists)
@@ -51,8 +48,7 @@ function AppWithRedux() {
     }, [dispatch]);
 
     //! Operations with tasks
-
-    const updateTasks = useCallback((newTitle: string, taskId: string, toDoListID: string) => {
+    const updateTaskTitle = useCallback((newTitle: string, taskId: string, toDoListID: string) => {
         dispatch(changeTaskTitleAC(taskId, newTitle, toDoListID))
     }, [dispatch])
 
@@ -73,8 +69,6 @@ function AppWithRedux() {
     }, [dispatch])
 
     //! ToDoLists
-
-
     const removeTodolistHandler = useCallback((toDoListID: string) => {
         let action = removeTodolistAC(toDoListID);
         dispatch(action)
@@ -105,7 +99,7 @@ function AppWithRedux() {
                         removeTodolistHandler={removeTodolistHandler}
                         changeTaskStatus={changeTaskStatus}
                         changeFilter={changeFilter}
-                        updatedTasks={updateTasks}
+                        updateTaskTitle={updateTaskTitle}
                         updatedToDoLists={updatedToDoLists}
                     />
                 </Paper>
