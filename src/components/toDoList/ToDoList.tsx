@@ -1,5 +1,4 @@
-import { FC, ChangeEvent, ReactNode, useCallback, memo, useMemo } from "react";
-import { FilterStatusType } from "../../App";
+import { FC, ReactNode, useCallback, memo, useMemo } from "react";
 import { AddItemForm } from "../addItemForm/AddItemForm";
 import { EditableSpan } from "../editableSpan/EditableSpan";
 import { Task } from "../task/Task";
@@ -7,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button, { ButtonProps } from '@mui/material/Button';
 import List from '@mui/material/List';
+import { FilterStatusType } from "../../AppWithRedux";
 
 export type ToDoListPropsType = {
     id: string
@@ -19,7 +19,7 @@ export type ToDoListPropsType = {
     changeTaskStatus: (taskID: string, newIsDoneValue: boolean, toDoListID: string) => void
     changeFilter: (status: FilterStatusType, toDoListId: string) => void
     removeTodolistHandler: (id: string) => void
-    updatedTasks: (newTitle: string, id: string, toDoListID: string) => void
+    updateTaskTitle: (newTitle: string, id: string, toDoListID: string) => void
     updatedToDoLists: (title: string, toDoListId: string) => void,
     children?: ReactNode
 };
@@ -41,7 +41,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     addNewTasks,
     changeTaskStatus,
     changeFilter,
-    updatedTasks,
+    updateTaskTitle,
     updatedToDoLists,
     children
 }: ToDoListPropsType) => {
@@ -65,15 +65,6 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
         }
     }, [filter, tasks])
 
-
-    const changeTaskStatusHandler = useCallback((e: ChangeEvent<HTMLInputElement>, taskId: string) => {
-        changeTaskStatus(taskId, e.currentTarget.checked, id)
-    }, [changeTaskStatus, id])
-
-    const updatedTasksHandler = useCallback((newTitle: string, taskId: string) => {
-        updatedTasks(newTitle, taskId, id)
-    }, [id, updatedTasks])
-
     const taskElements: Array<JSX.Element> | JSX.Element =
         tasks.length !== 0 ? (
             filteredTasks.map((task) => {
@@ -83,8 +74,8 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
                     isDone={task.isDone}
                     taskID={task.id}
                     tlID={id}
-                    changeTaskStatusHandler={changeTaskStatusHandler}
-                    updatedTasksHandler={updatedTasksHandler}
+                    changeTaskStatus={changeTaskStatus}
+                    updateTaskTitle={updateTaskTitle}
                     removeHandler={removeHandler}
                 />
             })
