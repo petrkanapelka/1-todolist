@@ -4,8 +4,6 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
-import { useDispatch } from "react-redux";
-import { changeTaskStatusAC, changeTaskTitleAC } from "../../modules/tasks-reducer";
 
 
 export type TaskPropsType = {
@@ -13,8 +11,8 @@ export type TaskPropsType = {
     taskID: string
     isDone: boolean
     tlID: string
-    changeTaskStatusHandler: (e: ChangeEvent<HTMLInputElement>, taskId: string) => void
-    updatedTasksHandler: (newTitle: string, taskId: string) => void
+    changeTaskStatus: (taskId: string, newIsDoneValue: boolean, toDoListID: string) => void
+    updateTaskTitle: (newTitle: string, taskId: string, toDoListID: string) => void
     removeHandler: (taskID: string, tlID: string) => void
 
 };
@@ -29,15 +27,13 @@ const taskStyle = {
 
 export const Task = memo((props: TaskPropsType) => {
 
-    const dispatch = useDispatch();
-
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(changeTaskStatusAC(props.taskID, e.currentTarget.checked, props.tlID))
-    }, [dispatch, props.taskID, props.tlID])
+        props.changeTaskStatus(props.taskID, e.currentTarget.checked, props.tlID)
+    }, [props])
 
     const updatedItemHandler = useCallback((newTitle: string) => {
-        dispatch(changeTaskTitleAC(props.taskID, newTitle, props.tlID))
-    }, [dispatch, props.taskID, props.tlID])
+        props.updateTaskTitle(newTitle, props.taskID, props.tlID)
+    }, [props])
 
     return (
         <ListItem key={props.taskID} className="task-item" style={taskStyle} >
