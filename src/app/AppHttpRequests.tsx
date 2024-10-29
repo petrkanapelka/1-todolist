@@ -82,7 +82,6 @@ export const AppHttpRequests = () => {
                             },
                         })
                         .then(res => {
-                            // setTasks({ ...tasks, [tl.id]: res.data.items })
                             setTasks(prevTasks => ({ ...prevTasks, [tl.id]: res.data.items }))
                         })
                 })
