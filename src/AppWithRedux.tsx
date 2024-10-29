@@ -1,5 +1,5 @@
 import './App.css';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { TaskType, ToDoList } from './components/toDoList/ToDoList';
 import { AddItemForm } from './components/addItemForm/AddItemForm';
 import AppBar from '@mui/material/AppBar';
@@ -15,10 +15,12 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { addTodolistAC, changeToDoListFilterAC, changeTodolistTitleAC, removeTodolistAC } from './modules/todolists-reducer';
+import { addTodolistAC, changeToDoListFilterAC, changeTodolistTitleAC, getTodolistsAC, removeTodolistAC } from './modules/todolists-reducer';
 import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeAllTaskAC, removeTaskAC } from './modules/tasks-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './modules/store';
+import { API_KEY, BEARER_TOKEN } from './api-env';
+import axios from 'axios';
 
 export type FilterStatusType = 'all' | 'completed' | 'active' | 'three-tasks';
 
@@ -34,6 +36,56 @@ export type TasksStateType = {
 
 export type ThemeModeType = 'dark' | 'light';
 
+type Todolist = {
+    id: string
+    title: string
+    addedDate: string
+    order: number
+}
+
+type ApiResponse<T> = {
+    data: {
+        item: T
+    };
+    messages: string[];
+    fieldsErrors: string[];
+    resultCode: number;
+};
+
+export type GetTasksResponse = {
+    error: string | null
+    totalCount: number
+    items: DomainTask[]
+}
+
+export type DomainTask = {
+    description: string
+    title: string
+    status: number
+    priority: number
+    startDate: string
+    deadline: string
+    id: string
+    todoListId: string
+    order: number
+    addedDate: string
+}
+
+
+type UpdateTaskModel = {
+    status: number;
+    title: string;
+    deadline: string;
+    description: string;
+    priority: number;
+    startDate: string;
+}
+
+enum RESULT_CODE {
+    COMPLETED = 2,
+    ACTIVE = 0
+}
+
 
 function AppWithRedux() {
 
@@ -42,6 +94,34 @@ function AppWithRedux() {
     let toDoLists = useSelector<AppRootStateType, ToDoListType[]>(state => state.todolists)
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        axios
+            .get<Todolist[]>('https://social-network.samuraijs.com/api/1.1/todo-lists', {
+                headers: {
+                    Authorization: BEARER_TOKEN,
+                },
+            })
+            .then(res => {
+                const todolists = res.data
+                console.log("🚀 ~ useEffect ~ todolists ➔", todolists);
+                // setTodolists(todolists)
+                dispatch(getTodolistsAC())
+                todolists.forEach(tl => {
+                    axios
+                        .get<GetTasksResponse>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${tl.id}/tasks`, {
+                            headers: {
+                                Authorization: BEARER_TOKEN,
+                                'API-KEY': API_KEY,
+                            },
+                        })
+                        .then(res => {
+                            // setTasks(prevTasks => ({ ...prevTasks, [tl.id]: res.data.items }))
+                        })
+                })
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const changeFilter = useCallback((status: FilterStatusType, toDoListId: string) => {
         dispatch(changeToDoListFilterAC(toDoListId, status))
