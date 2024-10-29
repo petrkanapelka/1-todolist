@@ -2,26 +2,121 @@ import Checkbox from '@mui/material/Checkbox'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { AddItemForm } from '../components/addItemForm/AddItemForm'
 import { EditableSpan } from '../components/editableSpan/EditableSpan'
+import axios from 'axios'
+
+type Todolist = {
+    id: string
+    title: string
+    addedDate: string
+    order: number
+}
+
+type ApiResponse<T> = {
+    data: {
+        item: T
+    };
+    messages: string[];
+    fieldsErrors: string[];
+    resultCode: number;
+};
+
+export type GetTasksResponse = {
+    error: string | null
+    totalCount: number
+    items: DomainTask[]
+}
+
+export type DomainTask = {
+    description: string
+    title: string
+    status: number
+    priority: number
+    startDate: string
+    deadline: string
+    id: string
+    todoListId: string
+    order: number
+    addedDate: string
+}
+
+
 
 export const AppHttpRequests = () => {
-    const [todolists, setTodolists] = useState<any>([])
-    const [tasks, setTasks] = useState<any>({})
+    const [todolists, setTodolists] = useState<Todolist[]>([])
+    const [tasks, setTasks] = useState<{ [key: string]: DomainTask[] }>({})
 
     useEffect(() => {
-        // get todolists
+        axios
+            .get<Todolist[]>('https://social-network.samuraijs.com/api/1.1/todo-lists', {
+                headers: {
+                    Authorization: 'Bearer 8e14572c-4de5-4796-85ac-b8f52e4bb444',
+                },
+            })
+            .then(res => {
+                const todolists = res.data
+                setTodolists(todolists)
+                todolists.forEach(tl => {
+                    axios
+                        .get<GetTasksResponse>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${tl.id}/tasks`, {
+                            headers: {
+                                Authorization: 'Bearer 8e14572c-4de5-4796-85ac-b8f52e4bb444',
+                                'API-KEY': '7b49e6d3-39cc-483e-813a-f81f14547573',
+                            },
+                        })
+                        .then(res => {
+                            console.log(res.data)
+                            setTasks({...tasks,[tl.id]:res.data.items})
+                        })
+                })
+            })
     }, [])
 
     const createTodolistHandler = (title: string) => {
-        // create todolist
-        return title
+        axios
+            .post<ApiResponse<Todolist>>(
+                'https://social-network.samuraijs.com/api/1.1/todo-lists',
+                { title },
+                {
+                    headers: {
+                        Authorization: 'Bearer 8e14572c-4de5-4796-85ac-b8f52e4bb444',
+                        'API-KEY': '7b49e6d3-39cc-483e-813a-f81f14547573',
+                    },
+                }
+            )
+            .then(res => {
+                const newTodo = res.data.data.item
+                setTodolists([newTodo, ...todolists])
+            })
     }
 
     const removeTodolistHandler = (id: string) => {
-        // remove todolist
+        axios
+            .delete<ApiResponse<unknown>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`, {
+                headers: {
+                    Authorization: 'Bearer 8e14572c-4de5-4796-85ac-b8f52e4bb444',
+                    'API-KEY': '7b49e6d3-39cc-483e-813a-f81f14547573',
+                },
+            })
+            .then(res => {
+                setTodolists(todolists.filter(tl => tl.id !== id))
+            })
     }
 
     const updateTodolistHandler = (id: string, title: string) => {
-        // update todolist title
+        axios
+            .put<ApiResponse<unknown>>(
+                `https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`,
+                { title },
+                {
+                    headers: {
+                        Authorization: 'Bearer 8e14572c-4de5-4796-85ac-b8f52e4bb444',
+                        'API-KEY': '7b49e6d3-39cc-483e-813a-f81f14547573',
+                    },
+                }
+            )
+            .then(res => {
+                setTodolists(todolists.map(tl => tl.id === id ? { ...tl, title } : tl))
+            })
     }
 
     const createTaskHandler = (title: string, todolistId: string) => {
