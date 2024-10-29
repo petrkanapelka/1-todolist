@@ -71,6 +71,7 @@ export const AppHttpRequests = () => {
             })
             .then(res => {
                 const todolists = res.data
+                console.log("🚀 ~ useEffect ~ todolists ➔", todolists);
                 setTodolists(todolists)
                 todolists.forEach(tl => {
                     axios
@@ -81,10 +82,12 @@ export const AppHttpRequests = () => {
                             },
                         })
                         .then(res => {
-                            setTasks({ ...tasks, [tl.id]: res.data.items })
+                            // setTasks({ ...tasks, [tl.id]: res.data.items })
+                            setTasks(prevTasks => ({ ...prevTasks, [tl.id]: res.data.items }))
                         })
                 })
             })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const createTodolistHandler = (title: string) => {
@@ -102,12 +105,13 @@ export const AppHttpRequests = () => {
             .then(res => {
                 const newTodo = res.data.data.item
                 setTodolists([newTodo, ...todolists])
+                setTasks({ ...tasks, [newTodo.id]: [] })
             })
     }
 
     const removeTodolistHandler = (id: string) => {
         axios
-            .delete<ApiResponse<unknown>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`, {
+            .delete<ApiResponse<Todolist>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`, {
                 headers: {
                     Authorization: BEARER_TOKEN,
                     'API-KEY': API_KEY,
@@ -120,7 +124,7 @@ export const AppHttpRequests = () => {
 
     const updateTodolistHandler = (id: string, title: string) => {
         axios
-            .put<ApiResponse<unknown>>(
+            .put<ApiResponse<Todolist>>(
                 `https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`,
                 { title },
                 {
@@ -155,7 +159,7 @@ export const AppHttpRequests = () => {
 
     const removeTaskHandler = (taskId: string, todolistId: string) => {
         axios
-            .delete<ApiResponse<unknown>>(
+            .delete<ApiResponse<DomainTask>>(
                 `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${taskId}`,
                 {
                     headers: {
