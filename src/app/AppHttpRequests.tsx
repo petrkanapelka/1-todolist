@@ -81,7 +81,6 @@ export const AppHttpRequests = () => {
                             },
                         })
                         .then(res => {
-                            console.log(res.data)
                             setTasks({ ...tasks, [tl.id]: res.data.items })
                         })
                 })
@@ -149,7 +148,6 @@ export const AppHttpRequests = () => {
                 }
             )
             .then(res => {
-                console.log('restaskcreate', res)
                 const newTask = res.data.data.item
                 setTasks({ ...tasks, [todolistId]: [newTask, ...tasks[todolistId]] })
             })
@@ -183,14 +181,37 @@ export const AppHttpRequests = () => {
                 }
             )
             .then(res => {
-                console.log(res.data)
                 const newTasks = tasks[task.todoListId].map(t => t.id === task.id ? { ...t, ...model } : t)
                 setTasks({ ...tasks, [task.todoListId]: newTasks })
             })
     }
 
-    const changeTaskTitleHandler = (title: string, task: any) => {
-        // update task title
+    const changeTaskTitleHandler = (title: string, task: DomainTask) => {
+
+        const model: UpdateTaskModel = {
+            title,
+            status: task.status,
+            deadline: task.deadline,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+        }
+
+        axios
+            .put<ApiResponse<DomainTask>>(
+                `https://social-network.samuraijs.com/api/1.1/todo-lists/${task.todoListId}/tasks/${task.id}`,
+                model,
+                {
+                    headers: {
+                        Authorization: BEARER_TOKEN,
+                        'API-KEY': API_KEY,
+                    },
+                }
+            )
+            .then(res => {
+                const newTasks = tasks[task.todoListId].map(t => t.id === task.id ? { ...t, ...model } : t)
+                setTasks({ ...tasks, [task.todoListId]: newTasks })
+            })
     }
 
     return (
