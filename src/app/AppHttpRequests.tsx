@@ -154,7 +154,19 @@ export const AppHttpRequests = () => {
     }
 
     const removeTaskHandler = (taskId: string, todolistId: string) => {
-        // remove task
+        axios
+            .delete<ApiResponse<unknown>>(
+                `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${taskId}`,
+                {
+                    headers: {
+                        Authorization: BEARER_TOKEN,
+                        'API-KEY': API_KEY,
+                    },
+                }
+            )
+            .then(res => {
+                setTasks({ ...tasks, [todolistId]: tasks[todolistId].filter(t => t.id !== taskId) })
+            })
     }
 
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, task: DomainTask) => {
