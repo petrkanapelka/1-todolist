@@ -42,6 +42,21 @@ export type DomainTask = {
 }
 
 
+type UpdateTaskModel = {
+    status: number;
+    title: string;
+    deadline: string;
+    description: string;
+    priority: number;
+    startDate: string;
+}
+
+enum RESULT_CODE {
+    COMPLETED = 2,
+    ACTIVE = 0
+}
+
+
 
 export const AppHttpRequests = () => {
     const [todolists, setTodolists] = useState<Todolist[]>([])
@@ -123,7 +138,7 @@ export const AppHttpRequests = () => {
 
     const createTaskHandler = (title: string, todolistId: string) => {
         axios
-            .post(
+            .post<ApiResponse<DomainTask>>(
                 `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks`,
                 { title },
                 {
@@ -134,7 +149,9 @@ export const AppHttpRequests = () => {
                 }
             )
             .then(res => {
-                console.log(res)
+                console.log('restaskcreate', res)
+                const newTask = res.data.data.item
+                setTasks({ ...tasks, [todolistId]: [newTask, ...tasks[todolistId]] })
             })
     }
 
@@ -142,8 +159,34 @@ export const AppHttpRequests = () => {
         // remove task
     }
 
-    const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, task: any) => {
-        // update task status
+    const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, task: DomainTask) => {
+        let status = e.currentTarget.checked ? RESULT_CODE.COMPLETED : RESULT_CODE.ACTIVE
+
+        const model: UpdateTaskModel = {
+            status,
+            title: task.title,
+            deadline: task.deadline,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+        }
+
+        axios
+            .put<ApiResponse<DomainTask>>(
+                `https://social-network.samuraijs.com/api/1.1/todo-lists/${task.todoListId}/tasks/${task.id}`,
+                model,
+                {
+                    headers: {
+                        Authorization: BEARER_TOKEN,
+                        'API-KEY': API_KEY,
+                    },
+                }
+            )
+            .then(res => {
+                console.log(res.data)
+                const newTasks = tasks[task.todoListId].map(t => t.id === task.id ? { ...t, ...model } : t)
+                setTasks({ ...tasks, [task.todoListId]: newTasks })
+            })
     }
 
     const changeTaskTitleHandler = (title: string, task: any) => {
@@ -169,11 +212,11 @@ export const AppHttpRequests = () => {
 
                         {/* Tasks */}
                         {!!tasks[tl.id] &&
-                            tasks[tl.id].map((task: any) => {
+                            tasks[tl.id].map((task: DomainTask) => {
                                 return (
                                     <div key={task.id}>
                                         <Checkbox
-                                            checked={task.isDone}
+                                            checked={task.status === RESULT_CODE.COMPLETED ? true : false}
                                             onChange={e => changeTaskStatusHandler(e, task)}
                                         />
                                         <EditableSpan
