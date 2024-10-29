@@ -3,6 +3,8 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { AddItemForm } from '../components/addItemForm/AddItemForm'
 import { EditableSpan } from '../components/editableSpan/EditableSpan'
 import axios from 'axios'
+import { API_KEY, BEARER_TOKEN } from '../api-env'
+
 
 type Todolist = {
     id: string
@@ -49,7 +51,7 @@ export const AppHttpRequests = () => {
         axios
             .get<Todolist[]>('https://social-network.samuraijs.com/api/1.1/todo-lists', {
                 headers: {
-                    Authorization: 'Bearer 8e14572c-4de5-4796-85ac-b8f52e4bb444',
+                    Authorization: BEARER_TOKEN,
                 },
             })
             .then(res => {
@@ -59,13 +61,13 @@ export const AppHttpRequests = () => {
                     axios
                         .get<GetTasksResponse>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${tl.id}/tasks`, {
                             headers: {
-                                Authorization: 'Bearer 8e14572c-4de5-4796-85ac-b8f52e4bb444',
-                                'API-KEY': '7b49e6d3-39cc-483e-813a-f81f14547573',
+                                Authorization: BEARER_TOKEN,
+                                'API-KEY': API_KEY,
                             },
                         })
                         .then(res => {
                             console.log(res.data)
-                            setTasks({...tasks,[tl.id]:res.data.items})
+                            setTasks({ ...tasks, [tl.id]: res.data.items })
                         })
                 })
             })
@@ -78,8 +80,8 @@ export const AppHttpRequests = () => {
                 { title },
                 {
                     headers: {
-                        Authorization: 'Bearer 8e14572c-4de5-4796-85ac-b8f52e4bb444',
-                        'API-KEY': '7b49e6d3-39cc-483e-813a-f81f14547573',
+                        Authorization: BEARER_TOKEN,
+                        'API-KEY': API_KEY,
                     },
                 }
             )
@@ -93,8 +95,8 @@ export const AppHttpRequests = () => {
         axios
             .delete<ApiResponse<unknown>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`, {
                 headers: {
-                    Authorization: 'Bearer 8e14572c-4de5-4796-85ac-b8f52e4bb444',
-                    'API-KEY': '7b49e6d3-39cc-483e-813a-f81f14547573',
+                    Authorization: BEARER_TOKEN,
+                    'API-KEY': API_KEY,
                 },
             })
             .then(res => {
@@ -109,8 +111,8 @@ export const AppHttpRequests = () => {
                 { title },
                 {
                     headers: {
-                        Authorization: 'Bearer 8e14572c-4de5-4796-85ac-b8f52e4bb444',
-                        'API-KEY': '7b49e6d3-39cc-483e-813a-f81f14547573',
+                        Authorization: BEARER_TOKEN,
+                        'API-KEY': API_KEY,
                     },
                 }
             )
@@ -120,7 +122,20 @@ export const AppHttpRequests = () => {
     }
 
     const createTaskHandler = (title: string, todolistId: string) => {
-        // create task
+        axios
+            .post(
+                `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks`,
+                { title },
+                {
+                    headers: {
+                        Authorization: BEARER_TOKEN,
+                        'API-KEY': API_KEY,
+                    },
+                }
+            )
+            .then(res => {
+                console.log(res)
+            })
     }
 
     const removeTaskHandler = (taskId: string, todolistId: string) => {
