@@ -4,6 +4,7 @@ import './index.css';
 import AppWithRedux from './AppWithRedux';
 import { Provider } from 'react-redux';
 import { store } from './modules/store';
+import { AppHttpRequests } from './app/AppHttpRequests';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +12,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <Provider store={store}>
-      <AppWithRedux />
+      {/* <AppWithRedux /> */}
+      <AppHttpRequests />
     </Provider>
 );
 
