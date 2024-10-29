@@ -7,22 +7,20 @@
 
 .App {
   gap: 50px;
-  padding: 30px;
+  min-width: 360px;
+  padding: 0 0 20px 0;
+  /* padding: 30px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  flex-direction: column; */
 }
 
-.App>div {
-  border: 2px solid rgb(104, 103, 103);
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
-    0 6px 20px rgba(0, 0, 0, 0.1),
-    0 10px 30px rgba(0, 0, 0, 0.1),
-    0 14px 40px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease-in-out;
-}
+/* .App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
 
 button {
   margin-right: 5px;
@@ -43,7 +41,9 @@ button:active {
   scale: 0.9;
 }
 
-li {
+li,
+.task-item,
+.css-1p823my-MuiListItem-root {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -55,8 +55,7 @@ li {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+  margin: 7px 0;
 }
 
 .inputField>input {
@@ -65,7 +64,7 @@ li {
 
 .inputField>button {
   margin: 0;
-  margin-right: 5px;
+  margin-left: 10px;
 }
 
 .error {
@@ -102,6 +101,68 @@ li {
 
 .todolist-title-container {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 5px;
+  width: 100%;
+  font-size: 18px;
+}
+
+.todolists-wrapper {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  max-width: 100%;
+}
+
+.todolist {
+  border: 2px solid #1976D2;
+  padding: 7px;
+  border-radius: 10px;
+  transition: box-shadow 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+}
+
+.paper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+.addnewtodolist-wrapper {
+  padding: 5px 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.addnewtodolist-wrapper>.inputField {
+  justify-content: center;
+}
+
+.filter-buttons {
+  display: grid;
+  gap: 2px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  max-width: 100%;
+}
+
+.empty-span {
+  margin: 10px auto;
+  text-align: center;
+  font-size: 16px;
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px 0;
+
 }

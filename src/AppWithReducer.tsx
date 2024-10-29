@@ -1,5 +1,5 @@
 // import './App.css';
-// import { useEffect, useState } from 'react';
+// import { useEffect, useReducer, useState } from 'react';
 // import { TaskType, ToDoList } from './components/toDoList/ToDoList';
 // import { v1 } from 'uuid'
 // import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -17,6 +17,8 @@
 // import Switch from '@mui/material/Switch';
 // import FormGroup from '@mui/material/FormGroup';
 // import FormControlLabel from '@mui/material/FormControlLabel';
+// import { addTodolistAC, changeToDoListFilterAC, changeTodolistTitleAC, removeTodolistAC, toDoListsReducer } from './modules/todolists-reducer';
+// import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer } from './modules/tasks-reducer';
 
 // export type FilterStatusType = 'all' | 'completed' | 'active' | 'three-tasks';
 
@@ -88,7 +90,7 @@
 //     },
 // ]
 
-// function App() {
+// function AppWithReducer() {
 
 
 //     //! ToDoLists
@@ -119,7 +121,7 @@
 //         ? JSON.parse(taskStringFromLocalStorage)
 //         : defaultTasks
 
-//     let [tasks, setTasks] = useState<TasksStateType>(taskFromLocalStorage)
+//     let [tasks, dispatchTasks] = useReducer(tasksReducer, taskFromLocalStorage)
 
 
 //     const tdStringFromLocalStorage = localStorage.getItem('toDoLists');
@@ -131,7 +133,7 @@
 //         : toDoListsDefault
 
 
-//     const [toDoLists, setToDoLists] = useState<ToDoListType[]>(tdFromLocalStorage)
+//     const [toDoLists, dispatchToDoLists] = useReducer(toDoListsReducer, tdFromLocalStorage)
 
 
 
@@ -146,81 +148,52 @@
 
 
 //     const changeFilter = (status: FilterStatusType, toDoListId: string) => {
-//         const newToDoLists = toDoLists.map(t => {
-//             return t.id === toDoListId ? { ...t, filter: status } : t
-//         })
-//         setToDoLists(newToDoLists)
+//         dispatchToDoLists(changeToDoListFilterAC(toDoListId, status))
 //     };
 
 //     //! Operations with tasks
 
 //     const updateTasks = (newTitle: string, id: string, toDoListID: string) => {
-//         console.log(newTitle)
-//         setTasks({ ...tasks, [toDoListID]: tasks[toDoListID].map(t => t.id === id ? { ...t, title: newTitle } : t) })
+//         dispatchTasks(changeTaskTitleAC(id, newTitle, toDoListID))
 //     }
 
 //     const removeHandler = (id: string, toDoListID: string) => {
-//         const removeTask = tasks[toDoListID].filter(el => el.id !== id)
-//         tasks[toDoListID] = removeTask
-//         setTasks({ ...tasks });
+//         dispatchTasks(removeTaskAC(id, toDoListID))
 //     }
 
 //     const removeAllHandler = (toDoListID: string) => {
-//         const removeTask = tasks[toDoListID].filter(el => !el.id)
-//         tasks[toDoListID] = removeTask
-//         setTasks({ ...tasks });
+//         // const removeTask = tasks[toDoListID].filter(el => !el.id)
+//         // tasks[toDoListID] = removeTask
+//         // setTasks({ ...tasks });
 
 //     }
 
 //     const addNewTasks = (title: string, toDoListID: string) => {
-//         const newTask = { id: v1(), title, isDone: false }
-//         const newTasks = [newTask, ...tasks[toDoListID]]
-//         tasks[toDoListID] = newTasks
-//         setTasks({ ...tasks });
+//         dispatchTasks(addTaskAC(title, toDoListID))
 //     }
 
 //     const changeTaskStatus = (taskId: string, newIsDoneValue: boolean, toDoListID: string) => {
-
-//         const nextState: Array<TaskType> = tasks[toDoListID].map(t => t.id === taskId ? { ...t, isDone: newIsDoneValue } : t);
-//         tasks[toDoListID] = nextState
-//         setTasks({ ...tasks })
+//         dispatchTasks(changeTaskStatusAC(taskId, newIsDoneValue, toDoListID))
 //     }
 
 //     //! Filtration
 
 
-//     const filterTasks = (filter: FilterStatusType, toDoListID: string) => {
-
-//         let tasksForTodolist = tasks[toDoListID];
-
-//         switch (filter) {
-//             case 'active':
-//                 return tasksForTodolist = tasks[toDoListID].filter((task) => task.isDone === false);
-//             case 'completed':
-//                 return tasksForTodolist = tasks[toDoListID].filter((task) => task.isDone === true);
-//             case 'three-tasks':
-//                 return tasksForTodolist = tasks[toDoListID].filter((task, indx) => indx <= 2);;
-//             default:
-//                 return tasksForTodolist;
-//         }
-//     }
 
 //     const removeTodolistHandler = (toDoListID: string) => {
-//         const updatedToDoLists = toDoLists.filter(t => t.id !== toDoListID);
-//         const updatedTasks = { ...tasks };
-//         delete updatedTasks[toDoListID];
-//         setToDoLists(updatedToDoLists);
-//         setTasks(updatedTasks);
+//         let action = removeTodolistAC(toDoListID);
+//         dispatchToDoLists(action)
+//         dispatchTasks(action)
 //     }
 
 //     const addToDoList = (title: string) => {
-//         const newToDoList: ToDoListType = { id: v1(), title, filter: 'all' }
-//         setToDoLists([newToDoList, ...toDoLists])
-//         setTasks({ ...tasks, [newToDoList.id]: [] })
+//         let action = addTodolistAC(title);
+//         dispatchToDoLists(action)
+//         dispatchTasks(action)
 //     }
 
 //     const updatedToDoLists = (title: string, toDoListId: string) => {
-//         setToDoLists(toDoLists.map(tl => tl.id === toDoListId ? { ...tl, title } : tl))
+//         dispatchToDoLists(changeTodolistTitleAC(toDoListId, title))
 //     }
 
 
@@ -278,7 +251,7 @@
 //                             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 //                                 ToDoList
 //                             </Typography>
-//                             <MenuButton color="inherit" /* backgroundColor={theme.palette.primary.light} */>Login</MenuButton>
+//                             <MenuButton color="inherit" >Login</MenuButton>
 //                             <FormGroup sx={{ marginLeft: '15px' }}>
 //                                 <FormControlLabel
 //                                     control={
@@ -313,5 +286,5 @@
 //     );
 // }
 
-// export default App;
+// export default AppWithReducer;
 export { }
