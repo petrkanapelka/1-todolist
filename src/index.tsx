@@ -12,8 +12,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <Provider store={store}>
-    {/* <AppWithRedux /> */}
-    <AppHttpRequests />
+    <AppWithRedux />
+    {/* <AppHttpRequests /> */}
   </Provider>
 );
 
