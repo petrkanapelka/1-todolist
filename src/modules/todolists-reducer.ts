@@ -32,7 +32,10 @@ export type ChangeTodolistFilterActionType = {
     };
 };
 
+export type GetTodolistActionType = ReturnType<typeof getTodolistsAC>;
+
 export type ActionsType =
+    | GetTodolistActionType
     | RemoveTodolistActionType
     | AddTodolistActionType
     | ChangeTodolistTitleActionType
@@ -42,6 +45,10 @@ const initialState: ToDoListType[] = [];
 
 export const toDoListsReducer = (state = initialState, action: ActionsType): ToDoListType[] => {
     switch (action.type) {
+        case 'GET-TODOLISTS': {
+            return [...state];
+        }
+
         case 'REMOVE-TODOLIST': {
             return state.filter((tl) => tl.id !== action.payload.id);
         }
@@ -67,6 +74,10 @@ export const toDoListsReducer = (state = initialState, action: ActionsType): ToD
     }
 };
 
+export const getTodolistsAC = () => {
+    return { type: 'GET-TODOLISTS' } as const;
+};
+
 export const addTodolistAC = (title: string): AddTodolistActionType => {
     return { type: 'ADD-TODOLIST', payload: { title, id: v1() } } as const;
 };
@@ -75,10 +86,7 @@ export const removeTodolistAC = (id: string): RemoveTodolistActionType => {
     return { type: 'REMOVE-TODOLIST', payload: { id } } as const;
 };
 
-export const changeToDoListFilterAC = (
-    id: string,
-    filter: FilterStatusType
-): ChangeTodolistFilterActionType => {
+export const changeToDoListFilterAC = (id: string, filter: FilterStatusType): ChangeTodolistFilterActionType => {
     return { type: 'CHANGE-TODOLIST-FILTER', payload: { id, filter } } as const;
 };
 
