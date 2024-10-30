@@ -4,14 +4,15 @@ import { TaskStatus } from "common/enums/enums";
 import { AddItemForm } from "components/addItemForm/AddItemForm";
 import { MenuButton } from "components/menuButton/MenuButton";
 import { tasksApi } from "components/task/api/tasksApi";
-import { DomainTask, UpdateTaskModel } from "components/task/api/tasksApi.types";
+import { DomainTask, TasksStateType, UpdateTaskModel } from "components/task/api/tasksApi.types";
 import { todolistsApi } from "components/toDoList/api/todolistsApi";
 import { ToDoList } from "components/toDoList/ToDoList";
 import { FilterStatusType, Todolist } from "components/toDoList/api/todolistsApi.types";
-import { changeToDoListFilterAC } from "modules/todolists-reducer";
+import { changeToDoListFilterAC, setTodolistsAC } from "modules/todolists-reducer";
 import { useCallback, useState, useEffect, ChangeEvent } from "react";
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import './App.css';
+import { AppRootStateType } from "modules/store";
 
 export type ThemeModeType = 'dark' | 'light';
 
@@ -19,7 +20,7 @@ function AppWithRedux() {
 
     // let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
 
-    // let toDoLists = useSelector<AppRootStateType, ToDoListType[]>(state => state.todolists)
+    let toDoLists = useSelector<AppRootStateType, Todolist[]>(state => state.todolists)
 
     const dispatch = useDispatch();
 
@@ -64,8 +65,9 @@ function AppWithRedux() {
     //     dispatch(changeTodolistTitleAC(toDoListId, title))
     // }, [dispatch])
 
-    const changeFilter = useCallback((status: FilterStatusType, toDoListId: string) => {
-        dispatch(changeToDoListFilterAC(toDoListId, status))
+    const changeFilter = useCallback((payload: { status: FilterStatusType, todolistId: string }) => {
+        const { status, todolistId } = payload
+        dispatch(changeToDoListFilterAC(todolistId, status))
     }, [dispatch]);
 
     const [todolists, setTodolists] = useState<Todolist[]>([])
@@ -75,7 +77,9 @@ function AppWithRedux() {
         todolistsApi.getTodolists()
             .then(res => {
                 const todolists = res.data
+                dispatch(setTodolistsAC(todolists))
                 setTodolists(todolists)
+
                 todolists.forEach(tl => {
                     tasksApi.getTasks(tl.id)
                         .then(res => {
@@ -83,7 +87,7 @@ function AppWithRedux() {
                         })
                 })
             })
-    }, [])
+    }, [dispatch])
 
     const createTodolistHandler = (title: string) => {
         todolistsApi.createTodolist(title)
