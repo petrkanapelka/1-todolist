@@ -23,6 +23,7 @@ import { API_KEY, BEARER_TOKEN } from './api-env';
 import axios from 'axios';
 import { ApiResponse, FilterStatusType, RESULT_CODE, Todolist } from './components/toDoList/todolistsApi.types';
 import { DomainTask, GetTasksResponse, UpdateTaskModel } from './components/task/tasksApi.types';
+import { todolistsApi } from './components/toDoList/api/todolistsApi';
 
 export type ThemeModeType = 'dark' | 'light';
 
@@ -83,15 +84,9 @@ function AppWithRedux() {
     const [tasks, setTasks] = useState<{ [key: string]: DomainTask[] }>({})
 
     useEffect(() => {
-        axios
-            .get<Todolist[]>('https://social-network.samuraijs.com/api/1.1/todo-lists', {
-                headers: {
-                    Authorization: BEARER_TOKEN,
-                },
-            })
+        todolistsApi.getTodolists()
             .then(res => {
                 const todolists = res.data
-                console.log("🚀 ~ useEffect ~ todolists ➔", todolists);
                 setTodolists(todolists)
                 todolists.forEach(tl => {
                     axios
@@ -110,17 +105,7 @@ function AppWithRedux() {
     }, [])
 
     const createTodolistHandler = (title: string) => {
-        axios
-            .post<ApiResponse<Todolist>>(
-                'https://social-network.samuraijs.com/api/1.1/todo-lists',
-                { title },
-                {
-                    headers: {
-                        Authorization: BEARER_TOKEN,
-                        'API-KEY': API_KEY,
-                    },
-                }
-            )
+        todolistsApi.createTodolist(title)
             .then(res => {
                 const newTodo = res.data.data.item
                 setTodolists([newTodo, ...todolists])
@@ -129,30 +114,14 @@ function AppWithRedux() {
     }
 
     const removeTodolistHandler = (id: string) => {
-        axios
-            .delete<ApiResponse<Todolist>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`, {
-                headers: {
-                    Authorization: BEARER_TOKEN,
-                    'API-KEY': API_KEY,
-                },
-            })
+        todolistsApi.deleteTodolist(id)
             .then(res => {
                 setTodolists(todolists.filter(tl => tl.id !== id))
             })
     }
 
     const updateTodolistHandler = (id: string, title: string) => {
-        axios
-            .put<ApiResponse<Todolist>>(
-                `https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`,
-                { title },
-                {
-                    headers: {
-                        Authorization: BEARER_TOKEN,
-                        'API-KEY': API_KEY,
-                    },
-                }
-            )
+        todolistsApi.updateTodolist({ id, title })
             .then(res => {
                 setTodolists(todolists.map(tl => tl.id === id ? { ...tl, title } : tl))
             })
