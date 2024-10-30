@@ -4,15 +4,17 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
+import { DomainTask } from "../../AppWithRedux";
 
 
 export type TaskPropsType = {
+    tasks: { [key: string]: DomainTask[] }
     title: string
     taskID: string
     isDone: boolean
     tlID: string
-    changeTaskStatus: (taskId: string, newIsDoneValue: boolean, toDoListID: string) => void
-    updateTaskTitle: (newTitle: string, taskId: string, toDoListID: string) => void
+    changeTaskStatus: (e: ChangeEvent<HTMLInputElement>, task: DomainTask) => void
+    updateTaskTitle: (title: string, task: DomainTask) => void
     removeHandler: (taskID: string, tlID: string) => void
 
 };
@@ -28,11 +30,17 @@ const taskStyle = {
 export const Task = memo((props: TaskPropsType) => {
 
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        props.changeTaskStatus(props.taskID, e.currentTarget.checked, props.tlID)
+        const task = props.tasks[props.tlID].find(task => task.id === props.taskID)
+        if (task) {
+            props.changeTaskStatus(e, task)
+        }
     }, [props])
 
     const updatedItemHandler = useCallback((newTitle: string) => {
-        props.updateTaskTitle(newTitle, props.taskID, props.tlID)
+        const task = props.tasks[props.tlID].find(task => task.id === props.taskID)
+        if (task) {
+            props.updateTaskTitle(newTitle, task)
+        }
     }, [props])
 
     return (
