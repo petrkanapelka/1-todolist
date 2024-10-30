@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './modules/store';
 import { API_KEY, BEARER_TOKEN } from './api-env';
 import axios from 'axios';
-import { ApiResponse, FilterStatusType, RESULT_CODE, Todolist } from './components/toDoList/todolistsApi.types';
+import { FilterStatusType, RESULT_CODE, Todolist } from './components/toDoList/todolistsApi.types';
 import { DomainTask, GetTasksResponse, UpdateTaskModel } from './components/task/tasksApi.types';
 import { todolistsApi } from './components/toDoList/api/todolistsApi';
 import { tasksApi } from './components/task/api/tasksApi';
