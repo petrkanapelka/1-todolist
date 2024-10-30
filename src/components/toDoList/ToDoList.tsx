@@ -6,7 +6,8 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button, { ButtonProps } from '@mui/material/Button';
 import List from '@mui/material/List';
-import { DomainTask, FilterStatusType, RESULT_CODE } from "../../AppWithRedux";
+import { FilterStatusType, RESULT_CODE } from "./todolistsApi.types";
+import { DomainTask } from "../task/tasksApi.types";
 
 export type ToDoListPropsType = {
     id: string
@@ -24,11 +25,7 @@ export type ToDoListPropsType = {
     children?: ReactNode
 };
 
-export type TaskType = {
-    id: string;
-    title: string;
-    isDone: boolean;
-};
+
 
 export const ToDoList: FC<ToDoListPropsType> = memo(({
     id,
@@ -91,7 +88,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
 
     const updatedToDoListsHandler = useCallback((newTitle: string) => {
-        updatedToDoLists(id , newTitle)
+        updatedToDoLists(id, newTitle)
     }, [id, updatedToDoLists])
 
     const onClickAllHandler = useCallback(() => {
