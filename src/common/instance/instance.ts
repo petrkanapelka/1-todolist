@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { BEARER_TOKEN, API_KEY } from '../../api-env';
 
 export const instance = axios.create({
-    baseURL: 'https://social-network.samuraijs.com/api/1.1/',
+    baseURL: process.env.REACT_APP_BASE_URL,
     headers: {
-        Authorization: BEARER_TOKEN,
-        'API-KEY': API_KEY,
+        Authorization: `Bearer ${process.env.REACT_APP_BEARER_TOKEN}`,
+        'API-KEY': process.env.REACT_APP_API_KEY,
     },
 });
