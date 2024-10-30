@@ -1,7 +1,6 @@
 import { v1 } from 'uuid';
-import { TaskType } from '../components/toDoList/ToDoList';
 import { AddTodolistActionType, RemoveTodolistActionType } from './todolists-reducer';
-import { TasksStateType } from '../AppWithRedux';
+import { TasksStateType, TaskType } from '../components/task/tasksApi.types';
 
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>;
 
