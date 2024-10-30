@@ -1,5 +1,5 @@
 import { v1 } from 'uuid';
-import { FilterStatusType, ToDoListType } from '../AppWithRedux';
+import { FilterStatusType, ToDoListType } from '../components/toDoList/todolistsApi.types';
 
 export type RemoveTodolistActionType = {
     type: 'REMOVE-TODOLIST';
@@ -36,10 +36,7 @@ export type ChangeTodolistFilterActionType = {
 
 export type ActionsType =
     // | GetTodolistActionType
-    | RemoveTodolistActionType
-    | AddTodolistActionType
-    | ChangeTodolistTitleActionType
-    | ChangeTodolistFilterActionType;
+    RemoveTodolistActionType | AddTodolistActionType | ChangeTodolistTitleActionType | ChangeTodolistFilterActionType;
 
 const initialState: ToDoListType[] = [];
 
