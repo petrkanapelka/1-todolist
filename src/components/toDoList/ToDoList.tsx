@@ -43,11 +43,9 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     children
 }: ToDoListPropsType) => {
 
-    console.log('Todolist called')
 
 
     const filteredTasks = useMemo(() => {
-        console.log('useMemo')
         let tasksForTodolist = tasks[id];
 
         switch (filter) {
