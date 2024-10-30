@@ -1,4 +1,4 @@
-import { FC, ReactNode, useCallback, memo, useMemo } from "react";
+import { FC, ReactNode, useCallback, memo, useMemo, ChangeEvent } from "react";
 import { AddItemForm } from "../addItemForm/AddItemForm";
 import { EditableSpan } from "../editableSpan/EditableSpan";
 import { Task } from "../task/Task";
@@ -6,21 +6,21 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button, { ButtonProps } from '@mui/material/Button';
 import List from '@mui/material/List';
-import { FilterStatusType } from "../../AppWithRedux";
+import { DomainTask, FilterStatusType, RESULT_CODE } from "../../AppWithRedux";
 
 export type ToDoListPropsType = {
     id: string
     title: string
-    tasks: Array<TaskType>
+    tasks: { [key: string]: DomainTask[] }
     filter: FilterStatusType
     removeHandler: (id: string, toDoListID: string) => void;
     removeAllHandler: (toDoListID: string) => void
     addNewTasks: (title: string, toDoListID: string) => void;
-    changeTaskStatus: (taskID: string, newIsDoneValue: boolean, toDoListID: string) => void
+    changeTaskStatus: (e: ChangeEvent<HTMLInputElement>, task: DomainTask) => void
     changeFilter: (status: FilterStatusType, toDoListId: string) => void
     removeTodolistHandler: (id: string) => void
-    updateTaskTitle: (newTitle: string, id: string, toDoListID: string) => void
-    updatedToDoLists: (title: string, toDoListId: string) => void,
+    updateTaskTitle: (title: string, task: DomainTask) => void
+    updatedToDoLists: (id: string, title: string) => void,
     children?: ReactNode
 };
 
@@ -51,33 +51,33 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
     const filteredTasks = useMemo(() => {
         console.log('useMemo')
-        let tasksForTodolist = tasks;
+        let tasksForTodolist = tasks[id];
 
         switch (filter) {
             case 'active':
-                return tasksForTodolist = tasks.filter((task) => task.isDone === false);
+                return tasksForTodolist = tasks[id].filter((task) => task.status === RESULT_CODE.ACTIVE);
             case 'completed':
-                return tasksForTodolist = tasks.filter((task) => task.isDone === true);
+                return tasksForTodolist = tasks[id].filter((task) => task.status === RESULT_CODE.COMPLETED);
             case 'three-tasks':
-                return tasksForTodolist = tasks.filter((task, indx) => indx <= 2);;
+                return tasksForTodolist = tasks[id].filter((task, indx) => indx <= 2);;
             default:
                 return tasksForTodolist;
         }
-    }, [filter, tasks])
+    }, [filter, id, tasks])
 
     const taskElements: Array<JSX.Element> | JSX.Element =
-        tasks.length !== 0 ? (
+        tasks[id] && tasks[id].length !== 0 ? (
             filteredTasks.map((task) => {
                 return <Task
                     key={task.id}
                     title={task.title}
-                    isDone={task.isDone}
+                    isDone={task.status === RESULT_CODE.COMPLETED}
                     taskID={task.id}
                     tlID={id}
                     changeTaskStatus={changeTaskStatus}
                     updateTaskTitle={updateTaskTitle}
                     removeHandler={removeHandler}
-                />
+                    tasks={tasks} />
             })
         ) : (
             <span className="empty-span">Your tasklist is empty</span>
@@ -91,7 +91,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
 
     const updatedToDoListsHandler = useCallback((newTitle: string) => {
-        updatedToDoLists(newTitle, id)
+        updatedToDoLists(id , newTitle)
     }, [id, updatedToDoLists])
 
     const onClickAllHandler = useCallback(() => {
@@ -161,7 +161,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
             </List>
 
             <UpdateButton
-                disabled={filteredTasks.length === 0}
+                disabled={filteredTasks && filteredTasks.length === 0}
                 sx={{ alignSelf: 'center' }}
                 size='medium'
                 variant="outlined"
