@@ -18,7 +18,7 @@ export type ToDoListPropsType = {
     removeAllHandler: (toDoListID: string) => void
     addNewTasks: (title: string, toDoListID: string) => void;
     changeTaskStatus: (e: ChangeEvent<HTMLInputElement>, task: DomainTask) => void
-    changeFilter: (status: FilterStatusType, toDoListId: string) => void
+    changeFilter: (payload: { status: FilterStatusType, todolistId: string }) => void
     removeTodolistHandler: (id: string) => void
     updateTaskTitle: (title: string, task: DomainTask) => void
     updatedToDoLists: (id: string, title: string) => void,
@@ -90,16 +90,16 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     }, [id, updatedToDoLists])
 
     const onClickAllHandler = useCallback(() => {
-        changeFilter("all", id);
+        changeFilter({ todolistId: id, status: "all" });
     }, [changeFilter, id])
     const onClickActiveHandler = useCallback(() => {
-        changeFilter("active", id);
+        changeFilter({ todolistId: id, status: "active" });
     }, [changeFilter, id])
     const onClickCompletedHandler = useCallback(() => {
-        changeFilter("completed", id);
+        changeFilter({ todolistId: id, status: "completed" });
     }, [changeFilter, id])
     const onClickFirstThreeHandler = useCallback(() => {
-        changeFilter("three-tasks", id);
+        changeFilter({ todolistId: id, status: "three-tasks" });
     }, [changeFilter, id])
     const onClickRemoveAllHandler = useCallback(() => {
         removeAllHandler(id);

@@ -1,1 +1,1 @@
-export type { ApiResponse, FieldError } from './types.ts';
+export type { ApiResponse } from './types';

@@ -1,1 +1,1 @@
-export type * from './tasksApi.types';
+export  * from './tasksApi.types';

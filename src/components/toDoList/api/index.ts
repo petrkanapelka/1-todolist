@@ -1,2 +1,2 @@
-export { todolistsApi } from './todolistsApi';
-export type * from './todolistsApi.types';
+export { todolistsApi } from "./todolistsApi";
+export * from "./todolistsApi.types";
