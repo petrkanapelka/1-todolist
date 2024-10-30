@@ -24,6 +24,7 @@ import axios from 'axios';
 import { ApiResponse, FilterStatusType, RESULT_CODE, Todolist } from './components/toDoList/todolistsApi.types';
 import { DomainTask, GetTasksResponse, UpdateTaskModel } from './components/task/tasksApi.types';
 import { todolistsApi } from './components/toDoList/api/todolistsApi';
+import { tasksApi } from './components/task/api/tasksApi';
 
 export type ThemeModeType = 'dark' | 'light';
 
@@ -89,19 +90,12 @@ function AppWithRedux() {
                 const todolists = res.data
                 setTodolists(todolists)
                 todolists.forEach(tl => {
-                    axios
-                        .get<GetTasksResponse>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${tl.id}/tasks`, {
-                            headers: {
-                                Authorization: BEARER_TOKEN,
-                                'API-KEY': API_KEY,
-                            },
-                        })
+                    tasksApi.getTasks(tl.id)
                         .then(res => {
                             setTasks(prevTasks => ({ ...prevTasks, [tl.id]: res.data.items }))
                         })
                 })
             })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const createTodolistHandler = (title: string) => {
@@ -128,17 +122,7 @@ function AppWithRedux() {
     }
 
     const createTaskHandler = (title: string, todolistId: string) => {
-        axios
-            .post<ApiResponse<DomainTask>>(
-                `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks`,
-                { title },
-                {
-                    headers: {
-                        Authorization: BEARER_TOKEN,
-                        'API-KEY': API_KEY,
-                    },
-                }
-            )
+        tasksApi.createTask({ title, todolistId })
             .then(res => {
                 const newTask = res.data.data.item
                 setTasks({ ...tasks, [todolistId]: [newTask, ...tasks[todolistId]] })
@@ -146,16 +130,7 @@ function AppWithRedux() {
     }
 
     const removeTaskHandler = (taskId: string, todolistId: string) => {
-        axios
-            .delete<ApiResponse<DomainTask>>(
-                `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${taskId}`,
-                {
-                    headers: {
-                        Authorization: BEARER_TOKEN,
-                        'API-KEY': API_KEY,
-                    },
-                }
-            )
+        tasksApi.deleteTask({ taskId, todolistId })
             .then(res => {
                 setTasks({ ...tasks, [todolistId]: tasks[todolistId].filter(t => t.id !== taskId) })
             })
@@ -163,15 +138,7 @@ function AppWithRedux() {
 
     const removeAllTaskHandler = (todolistId: string) => {
         const deleteRequests = tasks[todolistId].map((task) =>
-            axios.delete<ApiResponse<DomainTask>>(
-                `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${task.id}`,
-                {
-                    headers: {
-                        Authorization: BEARER_TOKEN,
-                        'API-KEY': API_KEY,
-                    },
-                }
-            )
+            tasksApi.deleteTask({ taskId: task.id, todolistId })
         );
 
         Promise.all(deleteRequests)
@@ -199,17 +166,7 @@ function AppWithRedux() {
             startDate: task.startDate,
         }
 
-        axios
-            .put<ApiResponse<DomainTask>>(
-                `https://social-network.samuraijs.com/api/1.1/todo-lists/${task.todoListId}/tasks/${task.id}`,
-                model,
-                {
-                    headers: {
-                        Authorization: BEARER_TOKEN,
-                        'API-KEY': API_KEY,
-                    },
-                }
-            )
+        tasksApi.updateTask({ model, task })
             .then(res => {
                 const newTasks = tasks[task.todoListId].map(t => t.id === task.id ? { ...t, ...model } : t)
                 setTasks({ ...tasks, [task.todoListId]: newTasks })
@@ -227,17 +184,7 @@ function AppWithRedux() {
             startDate: task.startDate,
         }
 
-        axios
-            .put<ApiResponse<DomainTask>>(
-                `https://social-network.samuraijs.com/api/1.1/todo-lists/${task.todoListId}/tasks/${task.id}`,
-                model,
-                {
-                    headers: {
-                        Authorization: BEARER_TOKEN,
-                        'API-KEY': API_KEY,
-                    },
-                }
-            )
+        tasksApi.updateTask({ model, task })
             .then(res => {
                 const newTasks = tasks[task.todoListId].map(t => t.id === task.id ? { ...t, ...model } : t)
                 setTasks({ ...tasks, [task.todoListId]: newTasks })
