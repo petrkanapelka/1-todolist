@@ -2,11 +2,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, List, ButtonProps, Button } from '@mui/material';
 import { TaskStatus } from 'common/enums/enums';
 import { AddItemForm } from 'components/addItemForm/AddItemForm';
-import { EditableSpan } from 'components/editableSpan/EditableSpan';
-import { DomainTask } from 'components/task/tasksApi.types';
+import { DomainTask } from 'components/task/api/tasksApi.types';
 import { ChangeEvent, ReactNode, FC, memo, useMemo, useCallback } from 'react';
-import { FilterStatusType } from './todolistsApi.types';
+import { FilterStatusType } from './api/todolistsApi.types';
 import { Task } from 'components/task/Task';
+import { EditableSpan } from 'components/editableSpan';
 
 
 export type ToDoListPropsType = {

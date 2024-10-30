@@ -1,5 +1,5 @@
 import { v1 } from 'uuid';
-import { FilterStatusType, ToDoListType } from '../components/toDoList/todolistsApi.types';
+import { FilterStatusType, ToDoListType } from '../components/toDoList/api/todolistsApi.types';
 
 export type RemoveTodolistActionType = {
     type: 'REMOVE-TODOLIST';

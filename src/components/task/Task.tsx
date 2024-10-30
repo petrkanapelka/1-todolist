@@ -1,10 +1,10 @@
 import { ChangeEvent, memo, useCallback } from "react";
-import { EditableSpan } from "../editableSpan/EditableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
-import { DomainTask } from "./tasksApi.types";
+import { DomainTask } from "./api/tasksApi.types";
+import { EditableSpan } from "components/editableSpan";
 
 
 export type TaskPropsType = {
