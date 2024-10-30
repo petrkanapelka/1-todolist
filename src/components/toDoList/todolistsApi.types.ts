@@ -13,8 +13,3 @@ export type Todolist = {
     order: number;
 };
 
-
-export enum RESULT_CODE {
-    COMPLETED = 2,
-    ACTIVE = 0,
-}
