@@ -1,6 +1,6 @@
 import { DomainTask, GetTasksResponse, UpdateTaskModel } from '../tasksApi.types';
-import { ApiResponse } from '../../toDoList/todolistsApi.types';
 import { instance } from '../../../common/instance/instance';
+import { ApiResponse } from '../../../common/types/types';
 
 export const tasksApi = {
     getTasks(todolistId: string) {
@@ -13,11 +13,11 @@ export const tasksApi = {
 
     deleteTask(payload: { taskId: string; todolistId: string }) {
         const { taskId, todolistId } = payload;
-        return instance.delete<ApiResponse<DomainTask>>(`todo-lists/${todolistId}/tasks/${taskId}`);
+        return instance.delete<ApiResponse>(`todo-lists/${todolistId}/tasks/${taskId}`);
     },
 
     updateTask(payload: { model: UpdateTaskModel; task: DomainTask }) {
         const { model, task } = payload;
-        return instance.put<ApiResponse<DomainTask>>(`todo-lists/${task.todoListId}/tasks/${task.id}`, model);
+        return instance.put<ApiResponse>(`todo-lists/${task.todoListId}/tasks/${task.id}`, model);
     },
 };
