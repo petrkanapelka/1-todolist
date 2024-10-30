@@ -13,14 +13,6 @@ export type Todolist = {
     order: number;
 };
 
-export type ApiResponse<T> = {
-    data: {
-        item: T;
-    };
-    messages: string[];
-    fieldsErrors: string[];
-    resultCode: number;
-};
 
 export enum RESULT_CODE {
     COMPLETED = 2,
