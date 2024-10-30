@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
-import { DomainTask } from "../../AppWithRedux";
+import { DomainTask } from "./tasksApi.types";
 
 
 export type TaskPropsType = {
