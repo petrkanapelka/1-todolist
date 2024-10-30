@@ -32,10 +32,10 @@ export type ChangeTodolistFilterActionType = {
     };
 };
 
-export type GetTodolistActionType = ReturnType<typeof getTodolistsAC>;
+// export type GetTodolistActionType = ReturnType<typeof getTodolistsAC>;
 
 export type ActionsType =
-    | GetTodolistActionType
+    // | GetTodolistActionType
     | RemoveTodolistActionType
     | AddTodolistActionType
     | ChangeTodolistTitleActionType
@@ -45,9 +45,9 @@ const initialState: ToDoListType[] = [];
 
 export const toDoListsReducer = (state = initialState, action: ActionsType): ToDoListType[] => {
     switch (action.type) {
-        case 'GET-TODOLISTS': {
-            return [...state];
-        }
+        // case 'GET-TODOLISTS': {
+        //     return [...state];
+        // }
 
         case 'REMOVE-TODOLIST': {
             return state.filter((tl) => tl.id !== action.payload.id);
@@ -74,9 +74,9 @@ export const toDoListsReducer = (state = initialState, action: ActionsType): ToD
     }
 };
 
-export const getTodolistsAC = () => {
-    return { type: 'GET-TODOLISTS' } as const;
-};
+// export const getTodolistsAC = () => {
+//     return { type: 'GET-TODOLISTS' } as const;
+// };
 
 export const addTodolistAC = (title: string): AddTodolistActionType => {
     return { type: 'ADD-TODOLIST', payload: { title, id: v1() } } as const;
