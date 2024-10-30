@@ -1,61 +1,11 @@
-import Checkbox from '@mui/material/Checkbox'
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import { AddItemForm } from '../components/addItemForm/AddItemForm'
-import { EditableSpan } from '../components/editableSpan/EditableSpan'
-import axios from 'axios'
-import { API_KEY, BEARER_TOKEN } from '../api-env'
-
-
-type Todolist = {
-    id: string
-    title: string
-    addedDate: string
-    order: number
-}
-
-type ApiResponse<T> = {
-    data: {
-        item: T
-    };
-    messages: string[];
-    fieldsErrors: string[];
-    resultCode: number;
-};
-
-export type GetTasksResponse = {
-    error: string | null
-    totalCount: number
-    items: DomainTask[]
-}
-
-export type DomainTask = {
-    description: string
-    title: string
-    status: number
-    priority: number
-    startDate: string
-    deadline: string
-    id: string
-    todoListId: string
-    order: number
-    addedDate: string
-}
-
-
-type UpdateTaskModel = {
-    status: number;
-    title: string;
-    deadline: string;
-    description: string;
-    priority: number;
-    startDate: string;
-}
-
-enum RESULT_CODE {
-    COMPLETED = 2,
-    ACTIVE = 0
-}
-
+import { Checkbox } from "@mui/material"
+import axios from "axios"
+import { useState, useEffect, ChangeEvent } from "react"
+import { BEARER_TOKEN, API_KEY } from "../api-env"
+import { AddItemForm } from "../components/addItemForm/AddItemForm"
+import { EditableSpan } from "../components/editableSpan/EditableSpan"
+import { DomainTask, GetTasksResponse, UpdateTaskModel } from "../components/task/tasksApi.types"
+import { Todolist, ApiResponse, RESULT_CODE } from "../components/toDoList/todolistsApi.types"
 
 
 export const AppHttpRequests = () => {
