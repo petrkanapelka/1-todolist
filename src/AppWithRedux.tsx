@@ -21,10 +21,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './modules/store';
 import { API_KEY, BEARER_TOKEN } from './api-env';
 import axios from 'axios';
-import { FilterStatusType, RESULT_CODE, Todolist } from './components/toDoList/todolistsApi.types';
+import { FilterStatusType, Todolist } from './components/toDoList/todolistsApi.types';
 import { DomainTask, GetTasksResponse, UpdateTaskModel } from './components/task/tasksApi.types';
 import { todolistsApi } from './components/toDoList/api/todolistsApi';
 import { tasksApi } from './components/task/api/tasksApi';
+import { TaskStatus } from './common/enums/enums';
 
 export type ThemeModeType = 'dark' | 'light';
 
@@ -155,7 +156,7 @@ function AppWithRedux() {
 
 
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, task: DomainTask) => {
-        let status = e.currentTarget.checked ? RESULT_CODE.COMPLETED : RESULT_CODE.ACTIVE
+        let status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
 
         const model: UpdateTaskModel = {
             status,
