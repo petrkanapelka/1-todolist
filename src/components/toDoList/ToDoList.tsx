@@ -6,8 +6,9 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button, { ButtonProps } from '@mui/material/Button';
 import List from '@mui/material/List';
-import { FilterStatusType, RESULT_CODE } from "./todolistsApi.types";
 import { DomainTask } from "../task/tasksApi.types";
+import { TaskStatus } from "../../common/enums/enums";
+import { FilterStatusType } from "./todolistsApi.types";
 
 export type ToDoListPropsType = {
     id: string
@@ -50,9 +51,9 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
         switch (filter) {
             case 'active':
-                return tasksForTodolist = tasks[id].filter((task) => task.status === RESULT_CODE.ACTIVE);
+                return tasksForTodolist = tasks[id].filter((task) => task.status === TaskStatus.New);
             case 'completed':
-                return tasksForTodolist = tasks[id].filter((task) => task.status === RESULT_CODE.COMPLETED);
+                return tasksForTodolist = tasks[id].filter((task) => task.status === TaskStatus.Completed);
             case 'three-tasks':
                 return tasksForTodolist = tasks[id].filter((task, indx) => indx <= 2);;
             default:
@@ -66,7 +67,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
                 return <Task
                     key={task.id}
                     title={task.title}
-                    isDone={task.status === RESULT_CODE.COMPLETED}
+                    isDone={task.status === TaskStatus.Completed}
                     taskID={task.id}
                     tlID={id}
                     changeTaskStatus={changeTaskStatus}
