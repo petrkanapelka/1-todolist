@@ -1,14 +1,13 @@
-import { FC, ReactNode, useCallback, memo, useMemo, ChangeEvent } from "react";
-import { AddItemForm } from "../addItemForm/AddItemForm";
-import { EditableSpan } from "../editableSpan/EditableSpan";
-import { Task } from "../task/Task";
-import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Button, { ButtonProps } from '@mui/material/Button';
-import List from '@mui/material/List';
-import { DomainTask } from "../task/tasksApi.types";
-import { TaskStatus } from "../../common/enums/enums";
-import { FilterStatusType } from "./todolistsApi.types";
+import { IconButton, List, ButtonProps, Button } from '@mui/material';
+import { TaskStatus } from 'common/enums/enums';
+import { AddItemForm } from 'components/addItemForm/AddItemForm';
+import { EditableSpan } from 'components/editableSpan/EditableSpan';
+import { DomainTask } from 'components/task/tasksApi.types';
+import { ChangeEvent, ReactNode, FC, memo, useMemo, useCallback } from 'react';
+import { FilterStatusType } from './todolistsApi.types';
+import { Task } from 'components/task/Task';
+
 
 export type ToDoListPropsType = {
     id: string
