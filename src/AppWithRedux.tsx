@@ -1,31 +1,17 @@
-import './App.css';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { ToDoList } from './components/toDoList/ToDoList';
-import { AddItemForm } from './components/addItemForm/AddItemForm';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import { MenuButton } from './components/menuButton/MenuButton';
-import createTheme from '@mui/material/styles/createTheme';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import Switch from '@mui/material/Switch';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { addTodolistAC, changeToDoListFilterAC, changeTodolistTitleAC, removeTodolistAC } from './modules/todolists-reducer';
-import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeAllTaskAC, removeTaskAC } from './modules/tasks-reducer';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppRootStateType } from './modules/store';
-import { API_KEY, BEARER_TOKEN } from './api-env';
-import axios from 'axios';
-import { FilterStatusType, Todolist } from './components/toDoList/todolistsApi.types';
-import { DomainTask, GetTasksResponse, UpdateTaskModel } from './components/task/tasksApi.types';
-import { todolistsApi } from './components/toDoList/api/todolistsApi';
-import { tasksApi } from './components/task/api/tasksApi';
-import { TaskStatus } from './common/enums/enums';
+import { ThemeProvider } from "@emotion/react";
+import { Grid, Paper, createTheme, CssBaseline, Box, AppBar, Toolbar, Typography, FormGroup, FormControlLabel, Switch, Container } from "@mui/material";
+import { TaskStatus } from "common/enums/enums";
+import { AddItemForm } from "components/addItemForm/AddItemForm";
+import { MenuButton } from "components/menuButton/MenuButton";
+import { tasksApi } from "components/task/api/tasksApi";
+import { DomainTask, UpdateTaskModel } from "components/task/tasksApi.types";
+import { todolistsApi } from "components/toDoList/api/todolistsApi";
+import { ToDoList } from "components/toDoList/ToDoList";
+import { FilterStatusType, Todolist } from "components/toDoList/todolistsApi.types";
+import { changeToDoListFilterAC } from "modules/todolists-reducer";
+import { useCallback, useState, useEffect, ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
+
 
 export type ThemeModeType = 'dark' | 'light';
 
