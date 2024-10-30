@@ -1,6 +1,6 @@
 import './App.css';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { TaskType, ToDoList } from './components/toDoList/ToDoList';
+import { ToDoList } from './components/toDoList/ToDoList';
 import { AddItemForm } from './components/addItemForm/AddItemForm';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -21,71 +21,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './modules/store';
 import { API_KEY, BEARER_TOKEN } from './api-env';
 import axios from 'axios';
-
-export type FilterStatusType = 'all' | 'completed' | 'active' | 'three-tasks';
-
-export type ToDoListType = {
-    id: string
-    title: string
-    filter: FilterStatusType
-}
-
-export type TasksStateType = {
-    [key: string]: TaskType[]
-}
+import { ApiResponse, FilterStatusType, RESULT_CODE, Todolist } from './components/toDoList/todolistsApi.types';
+import { DomainTask, GetTasksResponse, UpdateTaskModel } from './components/task/tasksApi.types';
 
 export type ThemeModeType = 'dark' | 'light';
-
-type Todolist = {
-    id: string
-    title: string
-    addedDate: string
-    order: number
-}
-
-type ApiResponse<T> = {
-    data: {
-        item: T
-    };
-    messages: string[];
-    fieldsErrors: string[];
-    resultCode: number;
-};
-
-export type GetTasksResponse = {
-    error: string | null
-    totalCount: number
-    items: DomainTask[]
-}
-
-export type DomainTask = {
-    description: string
-    title: string
-    status: number
-    priority: number
-    startDate: string
-    deadline: string
-    id: string
-    todoListId: string
-    order: number
-    addedDate: string
-}
-
-
-type UpdateTaskModel = {
-    status: number;
-    title: string;
-    deadline: string;
-    description: string;
-    priority: number;
-    startDate: string;
-}
-
-export enum RESULT_CODE {
-    COMPLETED = 2,
-    ACTIVE = 0
-}
-
 
 function AppWithRedux() {
 
