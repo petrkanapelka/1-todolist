@@ -18,8 +18,6 @@ export type ThemeModeType = 'dark' | 'light';
 
 function AppWithRedux() {
     const dispatch = useAppDispatch();
-
-    // let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     let todolists2 = useAppSelector(state => state.todolists)
 
     useEffect(() => {
@@ -115,37 +113,37 @@ function AppWithRedux() {
             })
     }
 
-    const createTaskHandler = (title: string, todolistId: string) => {
-        tasksApi.createTask({ title, todolistId })
-            .then(res => {
-                const newTask = res.data.data.item
-                setTasks({ ...tasks, [todolistId]: [newTask, ...tasks[todolistId]] })
-            })
-    }
+    // const createTaskHandler = (title: string, todolistId: string) => {
+    //     tasksApi.createTask({ title, todolistId })
+    //         .then(res => {
+    //             const newTask = res.data.data.item
+    //             setTasks({ ...tasks, [todolistId]: [newTask, ...tasks[todolistId]] })
+    //         })
+    // }
 
-    const removeTaskHandler = (taskId: string, todolistId: string) => {
-        tasksApi.deleteTask({ taskId, todolistId })
-            .then(res => {
-                setTasks({ ...tasks, [todolistId]: tasks[todolistId].filter(t => t.id !== taskId) })
-            })
-    }
+    // const removeTaskHandler = (taskId: string, todolistId: string) => {
+    //     tasksApi.deleteTask({ taskId, todolistId })
+    //         .then(res => {
+    //             setTasks({ ...tasks, [todolistId]: tasks[todolistId].filter(t => t.id !== taskId) })
+    //         })
+    // }
 
-    const removeAllTaskHandler = (todolistId: string) => {
-        const deleteRequests = tasks[todolistId].map((task) =>
-            tasksApi.deleteTask({ taskId: task.id, todolistId })
-        );
+    // const removeAllTaskHandler = (todolistId: string) => {
+    //     const deleteRequests = tasks[todolistId].map((task) =>
+    //         tasksApi.deleteTask({ taskId: task.id, todolistId })
+    //     );
 
-        Promise.all(deleteRequests)
-            .then(() => {
-                setTasks((prevTasks) => ({
-                    ...prevTasks,
-                    [todolistId]: []
-                }));
-            })
-            .catch((error) => {
-                console.error("Error deleting tasks:", error);
-            });
-    };
+    //     Promise.all(deleteRequests)
+    //         .then(() => {
+    //             setTasks((prevTasks) => ({
+    //                 ...prevTasks,
+    //                 [todolistId]: []
+    //             }));
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error deleting tasks:", error);
+    //         });
+    // };
 
 
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, task: DomainTask) => {
@@ -194,10 +192,9 @@ function AppWithRedux() {
                         id={t.id}
                         title={t.title}
                         filter={'all'}
-                        tasks={tasks}
-                        addNewTasks={createTaskHandler}
-                        removeHandler={removeTaskHandler}
-                        removeAllHandler={removeAllTaskHandler}
+                        // addNewTasks={createTaskHandler}
+                        // removeHandler={removeTaskHandler}
+                        // removeAllHandler={removeAllTaskHandler}
                         removeTodolistHandler={removeTodolistHandler}
                         changeTaskStatus={changeTaskStatusHandler}
                         changeFilter={changeFilter}
