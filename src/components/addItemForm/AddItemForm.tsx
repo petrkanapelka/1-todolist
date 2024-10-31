@@ -8,7 +8,7 @@ export type AddItemFormType = {
 };
 
 export const AddItemForm: FC<AddItemFormType> = memo((props: AddItemFormType) => {
-
+    const { addNewItem } = props
 
     const [inputValue, setInputValue] = useState("");
     const [error, setError] = useState<string | null>(null)
@@ -20,7 +20,7 @@ export const AddItemForm: FC<AddItemFormType> = memo((props: AddItemFormType) =>
 
     const validateInput = () => {
         if (inputValue.length < 15 && inputValue.trim() !== '') {
-            props.addNewItem(inputValue.trim());
+            addNewItem(inputValue.trim());
             setInputValue("");
         } else {
             setError('Title is required');
