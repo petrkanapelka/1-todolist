@@ -8,27 +8,24 @@ import { DomainTask, TasksStateType, UpdateTaskModel } from "components/task/api
 import { todolistsApi } from "components/toDoList/api/todolistsApi";
 import { ToDoList } from "components/toDoList/ToDoList";
 import { DomainTodolist, FilterStatusType, Todolist } from "components/toDoList/api/todolistsApi.types";
-import { changeToDoListFilterAC, setTodolistsAC } from "modules/todolists-reducer";
+import { changeToDoListFilterAC, fetchTodolistsThunk, setTodolistsAC } from "modules/todolists-reducer";
 import { useCallback, useState, useEffect, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import './App.css';
-import { AppRootStateType } from "modules/store";
+import { AppDispatch, AppRootStateType, useAppDispatch, useAppSelector } from "modules/store";
 
 export type ThemeModeType = 'dark' | 'light';
 
 function AppWithRedux() {
+    const dispatch = useAppDispatch();
 
     // let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    // let toDoLists = useSelector<AppRootStateType, Todolist[]>(state => state.todolists)
+    let todolists2 = useAppSelector(state => state.todolists)
 
     useEffect(() => {
-        todolistsApi.getTodolists().then(res => {
-          const todolists = res.data
-          console.log(todolists)
-        })
-      }, [])
+        dispatch(fetchTodolistsThunk)
+    }, [dispatch])
 
-    const dispatch = useDispatch();
 
 
     // const changeFilter = useCallback((status: FilterStatusType, toDoListId: string) => {
@@ -80,19 +77,19 @@ function AppWithRedux() {
     const [tasks, setTasks] = useState<{ [key: string]: DomainTask[] }>({})
 
     useEffect(() => {
-        todolistsApi.getTodolists()
-            .then(res => {
-                const todolists = res.data
-                dispatch(setTodolistsAC(todolists))
-                setTodolists(todolists)
+        // todolistsApi.getTodolists()
+        //     .then(res => {
+        //         const todolists = res.data
+        //         dispatch(setTodolistsAC(todolists))
+        //         setTodolists(todolists)
 
-                todolists.forEach(tl => {
-                    tasksApi.getTasks(tl.id)
-                        .then(res => {
-                            setTasks(prevTasks => ({ ...prevTasks, [tl.id]: res.data.items }))
-                        })
-                })
-            })
+        //         todolists.forEach(tl => {
+        //             tasksApi.getTasks(tl.id)
+        //                 .then(res => {
+        //                     setTasks(prevTasks => ({ ...prevTasks, [tl.id]: res.data.items }))
+        //                 })
+        //         })
+        //     })
     }, [dispatch])
 
     const createTodolistHandler = (title: string) => {
@@ -189,7 +186,7 @@ function AppWithRedux() {
     }
 
 
-    const mappedToDoLists = todolists.map(t => {
+    const mappedToDoLists = todolists2.map(t => {
         return (
             <Grid item key={t.id}>
                 <Paper className="paper" elevation={3}>
