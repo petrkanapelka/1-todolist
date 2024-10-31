@@ -7,7 +7,7 @@ import { tasksApi } from "components/task/api/tasksApi";
 import { DomainTask, TasksStateType, UpdateTaskModel } from "components/task/api/tasksApi.types";
 import { todolistsApi } from "components/toDoList/api/todolistsApi";
 import { ToDoList } from "components/toDoList/ToDoList";
-import { FilterStatusType, Todolist } from "components/toDoList/api/todolistsApi.types";
+import { DomainTodolist, FilterStatusType, Todolist } from "components/toDoList/api/todolistsApi.types";
 import { changeToDoListFilterAC, setTodolistsAC } from "modules/todolists-reducer";
 import { useCallback, useState, useEffect, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,8 +19,14 @@ export type ThemeModeType = 'dark' | 'light';
 function AppWithRedux() {
 
     // let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    // let toDoLists = useSelector<AppRootStateType, Todolist[]>(state => state.todolists)
 
-    let toDoLists = useSelector<AppRootStateType, Todolist[]>(state => state.todolists)
+    useEffect(() => {
+        todolistsApi.getTodolists().then(res => {
+          const todolists = res.data
+          console.log(todolists)
+        })
+      }, [])
 
     const dispatch = useDispatch();
 
@@ -70,7 +76,7 @@ function AppWithRedux() {
         dispatch(changeToDoListFilterAC(todolistId, status))
     }, [dispatch]);
 
-    const [todolists, setTodolists] = useState<Todolist[]>([])
+    const [todolists, setTodolists] = useState<DomainTodolist[]>([])
     const [tasks, setTasks] = useState<{ [key: string]: DomainTask[] }>({})
 
     useEffect(() => {

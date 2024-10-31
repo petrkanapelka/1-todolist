@@ -1,5 +1,5 @@
 import { v1 } from "uuid";
-import { FilterStatusType, Todolist, ToDoListType } from "../components/toDoList/api/todolistsApi.types";
+import { DomainTodolist, FilterStatusType, Todolist, ToDoListType } from "../components/toDoList/api/todolistsApi.types";
 
 export type RemoveTodolistActionType = {
   type: "REMOVE-TODOLIST";
@@ -41,16 +41,16 @@ export type ActionsType =
   | ChangeTodolistTitleActionType
   | ChangeTodolistFilterActionType;
 
-const initialState: Todolist[] = [];
+const initialState: DomainTodolist[] = [];
 
-export const toDoListsReducer = (state = initialState, action: ActionsType): Todolist[] => {
+export const toDoListsReducer = (state = initialState, action: ActionsType): DomainTodolist[] => {
   if (!Array.isArray(state)) {
     console.error("State is not an array:", state);
     state = [];
   }
   switch (action.type) {
     case "SET-TODOLISTS": {
-      return [...action.todolists];
+      return action.todolists.map((tl) => ({ ...tl }));
     }
 
     case "REMOVE-TODOLIST": {
@@ -59,7 +59,7 @@ export const toDoListsReducer = (state = initialState, action: ActionsType): Tod
 
     case "ADD-TODOLIST": {
       const { title, id } = action.payload;
-      const newToDoList: Todolist = { id, title, addedDate: "", order: 0 };
+      const newToDoList: DomainTodolist = { id, title, addedDate: "", order: 0, filter: 'all'};
       return [newToDoList, ...state];
     }
 
@@ -78,7 +78,7 @@ export const toDoListsReducer = (state = initialState, action: ActionsType): Tod
   }
 };
 
-export const setTodolistsAC = (todolists: Todolist[]) => {
+export const setTodolistsAC = (todolists: DomainTodolist[]) => {
   return { type: "SET-TODOLISTS", todolists } as const;
 };
 
