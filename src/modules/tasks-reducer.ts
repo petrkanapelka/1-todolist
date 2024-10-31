@@ -50,22 +50,8 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
     }
 
     case "ADD-TASK": {
-      const newTask: DomainTask = {
-        title: action.title,
-        todoListId: action.todolistID,
-        startDate: "",
-        priority: TaskPriority.Low,
-        description: "",
-        deadline: "",
-        status: TaskStatus.New,
-        addedDate: "",
-        order: 0,
-        id: v1(),
-      };
-      return {
-        ...state,
-        [action.todolistID]: [newTask, ...state[action.todolistID]],
-      };
+      const newTask = action.payload.task;
+      return { ...state, [newTask.todoListId]: [newTask, ...state[newTask.todoListId]] };
     }
 
     case "CHANGE-STATUS-TASK": {
@@ -116,8 +102,8 @@ export const removeAllTaskAC = (todolistID: string) => {
   return { type: "REMOVE-ALL-TASK", todolistID } as const;
 };
 
-export const addTaskAC = (title: string, todolistID: string) => {
-  return { type: "ADD-TASK", title, todolistID } as const;
+export const addTaskAC = (payload: { task: DomainTask }) => {
+  return { type: "ADD-TASK", payload } as const;
 };
 
 export const changeTaskStatusAC = (taskID: string, isDone: boolean, todolistID: string) => {
@@ -134,4 +120,18 @@ export const fetchTasksThunkTC = (todolistId: string) => {
       dispatch(setTasksAC(todolistId, res.data.items));
     });
   };
+};
+
+export const removeTaskTC = (taskId: string, todolistId: string) => {
+  return (dispatch: Dispatch) => {
+    tasksApi.deleteTask({ todolistId, taskId }).then((res) => {
+      dispatch(removeTaskAC(taskId, todolistId));
+    });
+  };
+};
+
+export const addTaskTC = (arg: { title: string; todolistId: string }) => (dispatch: Dispatch) => {
+  tasksApi.createTask(arg).then((res) => {
+    dispatch(addTaskAC({ task: res.data.data.item }));
+  });
 };
