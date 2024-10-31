@@ -1,5 +1,6 @@
+import { DomainTodolist, FilterStatusType, todolistsApi } from "components/toDoList/api";
+import { Dispatch } from "redux";
 import { v1 } from "uuid";
-import { DomainTodolist, FilterStatusType, Todolist, ToDoListType } from "../components/toDoList/api/todolistsApi.types";
 
 export type RemoveTodolistActionType = {
   type: "REMOVE-TODOLIST";
@@ -59,7 +60,7 @@ export const toDoListsReducer = (state = initialState, action: ActionsType): Dom
 
     case "ADD-TODOLIST": {
       const { title, id } = action.payload;
-      const newToDoList: DomainTodolist = { id, title, addedDate: "", order: 0, filter: 'all'};
+      const newToDoList: DomainTodolist = { id, title, addedDate: "", order: 0, filter: "all" };
       return [newToDoList, ...state];
     }
 
@@ -98,4 +99,8 @@ export const changeTodolistTitleAC = (id: string, title: string): ChangeTodolist
   return { type: "CHANGE-TODOLIST-TITLE", payload: { id, title } } as const;
 };
 
-export type { ToDoListType };
+export const fetchTodolistsThunk = (dispatch: Dispatch) => {
+  todolistsApi.getTodolists().then((res) => {
+    dispatch(setTodolistsAC(res.data));
+  });
+};
