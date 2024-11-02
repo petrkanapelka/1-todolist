@@ -10,3 +10,5 @@ export type Todolist = {
 export type DomainTodolist = Todolist & {
   filter: FilterStatusType;
 };
+
+export type UpdateDomainTodolist = Partial<DomainTodolist>
