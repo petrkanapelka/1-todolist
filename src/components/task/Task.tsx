@@ -3,22 +3,17 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
-import { DomainTask } from "./api/tasksApi.types";
 import { EditableSpan } from "components/editableSpan";
 import { useAppDispatch, useAppSelector } from "modules/store";
-import { removeTaskTC } from "modules/tasks-reducer";
+import { removeTaskTC, updateTaskTC } from "modules/tasks-reducer";
+import { TaskStatus } from "common/enums/enums";
 
 
 export type TaskPropsType = {
-    tasks: { [key: string]: DomainTask[] }
     title: string
-    taskID: string
+    taskId: string
     isDone: boolean
-    tlID: string
-    changeTaskStatus: (e: ChangeEvent<HTMLInputElement>, task: DomainTask) => void
-    updateTaskTitle: (title: string, task: DomainTask) => void
-    // removeHandler: (taskID: string, tlID: string) => void
-
+    todoListId: string
 };
 
 const taskStyle = {
@@ -30,33 +25,36 @@ const taskStyle = {
 }
 
 export const Task = memo((props: TaskPropsType) => {
-    const { taskID, tlID: todolistID } = props
+    const { taskId, todoListId, isDone, title } = props
     const tasks = useAppSelector(state => state.tasks)
     const dispatch = useAppDispatch()
 
-    const removeHandler = () => {
-        dispatch(removeTaskTC(taskID, todolistID))
+    const onRemoveTask = () => {
+        dispatch(removeTaskTC(taskId, todoListId))
     }
 
-    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const task = tasks[todolistID].find(task => task.id === taskID)
+    const onChangeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const task = tasks[todoListId].find(task => {
+            return task.id === taskId;
+        });
         if (task) {
-            props.changeTaskStatus(e, task)
+            const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
+            dispatch(updateTaskTC({ taskId: task.id, todoListId: task.todoListId, title: task.title, status }))
         }
-    }, [props, taskID, tasks, todolistID])
+    }, [dispatch, taskId, tasks, todoListId])
 
-    const updatedItemHandler = useCallback((newTitle: string) => {
-        const task = tasks[todolistID].find(task => task.id === taskID)
+    const onChangeTaskTitle = useCallback((title: string) => {
+        const task = tasks[todoListId].find(task => task.id === taskId)
         if (task) {
-            props.updateTaskTitle(newTitle, task)
+            dispatch(updateTaskTC({ taskId, todoListId, status: task.status, title }))
         }
-    }, [props, taskID, tasks, todolistID])
+    }, [dispatch, taskId, tasks, todoListId])
 
     return (
-        <ListItem key={props.taskID} className="task-item" style={taskStyle} >
-            <Checkbox onChange={onChangeHandler} checked={props.isDone} />
-            <EditableSpan title={props.title} isDone={props.isDone} updatedItem={updatedItemHandler} />
-            <IconButton aria-label="delete" onClick={removeHandler}>
+        <ListItem key={taskId} className="task-item" style={taskStyle} >
+            <Checkbox onChange={onChangeTaskStatus} checked={isDone} />
+            <EditableSpan title={title} isDone={isDone} updatedItem={onChangeTaskTitle} />
+            <IconButton aria-label="delete" onClick={onRemoveTask}>
                 <DeleteIcon />
             </IconButton>
         </ListItem>
