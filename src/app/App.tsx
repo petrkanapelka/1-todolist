@@ -13,7 +13,7 @@ import './App.css';
 
 export type ThemeModeType = 'dark' | 'light';
 
-function AppWithRedux() {
+function App() {
     const dispatch = useAppDispatch();
     let todolists2 = useAppSelector(state => state.todolists)
 
@@ -134,4 +134,4 @@ function AppWithRedux() {
     );
 }
 
-export default AppWithRedux;
+export default App;

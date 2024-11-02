@@ -1,4 +1,4 @@
-import { DomainTask, GetTasksResponse, UpdateTaskDomainModel, UpdateTaskModel } from "./tasksApi.types";
+import { DomainTask, GetTasksResponse, UpdateTaskDomainModel } from "./tasksApi.types";
 import { ApiResponse } from "../../../common/types/types";
 import { instance } from "common/instance";
 
