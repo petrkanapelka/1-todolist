@@ -26,8 +26,8 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 }: ToDoListPropsType) => {
 
     const tasks = useAppSelector(state => state.tasks)
-    const todolists = useAppSelector(state=>state.todolists)
-    const filter = todolists.find(tl=>tl.id === todoListId)?.filter || 'all'
+    const todolists = useAppSelector(state => state.todolists)
+    const filter = todolists.find(tl => tl.id === todoListId)?.filter || 'all'
 
     const dispatch = useAppDispatch()
 
