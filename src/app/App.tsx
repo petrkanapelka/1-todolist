@@ -1,18 +1,20 @@
 import { ThemeProvider } from "@emotion/react";
-import { Grid, Paper, createTheme, CssBaseline, Box, AppBar, Toolbar, Typography, FormGroup, FormControlLabel, Switch, Container } from "@mui/material";
+import { Grid, Paper, createTheme, CssBaseline, Box, AppBar, Toolbar, Typography, FormGroup, FormControlLabel, Switch, Container, LinearProgress } from "@mui/material";
 import { AddItemForm } from "components/addItemForm/AddItemForm";
 import { MenuButton } from "components/menuButton/MenuButton";
 import { ToDoList } from "components/toDoList/ToDoList";
 import { addTodolistTC, fetchTodolistsThunk } from "modules/todolists-reducer";
-import { useState, useEffect } from "react";
+import { useEffect, ChangeEvent } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
 import './App.css';
+import { setAppThemesAC } from "modules/app-reducer";
 
-export type ThemeModeType = 'dark' | 'light';
 
 function App() {
     const dispatch = useAppDispatch();
     let todolists2 = useAppSelector(state => state.todolists)
+    const themeMode = useAppSelector(state => state.app.themeMode)
+    const appStatus = useAppSelector(state => state.app.status)
 
     useEffect(() => {
         dispatch(fetchTodolistsThunk)
@@ -36,11 +38,9 @@ function App() {
     });
 
 
-    const [themeMode, setThemeMode] = useState<ThemeModeType>('dark');
-
     const theme = createTheme({
         palette: {
-            mode: themeMode === 'dark' ? 'light' : 'dark',
+            mode: themeMode === 'light' ? 'light' : 'dark',
             primary: {
                 main: '#1976D2',
             },
@@ -50,8 +50,9 @@ function App() {
         },
     });
 
-    const changeMode = () => {
-        setThemeMode(prevMode => (prevMode === 'dark' ? 'light' : 'dark'));
+    const changeMode = (e: ChangeEvent<HTMLInputElement>) => {
+        const theme = e.currentTarget.checked ? 'light' : 'dark'
+        dispatch(setAppThemesAC(theme))
     }
 
     return (
@@ -72,10 +73,11 @@ function App() {
                                             onChange={changeMode}
                                             defaultChecked color="secondary" />
                                     }
-                                    label={themeMode === 'dark' ? 'light' : 'dark'}
+                                    label={themeMode === 'light' ? 'light' : 'dark'}
                                 />
                             </FormGroup>
                         </Toolbar>
+                       {appStatus === 'loading' && <LinearProgress />}
                     </AppBar>
                 </Box>
                 <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center' }}>
