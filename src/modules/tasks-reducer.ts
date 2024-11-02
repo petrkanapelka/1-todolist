@@ -4,6 +4,7 @@ import { Dispatch } from "redux";
 import { tasksApi } from "components/task/api/tasksApi";
 import { TaskStatus } from "common/enums/enums";
 import { AppRootStateType } from "./store";
+import { setAppStatusAC } from "./app-reducer";
 
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>;
 
@@ -100,28 +101,35 @@ export const updateTaskAC = (task: DomainTask) => {
 
 export const fetchTasksThunkTC = (todoListId: string) => {
   return (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC("loading"));
     tasksApi.getTasks(todoListId).then((res) => {
       dispatch(setTasksAC(todoListId, res.data.items));
+      dispatch(setAppStatusAC("succeeded"));
     });
   };
 };
 
 export const removeTaskTC = (taskId: string, todoListId: string) => {
   return (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC("loading"));
     tasksApi.deleteTask({ todoListId, taskId }).then((res) => {
       dispatch(removeTaskAC(taskId, todoListId));
+      dispatch(setAppStatusAC("succeeded"));
     });
   };
 };
 
 export const addTaskTC = (arg: { title: string; todoListId: string }) => (dispatch: Dispatch) => {
+  dispatch(setAppStatusAC("loading"));
   tasksApi.createTask(arg).then((res) => {
     dispatch(addTaskAC({ task: res.data.data.item }));
+    dispatch(setAppStatusAC("succeeded"));
   });
 };
 
 export const updateTaskTC = (arg: { taskId: string; todoListId: string; title: string; status: TaskStatus }) => {
   return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    dispatch(setAppStatusAC("loading"));
     const { taskId, todoListId, title, status } = arg;
 
     const tasks = getState().tasks;
@@ -140,6 +148,7 @@ export const updateTaskTC = (arg: { taskId: string; todoListId: string; title: s
 
       tasksApi.updateTask({ model, task }).then((res) => {
         dispatch(updateTaskAC(res.data.data.item));
+        dispatch(setAppStatusAC("succeeded"));
       });
     }
   };
