@@ -8,15 +8,14 @@ import { Task } from 'components/task/Task';
 import { EditableSpan } from 'components/editableSpan';
 import { useAppDispatch, useAppSelector } from 'modules/store';
 import { addTaskTC, fetchTasksThunkTC, removeTaskTC } from 'modules/tasks-reducer';
+import { changeToDoListFilterAC, removeTodolistTC, updateTodolistTC } from 'modules/todolists-reducer';
 
 
 export type ToDoListPropsType = {
     todoListId: string
     title: string
     filter: FilterStatusType
-    changeFilter: (payload: { status: FilterStatusType, todoListId: string }) => void
-    removeTodolistHandler: (id: string) => void
-    updatedToDoLists: (id: string, title: string) => void,
+    // changeFilter: (payload: { status: FilterStatusType, todoListId: string }) => void
     children?: ReactNode
 };
 
@@ -26,9 +25,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     todoListId,
     title,
     filter,
-    removeTodolistHandler,
-    changeFilter,
-    updatedToDoLists,
+    // changeFilter,
     children
 }: ToDoListPropsType) => {
 
@@ -77,10 +74,14 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
         dispatch(addTaskTC({ title, todoListId }))
     }, [dispatch, todoListId]))
 
+    const onRemoveTodolist = () => {
+        dispatch(removeTodolistTC(todoListId))
+    }
 
-    const onUpdateTodolist = useCallback((newTitle: string) => {
-        updatedToDoLists(todoListId, newTitle)
-    }, [todoListId, updatedToDoLists])
+
+    const onUpdateTodolist = useCallback((title: string) => {
+        dispatch(updateTodolistTC(title, todoListId))
+    }, [dispatch, todoListId])
 
     const onRemoveAllTasks = useCallback(() => {
         tasks[todoListId].forEach((t) => {
@@ -88,18 +89,25 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
         })
     }, [dispatch, tasks, todoListId])
 
+    const onChangeFilterStatus = useCallback((filter: FilterStatusType) => {
+        dispatch(changeToDoListFilterAC(todoListId, filter))
+    }, [dispatch, todoListId])
+
     const onChooseAllTasks = useCallback(() => {
-        changeFilter({ todoListId: todoListId, status: "all" });
-    }, [changeFilter, todoListId])
+        onChangeFilterStatus("all");
+    }, [onChangeFilterStatus])
+
     const onChooseActiveTasks = useCallback(() => {
-        changeFilter({ todoListId: todoListId, status: "active" });
-    }, [changeFilter, todoListId])
+        onChangeFilterStatus("active");
+    }, [onChangeFilterStatus])
+
     const onChooseCompletedTasks = useCallback(() => {
-        changeFilter({ todoListId: todoListId, status: "completed" });
-    }, [changeFilter, todoListId])
+        onChangeFilterStatus("completed");
+    }, [onChangeFilterStatus])
+
     const onChooseFirstThreeTasks = useCallback(() => {
-        changeFilter({ todoListId: todoListId, status: "three-tasks" });
-    }, [changeFilter, todoListId])
+        onChangeFilterStatus("three-tasks");
+    }, [onChangeFilterStatus])
 
 
 
@@ -111,7 +119,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
             <div className="header">
                 <div className={'todolist-title-container'}>
                     <EditableSpan title={title} updatedItem={onUpdateTodolist} />
-                    <IconButton aria-label="delete" onClick={() => removeTodolistHandler(todoListId)}>
+                    <IconButton aria-label="delete" onClick={onRemoveTodolist}>
                         <DeleteIcon />
                     </IconButton>
                 </div>
