@@ -2,11 +2,10 @@ import { ThemeProvider } from "@emotion/react";
 import { Grid, Paper, createTheme, CssBaseline, Box, AppBar, Toolbar, Typography, FormGroup, FormControlLabel, Switch, Container } from "@mui/material";
 import { AddItemForm } from "components/addItemForm/AddItemForm";
 import { MenuButton } from "components/menuButton/MenuButton";
-import { DomainTask } from "components/task/api/tasksApi.types";
 import { todolistsApi } from "components/toDoList/api/todolistsApi";
 import { ToDoList } from "components/toDoList/ToDoList";
 import { DomainTodolist, FilterStatusType } from "components/toDoList/api/todolistsApi.types";
-import { changeToDoListFilterAC, fetchTodolistsThunk } from "modules/todolists-reducer";
+import { addTodolistTC, changeToDoListFilterAC, fetchTodolistsThunk } from "modules/todolists-reducer";
 import { useCallback, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
 import './App.css';
@@ -28,15 +27,9 @@ function App() {
     }, [dispatch]);
 
     const [todolists, setTodolists] = useState<DomainTodolist[]>([])
-    const [tasks, setTasks] = useState<{ [key: string]: DomainTask[] }>({})
 
-    const createTodolistHandler = (title: string) => {
-        todolistsApi.createTodolist(title)
-            .then(res => {
-                const newTodo = res.data.data.item
-                setTodolists([newTodo, ...todolists])
-                setTasks({ ...tasks, [newTodo.id]: [] })
-            })
+    const onCreateTodolist = (title: string) => {
+        dispatch(addTodolistTC(title))
     }
 
     const removeTodolistHandler = (id: string) => {
@@ -117,7 +110,7 @@ function App() {
                     <Grid container sx={{ display: 'flex', justifyContent: 'center' }}>
                         <div className='addnewtodolist-wrapper'>
                             <h3>Add new ToDoList</h3>
-                            <AddItemForm addNewItem={createTodolistHandler} />
+                            <AddItemForm addNewItem={onCreateTodolist} />
                         </div>
                     </Grid>
                 </Container>
