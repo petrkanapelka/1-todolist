@@ -2,9 +2,8 @@ import { ThemeProvider } from "@emotion/react";
 import { Grid, Paper, createTheme, CssBaseline, Box, AppBar, Toolbar, Typography, FormGroup, FormControlLabel, Switch, Container } from "@mui/material";
 import { AddItemForm } from "components/addItemForm/AddItemForm";
 import { MenuButton } from "components/menuButton/MenuButton";
-import { todolistsApi } from "components/toDoList/api/todolistsApi";
 import { ToDoList } from "components/toDoList/ToDoList";
-import { DomainTodolist, FilterStatusType } from "components/toDoList/api/todolistsApi.types";
+import { FilterStatusType } from "components/toDoList/api/todolistsApi.types";
 import { addTodolistTC, changeToDoListFilterAC, fetchTodolistsThunk } from "modules/todolists-reducer";
 import { useCallback, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
@@ -20,30 +19,13 @@ function App() {
         dispatch(fetchTodolistsThunk)
     }, [dispatch])
 
-
-    const changeFilter = useCallback((payload: { status: FilterStatusType, todoListId: string }) => {
-        const { status, todoListId } = payload
-        dispatch(changeToDoListFilterAC(todoListId, status))
-    }, [dispatch]);
-
-    const [todolists, setTodolists] = useState<DomainTodolist[]>([])
+    // const changeFilter = useCallback((payload: { status: FilterStatusType, todoListId: string }) => {
+    //     const { status, todoListId } = payload
+    //     dispatch(changeToDoListFilterAC(todoListId, status))
+    // }, [dispatch]);
 
     const onCreateTodolist = (title: string) => {
         dispatch(addTodolistTC(title))
-    }
-
-    const removeTodolistHandler = (id: string) => {
-        todolistsApi.deleteTodolist(id)
-            .then(res => {
-                setTodolists(todolists.filter(tl => tl.id !== id))
-            })
-    }
-
-    const updateTodolistHandler = (id: string, title: string) => {
-        todolistsApi.updateTodolist({ id, title })
-            .then(res => {
-                setTodolists(todolists.map(tl => tl.id === id ? { ...tl, title } : tl))
-            })
     }
 
     const mappedToDoLists = todolists2.map(t => {
@@ -54,9 +36,7 @@ function App() {
                         todoListId={t.id}
                         title={t.title}
                         filter={'all'}
-                        removeTodolistHandler={removeTodolistHandler}
-                        changeFilter={changeFilter}
-                        updatedToDoLists={updateTodolistHandler}
+                        // changeFilter={changeFilter}
                     />
                 </Paper>
             </Grid>
