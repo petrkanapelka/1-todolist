@@ -14,8 +14,6 @@ import { changeToDoListFilterAC, removeTodolistTC, updateTodolistTC } from 'modu
 export type ToDoListPropsType = {
     todoListId: string
     title: string
-    filter: FilterStatusType
-    // changeFilter: (payload: { status: FilterStatusType, todoListId: string }) => void
     children?: ReactNode
 };
 
@@ -24,12 +22,13 @@ export type ToDoListPropsType = {
 export const ToDoList: FC<ToDoListPropsType> = memo(({
     todoListId,
     title,
-    filter,
-    // changeFilter,
     children
 }: ToDoListPropsType) => {
 
     const tasks = useAppSelector(state => state.tasks)
+    const todolists = useAppSelector(state=>state.todolists)
+    const filter = todolists.find(tl=>tl.id === todoListId)?.filter || 'all'
+
     const dispatch = useAppDispatch()
 
     useEffect(() => {
