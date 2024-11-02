@@ -5,12 +5,14 @@ import { loadState, saveState } from "./localStorage";
 import { throttle } from "lodash";
 import { thunk, ThunkDispatch } from "redux-thunk";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { appReducer } from "./app-reducer";
 
 const persistedState = loadState();
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
   todolists: toDoListsReducer,
+  app: appReducer
 });
 
 export const store = legacy_createStore(rootReducer, persistedState, applyMiddleware(thunk));
