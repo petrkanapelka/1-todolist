@@ -3,9 +3,8 @@ import { Grid, Paper, createTheme, CssBaseline, Box, AppBar, Toolbar, Typography
 import { AddItemForm } from "components/addItemForm/AddItemForm";
 import { MenuButton } from "components/menuButton/MenuButton";
 import { ToDoList } from "components/toDoList/ToDoList";
-import { FilterStatusType } from "components/toDoList/api/todolistsApi.types";
-import { addTodolistTC, changeToDoListFilterAC, fetchTodolistsThunk } from "modules/todolists-reducer";
-import { useCallback, useState, useEffect } from "react";
+import { addTodolistTC, fetchTodolistsThunk } from "modules/todolists-reducer";
+import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
 import './App.css';
 
@@ -19,11 +18,6 @@ function App() {
         dispatch(fetchTodolistsThunk)
     }, [dispatch])
 
-    // const changeFilter = useCallback((payload: { status: FilterStatusType, todoListId: string }) => {
-    //     const { status, todoListId } = payload
-    //     dispatch(changeToDoListFilterAC(todoListId, status))
-    // }, [dispatch]);
-
     const onCreateTodolist = (title: string) => {
         dispatch(addTodolistTC(title))
     }
@@ -35,8 +29,6 @@ function App() {
                     <ToDoList
                         todoListId={t.id}
                         title={t.title}
-                        filter={'all'}
-                        // changeFilter={changeFilter}
                     />
                 </Paper>
             </Grid>
