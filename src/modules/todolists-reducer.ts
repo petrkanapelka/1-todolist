@@ -7,13 +7,7 @@ export type AddTodolistActionType = ReturnType<typeof addTodolistAC>;
 
 export type ChangeTodolistTitleActionType = ReturnType<typeof changeTodolistTitleAC>;
 
-export type ChangeTodolistFilterActionType = {
-  type: "CHANGE-TODOLIST-FILTER";
-  payload: {
-    id: string;
-    filter: FilterStatusType;
-  };
-};
+export type ChangeTodolistFilterActionType = ReturnType<typeof changeToDoListFilterAC>;
 
 export type GetTodolistActionType = ReturnType<typeof setTodolistsAC>;
 
@@ -27,10 +21,6 @@ export type ActionsType =
 const initialState: DomainTodolist[] = [];
 
 export const toDoListsReducer = (state = initialState, action: ActionsType): DomainTodolist[] => {
-  if (!Array.isArray(state)) {
-    console.error("State is not an array:", state);
-    state = [];
-  }
   switch (action.type) {
     case "SET-TODOLISTS": {
       return action.todolists.map((tl) => ({ ...tl }));
@@ -73,7 +63,7 @@ export const removeTodolistAC = (id: string) => {
   return { type: "REMOVE-TODOLIST", payload: { id } } as const;
 };
 
-export const changeToDoListFilterAC = (id: string, filter: FilterStatusType): ChangeTodolistFilterActionType => {
+export const changeToDoListFilterAC = (id: string, filter: FilterStatusType) => {
   return { type: "CHANGE-TODOLIST-FILTER", payload: { id, filter } } as const;
 };
 
