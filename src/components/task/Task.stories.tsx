@@ -8,8 +8,8 @@
 // import { TaskType } from '../toDoList/ToDoList';
 // import { useState } from 'react';
 
-// const tlID = v1();
-// const taskID = v1();
+// const todoListId = v1();
+// const taskId = v1();
 
 // const meta: Meta<typeof Task> = {
 //     title: 'TODOLISTS/Task',
@@ -23,8 +23,8 @@
 //         changeTaskStatus: action('Task status changed'),
 //         updateTaskTitle: action('Task title changed'),
 //         removeHandler: action('Task deleted'),
-//         taskID: taskID,
-//         tlID: tlID,
+//         taskId: taskId,
+//         todoListId: todoListId,
 //         title: 'Hello',
 //         isDone: false
 //     }
@@ -44,13 +44,13 @@
 //     }
 // };
 // const TaskWithRedux = () => {
-//     let task = useSelector<AppRootStateType, TaskType>(state => state.tasks['todolistId1'][0])
+//     let task = useSelector<AppRootStateType, TaskType>(state => state.tasks['todolistID1'][0])
 //     let [isDone, setIsDone] = useState(task.isDone)
 //     return <Task
 //         title={task.title}
 //         isDone={isDone}
-//         taskID={task.id}
-//         tlID={'todolistId1'}
+//         taskId={task.id}
+//         todoListId={'todolistID1'}
 //         changeTaskStatus={() => setIsDone(!isDone)}
 //         updateTaskTitle={action('Task title changed')}
 //         removeHandler={action('Task deleted')} />
