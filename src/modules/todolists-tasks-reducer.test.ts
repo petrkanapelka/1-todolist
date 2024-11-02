@@ -19,28 +19,28 @@
 //   expect(idFromTodolists).toBe(action.payload.id);
 // });
 
-// test("property with todolistId should be deleted", () => {
+// test("property with todoListId should be deleted", () => {
 //   const startState: TasksStateType = {
-//     todolistId1: [
+//     todolistID1: [
 //       { id: "1", title: "CSS", isDone: false },
 //       { id: "2", title: "JS", isDone: true },
 //       { id: "3", title: "React", isDone: false },
 //     ],
-//     todolistId2: [
+//     todolistID2: [
 //       { id: "1", title: "bread", isDone: false },
 //       { id: "2", title: "milk", isDone: true },
 //       { id: "3", title: "tea", isDone: false },
 //     ],
 //   };
 
-//   const action = removeTodolistAC("todolistId2");
+//   const action = removeTodolistAC("todolistID2");
 
 //   const endState = tasksReducer(startState, action);
 
 //   const keys = Object.keys(endState);
 
 //   expect(keys.length).toBe(1);
-//   expect(endState["todolistId2"]).not.toBeDefined();
+//   expect(endState["todolistID2"]).not.toBeDefined();
 // });
 let a3 = 5;
 export { a3 };

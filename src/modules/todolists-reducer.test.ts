@@ -10,26 +10,26 @@
 
 // let startState: ToDoListType[];
 
-// let toDoListId1: string;
-// let todolistId2: string;
+// let todolistID1: string;
+// let todolistID2: string;
 
 // beforeEach(() => {
-//     toDoListId1 = v1();
-//     todolistId2 = v1();
+//     todolistID1 = v1();
+//     todolistID2 = v1();
 
 //     startState = [
-//         { id: toDoListId1, title: 'What to learn', filter: 'all' },
-//         { id: todolistId2, title: 'What to buy', filter: 'all' },
+//         { id: todolistID1, title: 'What to learn', filter: 'all' },
+//         { id: todolistID2, title: 'What to buy', filter: 'all' },
 //     ];
 // });
 
 // test('correct todolist should be removed', () => {
-//     const action = removeTodolistAC(toDoListId1);
+//     const action = removeTodolistAC(todolistID1);
 
 //     const endState = toDoListsReducer(startState, action);
 
 //     expect(endState.length).toBe(1);
-//     expect(endState[0].id).toBe(todolistId2);
+//     expect(endState[0].id).toBe(todolistID2);
 // });
 
 // test('correct todolist should be added', () => {
@@ -41,7 +41,7 @@
 // });
 
 // test('correct todolist should change its name', () => {
-//     const action = changeTodolistTitleAC(todolistId2, 'New Todolist');
+//     const action = changeTodolistTitleAC(todolistID2, 'New Todolist');
 
 //     const endState = toDoListsReducer(startState, action);
 
@@ -50,7 +50,7 @@
 // });
 
 // test('correct filter of todolist should be changed', () => {
-//     const action = changeToDoListFilterAC(todolistId2, 'completed');
+//     const action = changeToDoListFilterAC(todolistID2, 'completed');
 
 //     const endState = toDoListsReducer(startState, action);
 //     expect(endState[0].filter).toBe('all');
