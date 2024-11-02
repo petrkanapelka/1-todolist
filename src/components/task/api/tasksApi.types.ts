@@ -30,10 +30,12 @@ export type DomainTask = {
 };
 
 export type UpdateTaskModel = {
-  status: number;
+  status: TaskStatus;
   title: string;
   deadline: string;
   description: string;
   priority: number;
   startDate: string;
 };
+
+export type UpdateTaskDomainModel = Partial<UpdateTaskModel>;
