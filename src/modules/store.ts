@@ -12,6 +12,7 @@ const rootReducer = combineReducers({
   tasks: tasksReducer,
   todolists: toDoListsReducer,
 });
+
 export const store = legacy_createStore(rootReducer, persistedState, applyMiddleware(thunk));
 export type AppRootStateType = ReturnType<typeof rootReducer>;
 export type AppDispatch = ThunkDispatch<AppRootStateType, unknown, UnknownAction>;
