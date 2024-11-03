@@ -1,15 +1,18 @@
 import { ChangeEvent, memo, useState } from "react";
 import TextField from '@mui/material/TextField';
+import { RequestStatus } from "modules/app-reducer";
 
 
 export type EditableSpanType = {
     title: string
+    entityStatus?: RequestStatus
     isDone?: boolean
     updatedItem: (newTitle: string) => void
 };
 
 export const EditableSpan = memo((props: EditableSpanType) => {
-    const [inputValue, setInputValue] = useState(props.title);
+    const {title, entityStatus, isDone, updatedItem} = props
+    const [inputValue, setInputValue] = useState(title);
 
     let error: string | null = null
 
@@ -22,7 +25,7 @@ export const EditableSpan = memo((props: EditableSpanType) => {
     const activeEditeModeHandler = () => {
         setEditMode(!editMode)
         if (editMode) {
-            props.updatedItem(inputValue)
+            updatedItem(inputValue)
         }
     }
 
@@ -39,7 +42,7 @@ export const EditableSpan = memo((props: EditableSpanType) => {
     }
 
     return (
-        editMode ?
+        editMode && entityStatus !== 'loading'?
             <TextField
                 size="small"
                 value={inputValue}
@@ -58,7 +61,7 @@ export const EditableSpan = memo((props: EditableSpanType) => {
             : <span
                 onTouchStart={touchHandler}
                 onDoubleClick={activeEditeModeHandler}
-                className={props.isDone ? 'task-done' : 'task'}>{props.title}
+                className={isDone ? 'task-done' : 'task'}>{title}
             </span>
     );
 });
