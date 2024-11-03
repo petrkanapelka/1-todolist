@@ -4,7 +4,7 @@ import { Dispatch } from "redux";
 import { tasksApi } from "components/task/api/tasksApi";
 import { TaskStatus } from "common/enums/enums";
 import { AppRootStateType } from "./store";
-import { setAppStatusAC } from "./app-reducer";
+import { setAppErrorAC, setAppStatusAC } from "./app-reducer";
 
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>;
 
@@ -122,8 +122,17 @@ export const removeTaskTC = (taskId: string, todoListId: string) => {
 export const addTaskTC = (arg: { title: string; todoListId: string }) => (dispatch: Dispatch) => {
   dispatch(setAppStatusAC("loading"));
   tasksApi.createTask(arg).then((res) => {
-    dispatch(addTaskAC({ task: res.data.data.item }));
-    dispatch(setAppStatusAC("succeeded"));
+    if (res.data.resultCode === 0) {
+      dispatch(addTaskAC({ task: res.data.data.item }));
+      dispatch(setAppStatusAC("succeeded"));
+    } else {
+      if (res.data.messages.length) {
+        dispatch(setAppErrorAC(res.data.messages[0]));
+      } else {
+        dispatch(setAppErrorAC("Some error occurred"));
+      }
+      dispatch(setAppStatusAC("failed"));
+    }
   });
 };
 
