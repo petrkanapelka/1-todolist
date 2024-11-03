@@ -27,7 +27,8 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
     const tasks = useAppSelector(state => state.tasks)
     const todolists = useAppSelector(state => state.todolists)
-    const filter = todolists.find(tl => tl.id === todoListId)?.filter || 'all'
+    const filter = todolists.find(tl => tl.id === todoListId)?.filter || 'all';
+    const entityStatus = todolists.find(tl => tl.id === todoListId)?.entityStatus;
 
     const dispatch = useAppDispatch()
 
@@ -61,6 +62,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
                     isDone={task.status === TaskStatus.Completed}
                     taskId={task.id}
                     todoListId={todoListId}
+                    entityStatus={entityStatus!}
                 />
             })
         ) : (
@@ -117,14 +119,14 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
         <div className="todolist" >
             <div className="header">
                 <div className={'todolist-title-container'}>
-                    <EditableSpan title={title} updatedItem={onUpdateTodolist} />
-                    <IconButton aria-label="delete" onClick={onRemoveTodolist}>
+                    <EditableSpan title={title} updatedItem={onUpdateTodolist} entityStatus={entityStatus}/>
+                    <IconButton aria-label="delete" onClick={onRemoveTodolist} disabled={entityStatus === 'loading'}>
                         <DeleteIcon />
                     </IconButton>
                 </div>
             </div>
 
-            <AddItemForm addNewItem={onAddNewTask} />
+            <AddItemForm addNewItem={onAddNewTask} entityStatus={entityStatus}/>
 
             <div className="filter-buttons">
 
