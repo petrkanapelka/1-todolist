@@ -1,3 +1,5 @@
+import { RequestStatus } from "modules/app-reducer";
+
 export type FilterStatusType = "all" | "completed" | "active" | "three-tasks";
 
 export type Todolist = {
@@ -9,6 +11,7 @@ export type Todolist = {
 
 export type DomainTodolist = Todolist & {
   filter: FilterStatusType;
+  entityStatus: RequestStatus;
 };
 
-export type UpdateDomainTodolist = Partial<DomainTodolist>
+export type UpdateDomainTodolist = Partial<DomainTodolist>;
