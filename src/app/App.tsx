@@ -27,7 +27,7 @@ function App() {
     const mappedToDoLists = todolists2.map(t => {
         return (
             <Grid item key={t.id}>
-                <Paper className="paper" elevation={3}>
+                <Paper className="paper" elevation={3} sx={{ borderRadius: '10px' }}>
                     <ToDoList
                         todoListId={t.id}
                         title={t.title}
@@ -77,7 +77,7 @@ function App() {
                                 />
                             </FormGroup>
                         </Toolbar>
-                       {appStatus === 'loading' && <LinearProgress />}
+                        {appStatus === 'loading' && <LinearProgress />}
                     </AppBar>
                 </Box>
                 <Container fixed maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center' }}>
