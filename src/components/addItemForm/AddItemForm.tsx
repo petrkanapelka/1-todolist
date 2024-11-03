@@ -19,7 +19,7 @@ export const AddItemForm: FC<AddItemFormType> = memo((props: AddItemFormType) =>
 
 
     const validateInput = () => {
-        if (inputValue.length < 15 && inputValue.trim() !== '') {
+        if (inputValue.length < 1150 && inputValue.trim() !== '') {
             addNewItem(inputValue.trim());
             setInputValue("");
         } else {
@@ -51,9 +51,9 @@ export const AddItemForm: FC<AddItemFormType> = memo((props: AddItemFormType) =>
             <div className="inputField">
                 <TextField
                     type='text'
-                    helperText={inputValue.length >= 15 ? 'Enter fewer than 15 characters' : error}
-                    className={error || inputValue.length >= 15 ? 'error' : ''}
-                    error={!!error || inputValue.length >= 15}
+                    helperText={inputValue.length >= 1150 ? 'Enter fewer than 15 characters' : error}
+                    className={error || inputValue.length >= 1150 ? 'error' : ''}
+                    error={!!error || inputValue.length >= 1150}
                     size="small"
                     onKeyDown={onKeyDownHandler}
                     value={inputValue}
@@ -67,7 +67,7 @@ export const AddItemForm: FC<AddItemFormType> = memo((props: AddItemFormType) =>
                     style={buttonStyles}
                     variant="contained"
                     size='small'
-                    disabled={inputValue.length >= 15}
+                    // disabled={inputValue.length >= 15}
                     color="primary"
                     onClick={onClickInputHandler}>
                     <AddIcon />
