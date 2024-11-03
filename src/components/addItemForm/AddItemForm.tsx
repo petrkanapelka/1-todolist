@@ -2,13 +2,16 @@ import { FC, useState, ChangeEvent, KeyboardEvent, memo, /* useRef */ } from "re
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
+import { RequestStatus } from "modules/app-reducer";
 
 export type AddItemFormType = {
+    entityStatus?: RequestStatus
     addNewItem: (title: string) => void;
 };
 
 export const AddItemForm: FC<AddItemFormType> = memo((props: AddItemFormType) => {
-    const { addNewItem } = props
+    const { addNewItem, entityStatus } = props
+
 
     const [inputValue, setInputValue] = useState("");
     const [error, setError] = useState<string | null>(null)
@@ -19,7 +22,7 @@ export const AddItemForm: FC<AddItemFormType> = memo((props: AddItemFormType) =>
 
 
     const validateInput = () => {
-        if (inputValue.length < 1150 && inputValue.trim() !== '') {
+        if (inputValue.length < 100 && inputValue.trim() !== '') {
             addNewItem(inputValue.trim());
             setInputValue("");
         } else {
@@ -51,9 +54,9 @@ export const AddItemForm: FC<AddItemFormType> = memo((props: AddItemFormType) =>
             <div className="inputField">
                 <TextField
                     type='text'
-                    helperText={inputValue.length >= 1150 ? 'Enter fewer than 15 characters' : error}
-                    className={error || inputValue.length >= 1150 ? 'error' : ''}
-                    error={!!error || inputValue.length >= 1150}
+                    helperText={inputValue.length >= 100 ? 'Enter fewer than 100 characters' : error}
+                    className={error || inputValue.length >= 100 ? 'error' : ''}
+                    error={!!error || inputValue.length >= 100}
                     size="small"
                     onKeyDown={onKeyDownHandler}
                     value={inputValue}
@@ -61,13 +64,14 @@ export const AddItemForm: FC<AddItemFormType> = memo((props: AddItemFormType) =>
                     id="outlined-basic"
                     label="enter title"
                     variant="outlined"
+                    disabled={entityStatus === 'loading'}
                 />
 
                 <Button
                     style={buttonStyles}
                     variant="contained"
                     size='small'
-                    // disabled={inputValue.length >= 15}
+                    disabled={entityStatus === 'loading' || inputValue.length >= 100}
                     color="primary"
                     onClick={onClickInputHandler}>
                     <AddIcon />
