@@ -7,6 +7,7 @@ import { EditableSpan } from "components/editableSpan";
 import { useAppDispatch, useAppSelector } from "modules/store";
 import { removeTaskTC, updateTaskTC } from "modules/tasks-reducer";
 import { TaskStatus } from "common/enums/enums";
+import { RequestStatus } from "modules/app-reducer";
 
 
 export type TaskPropsType = {
@@ -14,6 +15,7 @@ export type TaskPropsType = {
     taskId: string
     isDone: boolean
     todoListId: string
+    entityStatus: RequestStatus
 };
 
 const taskStyle = {
@@ -25,7 +27,7 @@ const taskStyle = {
 }
 
 export const Task = memo((props: TaskPropsType) => {
-    const { taskId, todoListId, isDone, title } = props
+    const { taskId, todoListId, isDone, title, entityStatus } = props
     const tasks = useAppSelector(state => state.tasks)
     const dispatch = useAppDispatch()
 
@@ -52,9 +54,9 @@ export const Task = memo((props: TaskPropsType) => {
 
     return (
         <ListItem key={taskId} className="task-item" style={taskStyle} >
-            <Checkbox onChange={onChangeTaskStatus} checked={isDone} />
-            <EditableSpan title={title} isDone={isDone} updatedItem={onChangeTaskTitle} />
-            <IconButton aria-label="delete" onClick={onRemoveTask}>
+            <Checkbox onChange={onChangeTaskStatus} checked={isDone} disabled={entityStatus === 'loading'}/>
+            <EditableSpan title={title} isDone={isDone} updatedItem={onChangeTaskTitle} entityStatus={entityStatus}/>
+            <IconButton aria-label="delete" onClick={onRemoveTask} disabled={entityStatus === 'loading'}>
                 <DeleteIcon />
             </IconButton>
         </ListItem>
