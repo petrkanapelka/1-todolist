@@ -1,8 +1,9 @@
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from "@mui/material"
 import { getTheme } from "common/theme/getTheme"
-import { useAppSelector } from "modules/store"
+import { useAppDispatch, useAppSelector } from "modules/store"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import s from './Login.module.css'
+import { loginTC } from "./model/auth-reducer"
 
 type Inputs = {
     email: string
@@ -13,6 +14,7 @@ type Inputs = {
 export const Login = () => {
     const themeMode = useAppSelector(state => state.app.themeMode)
     const theme = getTheme(themeMode)
+    const dispatch = useAppDispatch()
 
     const {
         register,
@@ -23,7 +25,7 @@ export const Login = () => {
     } = useForm<Inputs>({ defaultValues: { email: '', password: '', rememberMe: false } })
 
     const onSubmit: SubmitHandler<Inputs> = data => {
-        console.log(data)
+        dispatch(loginTC(data))
         reset()
     }
 
