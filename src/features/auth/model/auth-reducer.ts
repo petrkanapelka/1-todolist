@@ -28,13 +28,14 @@ type ActionsType = ReturnType<typeof setIsLoggedInAC>;
 
 export const loginTC = (data: LoginArgs) => (dispatch: Dispatch) => {
   dispatch(setAppStatusAC("loading"));
-  debugger
   authApi
     .login(data)
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
         dispatch(setIsLoggedInAC(true));
         dispatch(setAppStatusAC("succeeded"));
+        debugger
+        localStorage.setItem("sn-token", res.data.data.token);
       } else {
         handleServerAppError(res.data, dispatch);
       }
