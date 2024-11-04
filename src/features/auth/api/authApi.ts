@@ -9,4 +9,7 @@ export const authApi = {
   logout() {
     return instance.delete<ApiResponse>('auth/login')
   },
+  me() {
+    return instance.get<ApiResponse<{ id: number; email: string; login: string }>>('auth/me')
+  },
 };
