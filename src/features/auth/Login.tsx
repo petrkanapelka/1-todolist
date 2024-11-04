@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "modules/store"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import s from './Login.module.css'
 import { loginTC } from "./model/auth-reducer"
+import { Navigate } from "react-router-dom"
 
 type Inputs = {
     email: string
@@ -15,6 +16,7 @@ export const Login = () => {
     const themeMode = useAppSelector(state => state.app.themeMode)
     const theme = getTheme(themeMode)
     const dispatch = useAppDispatch()
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
     const {
         register,
@@ -27,6 +29,11 @@ export const Login = () => {
     const onSubmit: SubmitHandler<Inputs> = data => {
         dispatch(loginTC(data))
         reset()
+    }
+
+    if (isLoggedIn) {
+        console.log("🚀 ~ Login ~ isLoggedIn ➔", isLoggedIn);
+        return <Navigate to={'/1-todolist/'} />
     }
 
     return (
