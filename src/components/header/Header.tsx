@@ -4,26 +4,33 @@ import { MenuButton } from "components/menuButton/MenuButton";
 import { ChangeEvent } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
 import { setAppThemesAC } from "modules/app-reducer";
+import { logoutTC } from 'features/auth/model/auth-reducer';
 
 
 function Header() {
     const dispatch = useAppDispatch();
     const themeMode = useAppSelector(state => state.app.themeMode)
     const appStatus = useAppSelector(state => state.app.status)
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
     const changeMode = (e: ChangeEvent<HTMLInputElement>) => {
         const theme = e.currentTarget.checked ? 'light' : 'dark'
         dispatch(setAppThemesAC(theme))
     }
 
+    const onLogOut = () => {
+        dispatch(logoutTC())
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar position="fixed">
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         ToDoList
                     </Typography>
-                    <MenuButton color="inherit" >Login</MenuButton>
+                    {/* <MenuButton color="inherit" >Login</MenuButton> */}
+                    {isLoggedIn && <MenuButton onClick={onLogOut}>Logout</MenuButton>}
                     <FormGroup sx={{ marginLeft: '15px' }}>
                         <FormControlLabel
                             control={
