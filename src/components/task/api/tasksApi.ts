@@ -8,7 +8,7 @@ export const tasksApi = {
   },
   createTask(payload: { title: string; todoListId: string }) {
     const { title, todoListId } = payload;
-    return instance.post<ApiResponse<DomainTask>>(`todo-lists/${todoListId}/tasks`, { title });
+    return instance.post<ApiResponse<{item:DomainTask}>>(`todo-lists/${todoListId}/tasks`, { title });
   },
 
   deleteTask(payload: { taskId: string; todoListId: string }) {
@@ -18,6 +18,6 @@ export const tasksApi = {
 
   updateTask(payload: { model: UpdateTaskDomainModel; task: DomainTask }) {
     const { model, task } = payload;
-    return instance.put<ApiResponse<DomainTask>>(`todo-lists/${task.todoListId}/tasks/${task.id}`, model);
+    return instance.put<ApiResponse<{item:DomainTask}>>(`todo-lists/${task.todoListId}/tasks/${task.id}`, model);
   },
 };
