@@ -15,7 +15,7 @@ function App() {
 
     return (
         <>
-            <div className="App">
+            <div className="App" style={{marginTop:  '66px'}}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
                     <Header />
