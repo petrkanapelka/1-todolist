@@ -5,11 +5,16 @@ import { ToDoList } from "components/toDoList/ToDoList";
 import { addTodolistTC, fetchTodolistsThunk } from "modules/todolists-reducer";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
+import { Navigate } from 'react-router-dom';
+import { Path } from 'common/router/router';
 
 
 function Main() {
     const dispatch = useAppDispatch();
     let todolists2 = useAppSelector(state => state.todolists)
+
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+
 
     useEffect(() => {
         dispatch(fetchTodolistsThunk)
@@ -19,6 +24,9 @@ function Main() {
         dispatch(addTodolistTC(title))
     }
 
+    if (!isLoggedIn) {
+        return <Navigate to={Path.Login} />
+    }
     const mappedToDoLists = todolists2.map(t => {
         return (
             <Grid item key={t.id}>
