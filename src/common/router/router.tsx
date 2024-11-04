@@ -1,5 +1,6 @@
 import App from "app/App"
 import Main from "components/main/Main"
+import { Page404 } from "components/Page404"
 import { Login } from "features/auth/Login"
 import { createBrowserRouter } from "react-router-dom"
 
@@ -9,16 +10,20 @@ export const Path = {
 
 export const router = createBrowserRouter([
     {
-        path: '/',
+        path: '/1-todolist',
         element: <App />,
         children: [
             {
-                path: '/',
+                path: '/1-todolist',
                 element: <Main />,
             },
             {
                 path: Path.Login,
                 element: <Login />,
+            },
+            {
+                path: '*',
+                element: <Page404 />,
             },
         ],
     },
