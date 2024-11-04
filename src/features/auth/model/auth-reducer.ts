@@ -34,8 +34,25 @@ export const loginTC = (data: LoginArgs) => (dispatch: Dispatch) => {
       if (res.data.resultCode === ResultCode.Success) {
         dispatch(setIsLoggedInAC(true));
         dispatch(setAppStatusAC("succeeded"));
-        debugger
         localStorage.setItem("sn-token", res.data.data.token);
+      } else {
+        handleServerAppError(res.data, dispatch);
+      }
+    })
+    .catch((error) => {
+      handleServerNetworkError(error, dispatch);
+    });
+};
+
+export const logoutTC = () => (dispatch: Dispatch) => {
+  dispatch(setAppStatusAC("loading"));
+  authApi
+    .logout()
+    .then((res) => {
+      if (res.data.resultCode === ResultCode.Success) {
+        dispatch(setAppStatusAC("succeeded"));
+        dispatch(setIsLoggedInAC(false));
+        localStorage.removeItem("sn-token");
       } else {
         handleServerAppError(res.data, dispatch);
       }
