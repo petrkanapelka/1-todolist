@@ -6,13 +6,15 @@ import { throttle } from "lodash";
 import { thunk, ThunkDispatch } from "redux-thunk";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { appReducer } from "./app-reducer";
+import { authReducer } from "features/auth/model/auth-reducer";
 
 const persistedState = loadState();
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
   todolists: toDoListsReducer,
-  app: appReducer
+  app: appReducer,
+  auth: authReducer,
 });
 
 export const store = legacy_createStore(rootReducer, persistedState, applyMiddleware(thunk));
