@@ -3,15 +3,15 @@ export type FieldError = {
     field: string;
 };
 
-export type BaseResponse<D> = {
-    resultCode: number;
-    messages: string[];
-    fieldsErrors: FieldError[];
-    data: D;
-};
+// export type BaseResponse<D> = {
+//     resultCode: number;
+//     messages: string[];
+//     fieldsErrors: FieldError[];
+//     data: D;
+// };
 
 export type ApiResponse<T = {}> = {
-    data: { item: T };
+    data: T;
     messages: string[];
     fieldsErrors: FieldError[];
     resultCode: number;
