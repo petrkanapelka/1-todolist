@@ -7,6 +7,7 @@ import { thunk, ThunkDispatch } from "redux-thunk";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { appReducer } from "./app-reducer";
 import { authReducer } from "features/auth/model/auth-reducer";
+import { configureStore } from "@reduxjs/toolkit";
 
 const persistedState = loadState();
 
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   auth: authReducer,
 });
 
-export const store = legacy_createStore(rootReducer, persistedState, applyMiddleware(thunk));
+// export const store = legacy_createStore(rootReducer, persistedState, applyMiddleware(thunk));
+export const store = configureStore({ reducer: rootReducer, preloadedState: persistedState });
 export type AppRootStateType = ReturnType<typeof rootReducer>;
 export type AppDispatch = ThunkDispatch<AppRootStateType, unknown, UnknownAction>;
 export const useAppDispatch = () => {
