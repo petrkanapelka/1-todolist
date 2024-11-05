@@ -112,6 +112,7 @@ li,
   transition: box-shadow 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
+  /* justify-content: space-between; */
   height: 100%;
 
 }
