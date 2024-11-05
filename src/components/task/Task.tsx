@@ -5,9 +5,9 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
 import { EditableSpan } from "components/editableSpan";
 import { useAppDispatch, useAppSelector } from "modules/store";
-import { removeTaskTC, updateTaskTC } from "modules/tasks-reducer";
 import { TaskStatus } from "common/enums/enums";
 import { RequestStatus } from "features/app/appSlice";
+import { removeTaskTC, updateTaskTC } from "./model/tasksThunks";
 
 
 export type TaskPropsType = {

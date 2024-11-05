@@ -1,8 +1,8 @@
 // import {
-//     addTaskAC,
+//     addTask,
 //     changeTaskStatusAC,
 //     changeTaskTitleAC,
-//     removeTaskAC,
+//     removeTask,
 //     tasksReducer,
 //     TasksStateType,
 // } from './tasks-reducer';
@@ -26,7 +26,7 @@
 // });
 
 // test('correct task should be deleted from correct array', () => {
-//     const action = removeTaskAC('2', 'todolistID2');
+//     const action = removeTask('2', 'todolistID2');
 
 //     const endState = tasksReducer(startState, action);
 
@@ -44,7 +44,7 @@
 // });
 
 // test('correct task should be added to correct array', () => {
-//     const action = addTaskAC('juice', 'todolistID2');
+//     const action = addTask('juice', 'todolistID2');
 
 //     const endState = tasksReducer(startState, action);
 

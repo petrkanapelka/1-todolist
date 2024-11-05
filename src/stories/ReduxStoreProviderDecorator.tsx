@@ -3,8 +3,8 @@ import React from 'react'
 import { Provider } from "react-redux";
 import { combineReducers, legacy_createStore } from "redux";
 import { v1 } from "uuid";
-import { tasksReducer } from '../modules/tasks-reducer';
 import { toDoListsReducer } from 'components/toDoList/model/todolistsSlice';
+import { tasksReducer } from 'components/task/model/tasksSlice';
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,

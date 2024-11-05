@@ -1,4 +1,3 @@
-import { tasksReducer } from "./tasks-reducer";
 import { combineReducers, UnknownAction } from "redux";
 import { loadState, saveState } from "./localStorage";
 import { throttle } from "lodash";
@@ -8,6 +7,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "features/auth/model/authSlice";
 import { appReducer } from "features/app/appSlice";
 import { toDoListsReducer } from "components/toDoList/model/todolistsSlice";
+import { tasksReducer } from "components/task/model/tasksSlice";
 
 const persistedState = loadState();
 

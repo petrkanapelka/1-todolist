@@ -7,8 +7,8 @@ import { FilterStatusType } from './api/todolistsApi.types';
 import { Task } from 'components/task/Task';
 import { EditableSpan } from 'components/editableSpan';
 import { useAppDispatch, useAppSelector } from 'modules/store';
-import { addTaskTC, fetchTasksThunkTC, removeTaskTC } from 'modules/tasks-reducer';
 import { removeTodolistTC, updateTodolistTC } from './model/todolistsThunks';
+import { addTaskTC, fetchTasksThunkTC, removeTaskTC } from 'components/task/model/tasksThunks';
 
 
 export type ToDoListPropsType = {

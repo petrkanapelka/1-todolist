@@ -3,7 +3,7 @@ import { DomainTodolist, Todolist } from "../api";
 import { RequestStatus } from "features/app/appSlice";
 
 export const todolistsSlice = createSlice({
-  name: "todos",
+  name: "todolists",
   initialState: [] as DomainTodolist[],
   reducers: (create) => ({
     removeTodolist: create.reducer<{ id: string }>((state, action) => {
