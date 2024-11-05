@@ -2,7 +2,7 @@ import { SyntheticEvent } from 'react'
 import Alert from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
 import { useAppDispatch, useAppSelector } from 'modules/store'
-import { setAppErrorAC } from 'modules/app-reducer'
+import { setAppError } from 'features/app/appSlice'
 
 export const ErrorSnackbar = () => {
     const dispatch = useAppDispatch()
@@ -12,7 +12,7 @@ export const ErrorSnackbar = () => {
             return
         }
 
-        dispatch(setAppErrorAC(null))
+        dispatch(setAppError({ error: null }))
     }
     return (
         <Snackbar open={error !== null} autoHideDuration={4000} onClose={handleClose}>

@@ -1,6 +1,6 @@
 import { ChangeEvent, memo, useState } from "react";
 import TextField from '@mui/material/TextField';
-import { RequestStatus } from "modules/app-reducer";
+import { RequestStatus } from "features/app/appSlice";
 
 
 export type EditableSpanType = {
@@ -11,7 +11,7 @@ export type EditableSpanType = {
 };
 
 export const EditableSpan = memo((props: EditableSpanType) => {
-    const {title, entityStatus, isDone, updatedItem} = props
+    const { title, entityStatus, isDone, updatedItem } = props
     const [inputValue, setInputValue] = useState(title);
 
     let error: string | null = null
@@ -42,7 +42,7 @@ export const EditableSpan = memo((props: EditableSpanType) => {
     }
 
     return (
-        editMode && entityStatus !== 'loading'?
+        editMode && entityStatus !== 'loading' ?
             <TextField
                 size="small"
                 value={inputValue}

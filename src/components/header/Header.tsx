@@ -3,8 +3,8 @@ import { Box, AppBar, Toolbar, Typography, FormGroup, FormControlLabel, Switch, 
 import { MenuButton } from "components/menuButton/MenuButton";
 import { ChangeEvent } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
-import { setAppThemesAC } from "modules/app-reducer";
 import { logoutTC } from 'features/auth/model/authThunks';
+import { setAppTheme } from 'features/app/appSlice';
 
 
 function Header() {
@@ -15,7 +15,7 @@ function Header() {
 
     const changeMode = (e: ChangeEvent<HTMLInputElement>) => {
         const theme = e.currentTarget.checked ? 'light' : 'dark'
-        dispatch(setAppThemesAC(theme))
+        dispatch(setAppTheme({ themeMode: theme }))
     }
 
     const onLogOut = () => {

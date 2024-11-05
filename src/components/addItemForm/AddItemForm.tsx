@@ -2,7 +2,7 @@ import { FC, useState, ChangeEvent, KeyboardEvent, memo, /* useRef */ } from "re
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
-import { RequestStatus } from "modules/app-reducer";
+import { RequestStatus } from "features/app/appSlice";
 
 export type AddItemFormType = {
     entityStatus?: RequestStatus

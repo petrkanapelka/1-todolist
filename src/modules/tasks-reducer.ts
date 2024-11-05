@@ -4,9 +4,9 @@ import { Dispatch } from "redux";
 import { tasksApi } from "components/task/api/tasksApi";
 import { ResultCode, TaskStatus } from "common/enums/enums";
 import { AppRootStateType } from "./store";
-import { setAppErrorAC, setAppStatusAC } from "./app-reducer";
 import { handleServerAppError } from "common/utils/handleServerAppError";
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError";
+import { setAppStatus } from "features/app/appSlice";
 
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>;
 
@@ -103,12 +103,12 @@ export const updateTaskAC = (task: DomainTask) => {
 
 export const fetchTasksThunkTC = (todoListId: string) => {
   return (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC("loading"));
+    dispatch(setAppStatus({ status: "loading" }));
     tasksApi
       .getTasks(todoListId)
       .then((res) => {
         dispatch(setTasksAC(todoListId, res.data.items));
-        dispatch(setAppStatusAC("succeeded"));
+        dispatch(setAppStatus({ status: "succeeded" }));
       })
       .catch((error) => {
         handleServerNetworkError(error, dispatch);
@@ -118,7 +118,7 @@ export const fetchTasksThunkTC = (todoListId: string) => {
 
 export const removeTaskTC = (taskId: string, todoListId: string) => {
   return (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC("loading"));
+    dispatch(setAppStatus({ status: "loading" }));
     dispatch(changeTodolistEntityStatusAC({ id: todoListId, entityStatus: "loading" }));
 
     tasksApi
@@ -126,7 +126,7 @@ export const removeTaskTC = (taskId: string, todoListId: string) => {
       .then((res) => {
         if (res.data.resultCode === ResultCode.Success) {
           dispatch(removeTaskAC(taskId, todoListId));
-          dispatch(setAppStatusAC("succeeded"));
+          dispatch(setAppStatus({ status: "succeeded" }));
           dispatch(changeTodolistEntityStatusAC({ id: todoListId, entityStatus: "succeeded" }));
         } else {
           handleServerAppError(res.data, dispatch);
@@ -139,7 +139,7 @@ export const removeTaskTC = (taskId: string, todoListId: string) => {
 };
 
 export const addTaskTC = (arg: { title: string; todoListId: string }) => (dispatch: Dispatch) => {
-  dispatch(setAppStatusAC("loading"));
+  dispatch(setAppStatus({ status: "loading" }));
   dispatch(changeTodolistEntityStatusAC({ id: arg.todoListId, entityStatus: "loading" }));
 
   tasksApi
@@ -147,7 +147,7 @@ export const addTaskTC = (arg: { title: string; todoListId: string }) => (dispat
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
         dispatch(addTaskAC({ task: res.data.data.item }));
-        dispatch(setAppStatusAC("succeeded"));
+        dispatch(setAppStatus({ status: "succeeded" }));
         dispatch(changeTodolistEntityStatusAC({ id: arg.todoListId, entityStatus: "succeeded" }));
       } else {
         handleServerAppError(res.data, dispatch);
@@ -160,7 +160,7 @@ export const addTaskTC = (arg: { title: string; todoListId: string }) => (dispat
 
 export const updateTaskTC = (arg: { taskId: string; todoListId: string; title: string; status: TaskStatus }) => {
   return (dispatch: Dispatch, getState: () => AppRootStateType) => {
-    dispatch(setAppStatusAC("loading"));
+    dispatch(setAppStatus({ status: "loading" }));
     dispatch(changeTodolistEntityStatusAC({ id: arg.todoListId, entityStatus: "loading" }));
 
     const { taskId, todoListId, title, status } = arg;
@@ -184,7 +184,7 @@ export const updateTaskTC = (arg: { taskId: string; todoListId: string; title: s
         .then((res) => {
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(updateTaskAC(res.data.data.item));
-            dispatch(setAppStatusAC("succeeded"));
+            dispatch(setAppStatus({ status: "succeeded" }));
             dispatch(changeTodolistEntityStatusAC({ id: arg.todoListId, entityStatus: "succeeded" }));
           } else {
             handleServerAppError(res.data, dispatch);

@@ -1,4 +1,4 @@
-import { RequestStatus } from "modules/app-reducer";
+import { RequestStatus } from "features/app/appSlice";
 
 export type FilterStatusType = "all" | "completed" | "active" | "three-tasks";
 
