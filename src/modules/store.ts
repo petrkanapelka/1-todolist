@@ -18,9 +18,12 @@ const rootReducer = combineReducers({
   auth: authReducer,
 });
 
-export const store = configureStore({ reducer: rootReducer, preloadedState: persistedState });
+export const store = configureStore({
+  reducer: rootReducer,
+  preloadedState: persistedState,
+});
 export type AppRootStateType = ReturnType<typeof rootReducer>;
-export type AppDispatch = ThunkDispatch<AppRootStateType, unknown, UnknownAction>;
+export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => {
   return useDispatch<AppDispatch>();
 };
