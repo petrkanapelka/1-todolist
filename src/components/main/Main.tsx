@@ -2,16 +2,16 @@ import '../../app/App.css';
 import { Grid, Paper, Container } from "@mui/material";
 import { AddItemForm } from "components/addItemForm/AddItemForm";
 import { ToDoList } from "components/toDoList/ToDoList";
-import { addTodolistTC, fetchTodolistsThunk } from "modules/todolists-reducer";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
 import { Navigate } from 'react-router-dom';
 import { Path } from 'common/router/router';
+import { addTodolistTC, fetchTodolistsThunk } from 'components/toDoList/model/todolistsThunks';
 
 
 function Main() {
     const dispatch = useAppDispatch();
-    let todolists2 = useAppSelector(state => state.todolists)
+    let todolists = useAppSelector(state => state.todolists)
 
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
@@ -27,7 +27,7 @@ function Main() {
     if (!isLoggedIn) {
         return <Navigate to={Path.Login} />
     }
-    const mappedToDoLists = todolists2.map(t => {
+    const mappedToDoLists = todolists.map(t => {
         return (
             <Grid item key={t.id}>
                 <Paper className="paper" elevation={3} sx={{ borderRadius: '10px' }}>

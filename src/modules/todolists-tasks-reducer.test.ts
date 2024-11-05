@@ -1,12 +1,12 @@
 // import { tasksReducer, TasksStateType } from "./tasks-reducer";
-// import { addTodolistAC, removeTodolistAC, toDoListsReducer } from "./todolists-reducer";
+// import { addTodolist, removeTodolist, toDoListsReducer } from "./todolists-reducer";
 // import { ToDoListPropsType } from "../components/toDoList/ToDoList";
 
 // test("ids should be equals", () => {
 //   const startTasksState: TasksStateType = {};
 //   const startTodolistsState: Array<ToDoListPropsType> = [];
 
-//   const action = addTodolistAC("new todolist");
+//   const action = addTodolist("new todolist");
 
 //   const endTasksState = tasksReducer(startTasksState, action);
 //   const endTodolistsState = toDoListsReducer(startTodolistsState, action);
@@ -33,7 +33,7 @@
 //     ],
 //   };
 
-//   const action = removeTodolistAC("todolistID2");
+//   const action = removeTodolist("todolistID2");
 
 //   const endState = tasksReducer(startState, action);
 

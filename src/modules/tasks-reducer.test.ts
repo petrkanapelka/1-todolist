@@ -6,7 +6,7 @@
 //     tasksReducer,
 //     TasksStateType,
 // } from './tasks-reducer';
-// import { addTodolistAC } from './todolists-reducer';
+// import { addTodolist } from './todolists-reducer';
 
 // let startState: TasksStateType;
 
@@ -74,7 +74,7 @@
 // });
 
 // test('new array should be added when new todolist is added', () => {
-//     const action = addTodolistAC('new todolist');
+//     const action = addTodolist('new todolist');
 
 //     const endState = tasksReducer(startState, action);
 

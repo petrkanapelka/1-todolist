@@ -1,8 +1,8 @@
 // import { v1 } from 'uuid';
 // import {
-//     removeTodolistAC,
-//     addTodolistAC,
-//     changeTodolistTitleAC,
+//     removeTodolist,
+//     addTodolist,
+//     changeTodolistTitle,
 //     toDoListsReducer,
 //     changeToDoListFilterAC,
 //     ToDoListType,
@@ -24,7 +24,7 @@
 // });
 
 // test('correct todolist should be removed', () => {
-//     const action = removeTodolistAC(todolistID1);
+//     const action = removeTodolist(todolistID1);
 
 //     const endState = toDoListsReducer(startState, action);
 
@@ -33,7 +33,7 @@
 // });
 
 // test('correct todolist should be added', () => {
-//     const action = addTodolistAC('New Todolist');
+//     const action = addTodolist('New Todolist');
 
 //     const endState = toDoListsReducer(startState, action);
 //     expect(endState.length).toBe(3);
@@ -41,7 +41,7 @@
 // });
 
 // test('correct todolist should change its name', () => {
-//     const action = changeTodolistTitleAC(todolistID2, 'New Todolist');
+//     const action = changeTodolistTitle(todolistID2, 'New Todolist');
 
 //     const endState = toDoListsReducer(startState, action);
 

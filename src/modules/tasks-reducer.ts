@@ -1,4 +1,3 @@
-import { AddTodolistActionType, changeTodolistEntityStatusAC, RemoveTodolistActionType } from "./todolists-reducer";
 import { DomainTask, TasksStateType, UpdateTaskDomainModel } from "../components/task/api/tasksApi.types";
 import { Dispatch } from "redux";
 import { tasksApi } from "components/task/api/tasksApi";
@@ -7,6 +6,7 @@ import { AppRootStateType } from "./store";
 import { handleServerAppError } from "common/utils/handleServerAppError";
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError";
 import { setAppStatus } from "features/app/appSlice";
+import { changeTodolistEntityStatus } from "components/toDoList/model/todolistsSlice";
 
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>;
 
@@ -20,8 +20,7 @@ export type SetTasksActionType = ReturnType<typeof setTasksAC>;
 
 export type ActionsType =
   | SetTasksActionType
-  | RemoveTodolistActionType
-  | AddTodolistActionType
+  | any
   | RemoveTaskActionType
   | AddTaskActionType
   | UpdateTaskActionType
@@ -119,7 +118,7 @@ export const fetchTasksThunkTC = (todoListId: string) => {
 export const removeTaskTC = (taskId: string, todoListId: string) => {
   return (dispatch: Dispatch) => {
     dispatch(setAppStatus({ status: "loading" }));
-    dispatch(changeTodolistEntityStatusAC({ id: todoListId, entityStatus: "loading" }));
+    dispatch(changeTodolistEntityStatus({ id: todoListId, entityStatus: "loading" }));
 
     tasksApi
       .deleteTask({ todoListId, taskId })
@@ -127,7 +126,7 @@ export const removeTaskTC = (taskId: string, todoListId: string) => {
         if (res.data.resultCode === ResultCode.Success) {
           dispatch(removeTaskAC(taskId, todoListId));
           dispatch(setAppStatus({ status: "succeeded" }));
-          dispatch(changeTodolistEntityStatusAC({ id: todoListId, entityStatus: "succeeded" }));
+          dispatch(changeTodolistEntityStatus({ id: todoListId, entityStatus: "succeeded" }));
         } else {
           handleServerAppError(res.data, dispatch);
         }
@@ -140,7 +139,7 @@ export const removeTaskTC = (taskId: string, todoListId: string) => {
 
 export const addTaskTC = (arg: { title: string; todoListId: string }) => (dispatch: Dispatch) => {
   dispatch(setAppStatus({ status: "loading" }));
-  dispatch(changeTodolistEntityStatusAC({ id: arg.todoListId, entityStatus: "loading" }));
+  dispatch(changeTodolistEntityStatus({ id: arg.todoListId, entityStatus: "loading" }));
 
   tasksApi
     .createTask(arg)
@@ -148,7 +147,7 @@ export const addTaskTC = (arg: { title: string; todoListId: string }) => (dispat
       if (res.data.resultCode === ResultCode.Success) {
         dispatch(addTaskAC({ task: res.data.data.item }));
         dispatch(setAppStatus({ status: "succeeded" }));
-        dispatch(changeTodolistEntityStatusAC({ id: arg.todoListId, entityStatus: "succeeded" }));
+        dispatch(changeTodolistEntityStatus({ id: arg.todoListId, entityStatus: "succeeded" }));
       } else {
         handleServerAppError(res.data, dispatch);
       }
@@ -161,7 +160,7 @@ export const addTaskTC = (arg: { title: string; todoListId: string }) => (dispat
 export const updateTaskTC = (arg: { taskId: string; todoListId: string; title: string; status: TaskStatus }) => {
   return (dispatch: Dispatch, getState: () => AppRootStateType) => {
     dispatch(setAppStatus({ status: "loading" }));
-    dispatch(changeTodolistEntityStatusAC({ id: arg.todoListId, entityStatus: "loading" }));
+    dispatch(changeTodolistEntityStatus({ id: arg.todoListId, entityStatus: "loading" }));
 
     const { taskId, todoListId, title, status } = arg;
 
@@ -185,7 +184,7 @@ export const updateTaskTC = (arg: { taskId: string; todoListId: string; title: s
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(updateTaskAC(res.data.data.item));
             dispatch(setAppStatus({ status: "succeeded" }));
-            dispatch(changeTodolistEntityStatusAC({ id: arg.todoListId, entityStatus: "succeeded" }));
+            dispatch(changeTodolistEntityStatus({ id: arg.todoListId, entityStatus: "succeeded" }));
           } else {
             handleServerAppError(res.data, dispatch);
           }

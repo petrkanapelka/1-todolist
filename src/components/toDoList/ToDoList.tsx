@@ -8,7 +8,7 @@ import { Task } from 'components/task/Task';
 import { EditableSpan } from 'components/editableSpan';
 import { useAppDispatch, useAppSelector } from 'modules/store';
 import { addTaskTC, fetchTasksThunkTC, removeTaskTC } from 'modules/tasks-reducer';
-import { changeToDoListFilterAC, removeTodolistTC, updateTodolistTC } from 'modules/todolists-reducer';
+import { removeTodolistTC, updateTodolistTC } from './model/todolistsThunks';
 
 
 export type ToDoListPropsType = {
@@ -185,3 +185,7 @@ const UpdateButton = memo(({ ...props }: ButtonProps) => {
         {...props}
     ></Button>
 })
+function changeToDoListFilterAC(todoListId: string, filter: string): any {
+    throw new Error('Function not implemented.');
+}
+
