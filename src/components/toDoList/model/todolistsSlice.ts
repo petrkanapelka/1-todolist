@@ -34,6 +34,9 @@ export const todolistsSlice = createSlice({
       return [];
     }),
   }),
+  selectors: {
+    selectTodolists: (state) => state,
+  },
 });
 
 export const {
@@ -46,3 +49,4 @@ export const {
 } = todolistsSlice.actions;
 
 export const toDoListsReducer = todolistsSlice.reducer;
+export const { selectTodolists } = todolistsSlice.selectors;
