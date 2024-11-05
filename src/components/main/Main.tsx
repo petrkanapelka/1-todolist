@@ -8,11 +8,12 @@ import { Navigate } from 'react-router-dom';
 import { Path } from 'common/router/router';
 import { addTodolistTC, fetchTodolistsThunk } from 'components/toDoList/model/todolistsThunks';
 import { selectIsLoggedIn } from 'features/auth/model/authSlice';
+import { selectTodolists } from 'components/toDoList/model/todolistsSlice';
 
 
 function Main() {
     const dispatch = useAppDispatch();
-    let todolists = useAppSelector(state => state.todolists)
+    let todolists = useAppSelector(selectTodolists)
     const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
 

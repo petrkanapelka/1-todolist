@@ -9,6 +9,8 @@ import { EditableSpan } from 'components/editableSpan';
 import { useAppDispatch, useAppSelector } from 'modules/store';
 import { removeTodolistTC, updateTodolistTC } from './model/todolistsThunks';
 import { addTaskTC, fetchTasksThunkTC, removeTaskTC } from 'components/task/model/tasksThunks';
+import { selectTodolists } from './model/todolistsSlice';
+import { selectTasks } from 'components/task/model/tasksSlice';
 
 
 export type ToDoListPropsType = {
@@ -25,8 +27,8 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     children
 }: ToDoListPropsType) => {
 
-    const tasks = useAppSelector(state => state.tasks)
-    const todolists = useAppSelector(state => state.todolists)
+    const tasks = useAppSelector(selectTasks)
+    const todolists = useAppSelector(selectTodolists)
     const filter = todolists.find(tl => tl.id === todoListId)?.filter || 'all';
     const entityStatus = todolists.find(tl => tl.id === todoListId)?.entityStatus;
 

@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "modules/store";
 import { TaskStatus } from "common/enums/enums";
 import { RequestStatus } from "features/app/appSlice";
 import { removeTaskTC, updateTaskTC } from "./model/tasksThunks";
+import { selectTasks } from "./model/tasksSlice";
 
 
 export type TaskPropsType = {
@@ -28,7 +29,7 @@ const taskStyle = {
 
 export const Task = memo((props: TaskPropsType) => {
     const { taskId, todoListId, isDone, title, entityStatus } = props
-    const tasks = useAppSelector(state => state.tasks)
+    const tasks = useAppSelector(selectTasks)
     const dispatch = useAppDispatch()
 
     const onRemoveTask = () => {
