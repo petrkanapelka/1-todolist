@@ -119,14 +119,14 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
         <div className="todolist" >
             <div className="header">
                 <div className={'todolist-title-container'}>
-                    <EditableSpan title={title} updatedItem={onUpdateTodolist} entityStatus={entityStatus}/>
+                    <EditableSpan title={title} updatedItem={onUpdateTodolist} entityStatus={entityStatus} />
                     <IconButton aria-label="delete" onClick={onRemoveTodolist} disabled={entityStatus === 'loading'}>
                         <DeleteIcon />
                     </IconButton>
                 </div>
             </div>
 
-            <AddItemForm addNewItem={onAddNewTask} entityStatus={entityStatus}/>
+            <AddItemForm addNewItem={onAddNewTask} entityStatus={entityStatus} />
 
             <div className="filter-buttons">
 
@@ -164,7 +164,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
             <UpdateButton
                 disabled={filteredTasks && filteredTasks.length === 0}
-                sx={{ alignSelf: 'center' }}
+                sx={{ alignSelf: 'center', justifySelf: 'flex-end' }}
                 size='medium'
                 variant="outlined"
                 startIcon={<DeleteIcon />}
