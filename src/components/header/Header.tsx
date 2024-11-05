@@ -4,14 +4,15 @@ import { MenuButton } from "components/menuButton/MenuButton";
 import { ChangeEvent } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
 import { logoutTC } from 'features/auth/model/authThunks';
-import { setAppTheme } from 'features/app/appSlice';
+import { selectStatus, selectThemeMode, setAppTheme } from 'features/app/appSlice';
+import { selectIsLoggedIn } from 'features/auth/model/authSlice';
 
 
 function Header() {
     const dispatch = useAppDispatch();
-    const themeMode = useAppSelector(state => state.app.themeMode)
-    const appStatus = useAppSelector(state => state.app.status)
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const themeMode = useAppSelector(selectThemeMode)
+    const appStatus = useAppSelector(selectStatus)
+    const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
     const changeMode = (e: ChangeEvent<HTMLInputElement>) => {
         const theme = e.currentTarget.checked ? 'light' : 'dark'

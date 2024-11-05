@@ -5,6 +5,8 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import s from './Login.module.css'
 import { Navigate } from "react-router-dom"
 import { loginTC } from "./model/authThunks"
+import { selectThemeMode } from "features/app/appSlice"
+import { selectIsLoggedIn } from "./model/authSlice"
 
 type Inputs = {
     email: string
@@ -13,10 +15,10 @@ type Inputs = {
 }
 
 export const Login = () => {
-    const themeMode = useAppSelector(state => state.app.themeMode)
+    const themeMode = useAppSelector(selectThemeMode)
     const theme = getTheme(themeMode)
     const dispatch = useAppDispatch()
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
     const {
         register,

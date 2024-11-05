@@ -9,11 +9,13 @@ import { Outlet } from "react-router-dom";
 import Header from "components/header/Header";
 import { useEffect } from "react";
 import { initializeAppTC } from 'features/auth/model/authThunks';
+import { selectThemeMode } from 'features/app/appSlice';
+import { selectIsInitialized } from 'features/auth/model/authSlice';
 
 
 function App() {
-    const themeMode = useAppSelector(state => state.app.themeMode)
-    const isInitialized = useAppSelector(state => state.auth.isInitialized)
+    const themeMode = useAppSelector(selectThemeMode)
+    const isInitialized = useAppSelector(selectIsInitialized)
     const theme = getTheme(themeMode)
     const dispatch = useAppDispatch()
 

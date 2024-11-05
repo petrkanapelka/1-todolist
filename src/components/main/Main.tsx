@@ -7,13 +7,13 @@ import { useAppDispatch, useAppSelector } from "modules/store";
 import { Navigate } from 'react-router-dom';
 import { Path } from 'common/router/router';
 import { addTodolistTC, fetchTodolistsThunk } from 'components/toDoList/model/todolistsThunks';
+import { selectIsLoggedIn } from 'features/auth/model/authSlice';
 
 
 function Main() {
     const dispatch = useAppDispatch();
     let todolists = useAppSelector(state => state.todolists)
-
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
 
     useEffect(() => {
