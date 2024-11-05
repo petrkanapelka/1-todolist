@@ -32,7 +32,6 @@ export const Login = () => {
     }
 
     if (isLoggedIn) {
-        console.log("🚀 ~ Login ~ isLoggedIn ➔", isLoggedIn);
         return <Navigate to={'/1-todolist/'} />
     }
 
@@ -40,7 +39,7 @@ export const Login = () => {
         <Grid container justifyContent={'center'} sx={{ marginTop: '15px' }}>
             <Grid item justifyContent={'center'}>
                 <FormControl>
-                    <FormLabel>
+                    <FormLabel sx={{marginTop: '20px'}}>
                         <p>
                             To login get registered
                             <a
@@ -62,9 +61,19 @@ export const Login = () => {
                     </FormLabel>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <FormGroup>
-                            <TextField label="Email" margin="normal" {...register('email')} />
+                            <TextField label="Email" margin="normal" {...register("email", {
+                                required: "Email is required",
+                                pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: "Invalid email format"
+                                }
+                            })} />
                             {errors.email && <span className={s.errorMessage}>{errors.email.message}</span>}
-                            <TextField type="password" label="Password" margin="normal" {...register('password')} />
+                            <TextField type="password" label="Password" margin="normal" {...register("password", {
+                                required: "Password is required",
+                                minLength: { value: 4, message: "Minimum length is 4" }
+                            })} />
+                            {errors.password && <span className={s.errorMessage}>{errors.password.message}</span>}
                             <FormControlLabel
                                 label={'Remember me'}
                                 control={
