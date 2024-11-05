@@ -4,7 +4,7 @@ import { MenuButton } from "components/menuButton/MenuButton";
 import { ChangeEvent } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
 import { setAppThemesAC } from "modules/app-reducer";
-import { logoutTC } from 'features/auth/model/auth-reducer';
+import { logoutTC } from 'features/auth/model/authThunks';
 
 
 function Header() {

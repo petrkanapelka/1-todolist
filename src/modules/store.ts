@@ -6,8 +6,8 @@ import { throttle } from "lodash";
 import { ThunkDispatch } from "redux-thunk";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { appReducer } from "./app-reducer";
-import { authReducer } from "features/auth/model/auth-reducer";
 import { configureStore } from "@reduxjs/toolkit";
+import { authReducer } from "features/auth/model/authSlice";
 
 const persistedState = loadState();
 

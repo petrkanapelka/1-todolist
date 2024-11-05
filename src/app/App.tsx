@@ -7,8 +7,8 @@ import { getTheme } from "common/theme/getTheme";
 import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar";
 import { Outlet } from "react-router-dom";
 import Header from "components/header/Header";
-import { initializeAppTC } from "features/auth/model/auth-reducer";
 import { useEffect } from "react";
+import { initializeAppTC } from 'features/auth/model/authThunks';
 
 
 function App() {

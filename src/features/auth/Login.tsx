@@ -3,8 +3,8 @@ import { getTheme } from "common/theme/getTheme"
 import { useAppDispatch, useAppSelector } from "modules/store"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import s from './Login.module.css'
-import { loginTC } from "./model/auth-reducer"
 import { Navigate } from "react-router-dom"
+import { loginTC } from "./model/authThunks"
 
 type Inputs = {
     email: string
@@ -39,7 +39,7 @@ export const Login = () => {
         <Grid container justifyContent={'center'} sx={{ marginTop: '15px' }}>
             <Grid item justifyContent={'center'}>
                 <FormControl>
-                    <FormLabel sx={{marginTop: '20px'}}>
+                    <FormLabel sx={{ marginTop: '20px' }}>
                         <p>
                             To login get registered
                             <a
