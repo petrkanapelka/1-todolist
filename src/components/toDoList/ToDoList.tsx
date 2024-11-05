@@ -9,7 +9,7 @@ import { EditableSpan } from 'components/editableSpan';
 import { useAppDispatch, useAppSelector } from 'modules/store';
 import { removeTodolistTC, updateTodolistTC } from './model/todolistsThunks';
 import { addTaskTC, fetchTasksThunkTC, removeTaskTC } from 'components/task/model/tasksThunks';
-import { selectTodolists } from './model/todolistsSlice';
+import { changeToDoListFilter, selectTodolists } from './model/todolistsSlice';
 import { selectTasks } from 'components/task/model/tasksSlice';
 
 
@@ -93,7 +93,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     }, [dispatch, tasks, todoListId])
 
     const onChangeFilterStatus = useCallback((filter: FilterStatusType) => {
-        dispatch(changeToDoListFilterAC(todoListId, filter))
+        dispatch(changeToDoListFilter({ id: todoListId, filter }))
     }, [dispatch, todoListId])
 
     const onChooseAllTasks = useCallback(() => {
@@ -187,7 +187,4 @@ const UpdateButton = memo(({ ...props }: ButtonProps) => {
         {...props}
     ></Button>
 })
-function changeToDoListFilterAC(todoListId: string, filter: string): any {
-    throw new Error('Function not implemented.');
-}
 

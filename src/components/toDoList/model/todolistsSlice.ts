@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DomainTodolist, Todolist } from "../api";
+import { DomainTodolist, FilterStatusType, Todolist } from "../api";
 import { RequestStatus } from "features/app/appSlice";
 
 export const todolistsSlice = createSlice({
@@ -27,6 +27,12 @@ export const todolistsSlice = createSlice({
         todolist.entityStatus = action.payload.entityStatus;
       }
     }),
+    changeToDoListFilter:create.reducer<{ id: string; filter: FilterStatusType }>((state, action) => {
+      const todolist = state.find((tl) => tl.id === action.payload.id);
+      if (todolist) {
+        todolist.filter = action.payload.filter;
+      }
+    }),
     setTodolists: create.reducer<{ todolists: Todolist[] }>((state, action) => {
       return action.payload.todolists.map((tl) => ({ ...tl, filter: "all", entityStatus: "idle" }));
     }),
@@ -46,6 +52,7 @@ export const {
   changeTodolistTitle,
   setTodolists,
   clearTodolists,
+  changeToDoListFilter
 } = todolistsSlice.actions;
 
 export const toDoListsReducer = todolistsSlice.reducer;
