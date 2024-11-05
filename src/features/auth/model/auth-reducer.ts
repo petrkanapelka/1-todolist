@@ -73,12 +73,14 @@ export const logoutTC = () => (dispatch: Dispatch) => {
 
 export const initializeAppTC = () => (dispatch: Dispatch) => {
   dispatch(setAppStatusAC("loading"));
+  dispatch(setIsInitializedAC(false));
   authApi
     .me()
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
         dispatch(setAppStatusAC("succeeded"));
         dispatch(setIsLoggedInAC(true));
+        dispatch(setIsInitializedAC(true));
       } else {
         handleServerAppError(res.data, dispatch);
       }
