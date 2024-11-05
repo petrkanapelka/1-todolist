@@ -44,7 +44,11 @@ export const tasksSlice = createSlice({
         delete state[action.payload.id];
       });
   },
+  selectors: {
+    selectTasks: (state) => state,
+  },
 });
 
 export const { setTasks, removeTask, addTask, updateTask, clearTasks } = tasksSlice.actions;
 export const tasksReducer = tasksSlice.reducer;
+export const { selectTasks } = tasksSlice.selectors;
