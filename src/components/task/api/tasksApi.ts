@@ -49,7 +49,18 @@ export const tasksApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Tasks"],
     }),
+    updateTask: build.mutation<ApiResponse<{ item: DomainTask }>, { model: UpdateTaskDomainModel; task: DomainTask }>({
+      query: ({ model, task }) => {
+        debugger;
+        return {
+          url: `todo-lists/${task.todoListId}/tasks/${task.id}`,
+          method: "PUT",
+          body: model,
+        };
+      },
+      invalidatesTags: ["Tasks"],
+    }),
   }),
 });
 
-export const { useGetTasksQuery, useAddTaskMutation, useDeleteTaskMutation } = tasksApi;
+export const { useGetTasksQuery, useAddTaskMutation, useDeleteTaskMutation, useUpdateTaskMutation } = tasksApi;
