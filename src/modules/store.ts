@@ -7,20 +7,20 @@ import { authReducer, authSlice } from "features/auth/model/authSlice";
 import { appReducer, appSlice } from "features/app/appSlice";
 import { toDoListsReducer, todolistsSlice } from "components/toDoList/model/todolistsSlice";
 import { tasksReducer, tasksSlice } from "components/task/model/tasksSlice";
-import { todolistsApi } from "components/toDoList/api";
 import { setupListeners } from "@reduxjs/toolkit/query";
+import { baseApi } from "app/baseApi";
 
 const rootReducer = combineReducers({
   [tasksSlice.name]: tasksReducer,
   [todolistsSlice.name]: toDoListsReducer,
   [appSlice.name]: appReducer,
   [authSlice.name]: authReducer,
-  [todolistsApi.reducerPath]: todolistsApi.reducer,
+  [baseApi.reducerPath]: baseApi.reducer,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(todolistsApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
 });
 
 setupListeners(store.dispatch);
