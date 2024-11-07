@@ -1,15 +1,14 @@
 import { ResultCode } from "common/enums/enums";
 import { handleServerAppError } from "common/utils/handleServerAppError";
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError";
-import { authApi } from "../api/authApi";
-import { LoginArgs } from "../api/authApi.types";
-import { setIsInitialized, setIsLoggedIn } from "./authSlice";
 import { Dispatch } from "redux";
-import { setAppStatus } from "features/app/appSlice";
+import { setAppStatus, setIsLoggedIn } from "features/app/appSlice";
+import { LoginArgs } from "../api/authApi.types";
+import { _authApi } from "../api/authApi";
 
 export const loginTC = (data: LoginArgs) => (dispatch: Dispatch) => {
   dispatch(setAppStatus({ status: "loading" }));
-  authApi
+  _authApi
     .login(data)
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
@@ -27,7 +26,7 @@ export const loginTC = (data: LoginArgs) => (dispatch: Dispatch) => {
 
 export const logoutTC = () => (dispatch: Dispatch) => {
   dispatch(setAppStatus({ status: "loading" }));
-  authApi
+  _authApi
     .logout()
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
@@ -45,8 +44,8 @@ export const logoutTC = () => (dispatch: Dispatch) => {
 
 export const initializeAppTC = () => (dispatch: Dispatch) => {
   dispatch(setAppStatus({ status: "loading" }));
-  dispatch(setIsInitialized({ isInitialized: false }));
-  authApi
+  // dispatch(setIsInitialized({ isInitialized: false }));
+  _authApi
     .me()
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
@@ -60,6 +59,6 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
       handleServerNetworkError(error, dispatch);
     })
     .finally(() => {
-      dispatch(setIsInitialized({ isInitialized: true }));
+      // dispatch(setIsInitialized({ isInitialized: true }));
     });
 };
