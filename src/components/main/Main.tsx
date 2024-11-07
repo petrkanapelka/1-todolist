@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
 import { Navigate } from 'react-router-dom';
 import { Path } from 'common/router/router';
-// import { selectIsLoggedIn } from 'features/auth/model/authSlice';
 import { useGetTodolistsQuery, useAddTodolistMutation } from 'components/toDoList/api/todolistsApi';
 import { selectIsLoggedIn } from 'features/app/appSlice';
 
