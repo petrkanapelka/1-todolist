@@ -5,8 +5,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import s from './Login.module.css'
 import { Navigate } from "react-router-dom"
 import { loginTC } from "./model/authThunks"
-import { selectThemeMode } from "features/app/appSlice"
-import { selectIsLoggedIn } from "./model/authSlice"
+import { selectIsLoggedIn, selectThemeMode } from "features/app/appSlice"
 
 type Inputs = {
     email: string
