@@ -5,14 +5,15 @@ import { changeTodolistEntityStatus } from "components/toDoList/model/todolistsS
 import { setAppStatus } from "features/app/appSlice";
 import { AppRootStateType } from "modules/store";
 import { Dispatch } from "redux";
-import { UpdateTaskDomainModel } from "../api";
-import { tasksApi } from "../api/tasksApi";
-import { addTask, removeTask, setTasks, updateTask } from "./tasksSlice";
+import { _tasksApi } from "../api/tasksApi";
+import { UpdateTaskDomainModel } from "../api/tasksApi.types";
+import { setTasks, removeTask, addTask, updateTask } from "./tasksSlice";
+
 
 export const fetchTasksThunkTC = (todoListId: string) => {
   return (dispatch: Dispatch) => {
     dispatch(setAppStatus({ status: "loading" }));
-    tasksApi
+    _tasksApi
       .getTasks(todoListId)
       .then((res) => {
         dispatch(setTasks({ todoListId, tasks: res.data.items }));
@@ -29,7 +30,7 @@ export const removeTaskTC = (taskId: string, todoListId: string) => {
     dispatch(setAppStatus({ status: "loading" }));
     dispatch(changeTodolistEntityStatus({ id: todoListId, entityStatus: "loading" }));
 
-    tasksApi
+    _tasksApi
       .deleteTask({ todoListId, taskId })
       .then((res) => {
         if (res.data.resultCode === ResultCode.Success) {
@@ -50,7 +51,7 @@ export const addTaskTC = (arg: { title: string; todoListId: string }) => (dispat
   dispatch(setAppStatus({ status: "loading" }));
   dispatch(changeTodolistEntityStatus({ id: arg.todoListId, entityStatus: "loading" }));
 
-  tasksApi
+  _tasksApi
     .createTask(arg)
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
@@ -87,7 +88,7 @@ export const updateTaskTC = (arg: { taskId: string; todoListId: string; title: s
         startDate: task.startDate,
       };
 
-      tasksApi
+      _tasksApi
         .updateTask({ model, task })
         .then((res) => {
           if (res.data.resultCode === ResultCode.Success) {
