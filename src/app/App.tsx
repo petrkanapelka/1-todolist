@@ -7,21 +7,27 @@ import { getTheme } from "common/theme/getTheme";
 import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar";
 import { Outlet } from "react-router-dom";
 import Header from "components/header/Header";
-import { useEffect } from "react";
-import { initializeAppTC } from 'features/auth/model/authThunks';
-import { selectThemeMode } from 'features/app/appSlice';
-import { selectIsInitialized } from 'features/auth/model/authSlice';
+import { useEffect, useState } from "react";
+import { selectThemeMode, setIsLoggedIn } from 'features/app/appSlice';
+import { useMeQuery } from 'features/auth/api/authApi';
+import { ResultCode } from 'common/enums/enums';
 
 
 function App() {
+    const [isInitialized, setIsInitialized] = useState(false)
+    const { data, isLoading } = useMeQuery()
     const themeMode = useAppSelector(selectThemeMode)
-    const isInitialized = useAppSelector(selectIsInitialized)
     const theme = getTheme(themeMode)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(initializeAppTC())
-    }, [dispatch])
+        if (!isLoading) {
+            setIsInitialized(true)
+            if (data?.resultCode === ResultCode.Success) {
+                dispatch(setIsLoggedIn({ isLoggedIn: true }))
+            }
+        }
+    }, [data?.resultCode, dispatch, isLoading])
 
 
     return (
