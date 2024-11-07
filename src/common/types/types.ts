@@ -3,13 +3,6 @@ export type FieldError = {
     field: string;
 };
 
-// export type BaseResponse<D> = {
-//     resultCode: number;
-//     messages: string[];
-//     fieldsErrors: FieldError[];
-//     data: D;
-// };
-
 export type ApiResponse<T = {}> = {
     data: T;
     messages: string[];
