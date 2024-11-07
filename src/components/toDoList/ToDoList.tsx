@@ -7,10 +7,10 @@ import { FilterStatusType } from './api/todolistsApi.types';
 import { Task } from 'components/task/Task';
 import { EditableSpan } from 'components/editableSpan';
 import { useAppDispatch, useAppSelector } from 'modules/store';
-import { removeTodolistTC, updateTodolistTC } from './model/todolistsThunks';
 import { addTaskTC, fetchTasksThunkTC, removeTaskTC } from 'components/task/model/tasksThunks';
 import { changeToDoListFilter, selectTodolists } from './model/todolistsSlice';
 import { selectTasks } from 'components/task/model/tasksSlice';
+import { useRemoveTodolistMutation, useUpdateTodolistTitleMutation } from './api/todolistsApi';
 
 
 export type ToDoListPropsType = {
@@ -31,6 +31,8 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     const todolists = useAppSelector(selectTodolists)
     const filter = todolists.find(tl => tl.id === todoListId)?.filter || 'all';
     const entityStatus = todolists.find(tl => tl.id === todoListId)?.entityStatus;
+    const [removeTodolist] = useRemoveTodolistMutation()
+    const [updateTodolistTitle] = useUpdateTodolistTitleMutation()
 
     const dispatch = useAppDispatch()
 
@@ -78,13 +80,13 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     }, [dispatch, todoListId]))
 
     const onRemoveTodolist = () => {
-        dispatch(removeTodolistTC(todoListId))
+        removeTodolist(todoListId)
     }
 
 
     const onUpdateTodolist = useCallback((title: string) => {
-        dispatch(updateTodolistTC(title, todoListId))
-    }, [dispatch, todoListId])
+        updateTodolistTitle({id: todoListId, title})
+    }, [todoListId, updateTodolistTitle])
 
     const onRemoveAllTasks = useCallback(() => {
         tasks[todoListId].forEach((t) => {
