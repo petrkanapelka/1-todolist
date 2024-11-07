@@ -3,9 +3,11 @@ import { Box, AppBar, Toolbar, Typography, FormGroup, FormControlLabel, Switch, 
 import { MenuButton } from "components/menuButton/MenuButton";
 import { ChangeEvent } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
-import { selectIsLoggedIn, selectStatus, selectThemeMode, setAppTheme } from 'features/app/appSlice';
+import { selectIsLoggedIn, selectStatus, selectThemeMode, setAppTheme, setIsLoggedIn } from 'features/app/appSlice';
 import { useLogoutMutation } from 'features/auth/api/authApi';
-import { logoutTC } from 'features/auth/model/authThunks';
+import { ResultCode } from 'common/enums/enums';
+import { clearTasks } from 'components/task/model/tasksSlice';
+import { clearTodolists } from 'components/toDoList/model/todolistsSlice';
 
 
 function Header() {
@@ -21,8 +23,14 @@ function Header() {
     }
 
     const onLogOut = () => {
-        dispatch(logoutTC())
-        // logout()
+        logout().then(res => {
+            if (res.data?.resultCode === ResultCode.Success) {
+                dispatch(setIsLoggedIn({ isLoggedIn: false }))
+                localStorage.removeItem('sn-token')
+                dispatch(clearTasks())
+                dispatch(clearTodolists())
+            }
+        })
     }
 
     return (
