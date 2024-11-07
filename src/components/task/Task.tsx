@@ -9,10 +9,12 @@ import { TaskStatus } from "common/enums/enums";
 import { RequestStatus } from "features/app/appSlice";
 import { removeTaskTC, updateTaskTC } from "./model/tasksThunks";
 import { selectTasks } from "./model/tasksSlice";
-import { useDeleteTaskMutation } from "./api/tasksApi";
+import { useDeleteTaskMutation, useUpdateTaskMutation } from "./api/tasksApi";
+import { DomainTask, UpdateTaskDomainModel } from "./api";
 
 
 export type TaskPropsType = {
+    tasks: DomainTask[]
     title: string
     taskId: string
     isDone: boolean
@@ -29,32 +31,51 @@ const taskStyle = {
 }
 
 export const Task = memo((props: TaskPropsType) => {
-    const { taskId, todoListId, isDone, title, entityStatus } = props
-    const tasks = useAppSelector(selectTasks)
+    const { taskId, todoListId, isDone, title, entityStatus, tasks } = props
+    // const tasks = useAppSelector(selectTasks)
     const dispatch = useAppDispatch()
     const [removeTask] = useDeleteTaskMutation()
+    const [updateTask] = useUpdateTaskMutation()
 
 
     const onRemoveTask = () => {
-        removeTask({taskId, todoListId})
+        removeTask({ taskId, todoListId })
     }
 
     const onChangeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const task = tasks[todoListId].find(task => {
+        const task = tasks.find(task => {
             return task.id === taskId;
         });
         if (task) {
             const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
-            dispatch(updateTaskTC({ taskId: task.id, todoListId: task.todoListId, title: task.title, status }))
+            const model: UpdateTaskDomainModel = {
+                status,
+                title: task.title,
+                deadline: task.deadline,
+                description: task.description,
+                priority: task.priority,
+                startDate: task.startDate,
+            };
+            updateTask({ task, model })
         }
-    }, [dispatch, taskId, tasks, todoListId])
+    }, [taskId, tasks, updateTask])
 
     const onChangeTaskTitle = useCallback((title: string) => {
-        const task = tasks[todoListId].find(task => task.id === taskId)
+        const task = tasks.find(task => {
+            return task.id === taskId;
+        });
         if (task) {
-            dispatch(updateTaskTC({ taskId, todoListId, status: task.status, title }))
+            const model: UpdateTaskDomainModel = {
+                title,
+                status: task.status,
+                deadline: task.deadline,
+                description: task.description,
+                priority: task.priority,
+                startDate: task.startDate,
+            };
+            updateTask({ task, model })
         }
-    }, [dispatch, taskId, tasks, todoListId])
+    }, [taskId, tasks, updateTask])
 
     return (
         <ListItem key={taskId} className="task-item" style={taskStyle} >
