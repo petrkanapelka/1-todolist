@@ -6,29 +6,30 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "modules/store";
 import { Navigate } from 'react-router-dom';
 import { Path } from 'common/router/router';
-import { addTodolistTC, fetchTodolistsThunk } from 'components/toDoList/model/todolistsThunks';
 import { selectIsLoggedIn } from 'features/auth/model/authSlice';
-import { selectTodolists } from 'components/toDoList/model/todolistsSlice';
+import { useGetTodolistsQuery, useAddTodolistMutation } from 'components/toDoList/api/todolistsApi';
 
 
 function Main() {
     const dispatch = useAppDispatch();
-    let todolists = useAppSelector(selectTodolists)
+    const { data: todolists } = useGetTodolistsQuery()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [addTodolist, { data, error, isLoading }] = useAddTodolistMutation();
     const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
 
     useEffect(() => {
-        dispatch(fetchTodolistsThunk)
     }, [dispatch])
 
     const onCreateTodolist = (title: string) => {
-        dispatch(addTodolistTC(title))
+        addTodolist(title)
     }
 
     if (!isLoggedIn) {
         return <Navigate to={Path.Login} />
     }
-    const mappedToDoLists = todolists.map(t => {
+
+    const mappedToDoLists = todolists ? todolists.map(t => {
         return (
             <Grid item key={t.id}>
                 <Paper className="paper" elevation={3} sx={{ borderRadius: '10px' }}>
@@ -39,7 +40,7 @@ function Main() {
                 </Paper>
             </Grid>
         );
-    });
+    }) : todolists
 
     return (
         <>
