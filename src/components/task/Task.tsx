@@ -9,6 +9,7 @@ import { TaskStatus } from "common/enums/enums";
 import { RequestStatus } from "features/app/appSlice";
 import { removeTaskTC, updateTaskTC } from "./model/tasksThunks";
 import { selectTasks } from "./model/tasksSlice";
+import { useDeleteTaskMutation } from "./api/tasksApi";
 
 
 export type TaskPropsType = {
@@ -31,9 +32,11 @@ export const Task = memo((props: TaskPropsType) => {
     const { taskId, todoListId, isDone, title, entityStatus } = props
     const tasks = useAppSelector(selectTasks)
     const dispatch = useAppDispatch()
+    const [removeTask] = useDeleteTaskMutation()
+
 
     const onRemoveTask = () => {
-        dispatch(removeTaskTC(taskId, todoListId))
+        removeTask({taskId, todoListId})
     }
 
     const onChangeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {

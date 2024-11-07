@@ -2,8 +2,7 @@ import '../../app/App.css';
 import { Grid, Paper, Container } from "@mui/material";
 import { AddItemForm } from "components/addItemForm/AddItemForm";
 import { ToDoList } from "components/toDoList/ToDoList";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "modules/store";
+import {  useAppSelector } from "modules/store";
 import { Navigate } from 'react-router-dom';
 import { Path } from 'common/router/router';
 import { useGetTodolistsQuery, useAddTodolistMutation } from 'components/toDoList/api/todolistsApi';
@@ -11,15 +10,10 @@ import { selectIsLoggedIn } from 'features/app/appSlice';
 
 
 function Main() {
-    const dispatch = useAppDispatch();
     const { data: todolists } = useGetTodolistsQuery()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [addTodolist, { data, error, isLoading }] = useAddTodolistMutation();
     const isLoggedIn = useAppSelector(selectIsLoggedIn)
-
-
-    useEffect(() => {
-    }, [dispatch])
 
     const onCreateTodolist = (title: string) => {
         addTodolist(title)
