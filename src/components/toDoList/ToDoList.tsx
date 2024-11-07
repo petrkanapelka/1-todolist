@@ -60,6 +60,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
                     taskId={task.id}
                     todoListId={todoListId}
                     entityStatus={entityStatus!}
+                    tasks={filteredTasks}
                 />
             })
         ) : (
