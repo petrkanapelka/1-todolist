@@ -2,16 +2,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, List, ButtonProps, Button } from '@mui/material';
 import { TaskStatus } from 'common/enums/enums';
 import { AddItemForm } from 'components/addItemForm/AddItemForm';
-import { ReactNode, FC, memo, useMemo, useCallback, useEffect } from 'react';
+import { ReactNode, FC, memo, useMemo, useCallback } from 'react';
 import { FilterStatusType } from './api/todolistsApi.types';
 import { Task } from 'components/task/Task';
 import { EditableSpan } from 'components/editableSpan';
 import { useAppDispatch, useAppSelector } from 'modules/store';
-import { addTaskTC, fetchTasksThunkTC, removeTaskTC } from 'components/task/model/tasksThunks';
+import { addTaskTC, removeTaskTC } from 'components/task/model/tasksThunks';
 import { changeToDoListFilter, selectTodolists } from './model/todolistsSlice';
-import { selectTasks } from 'components/task/model/tasksSlice';
 import { useRemoveTodolistMutation, useUpdateTodolistTitleMutation } from './api/todolistsApi';
-
+import { useGetTasksQuery } from 'components/task/api/tasksApi';
 
 export type ToDoListPropsType = {
     todoListId: string
@@ -19,15 +18,13 @@ export type ToDoListPropsType = {
     children?: ReactNode
 };
 
-
-
 export const ToDoList: FC<ToDoListPropsType> = memo(({
     todoListId,
     title,
     children
 }: ToDoListPropsType) => {
-
-    const tasks = useAppSelector(selectTasks)
+    const { data } = useGetTasksQuery({ todoListId })
+    const tasks = data?.items
     const todolists = useAppSelector(selectTodolists)
     const filter = todolists.find(tl => tl.id === todoListId)?.filter || 'all';
     const entityStatus = todolists.find(tl => tl.id === todoListId)?.entityStatus;
@@ -36,29 +33,23 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        dispatch(fetchTasksThunkTC(todoListId))
-    }, [dispatch, todoListId])
-
-
-
     const filteredTasks = useMemo(() => {
-        let tasksForTodolist = tasks[todoListId];
+        let tasksForTodolist = tasks || [];
 
         switch (filter) {
             case 'active':
-                return tasksForTodolist = tasks[todoListId].filter((task) => task.status === TaskStatus.New);
+                return tasksForTodolist = tasksForTodolist?.filter((task) => task.status === TaskStatus.New);
             case 'completed':
-                return tasksForTodolist = tasks[todoListId].filter((task) => task.status === TaskStatus.Completed);
+                return tasksForTodolist = tasksForTodolist?.filter((task) => task.status === TaskStatus.Completed);
             case 'three-tasks':
-                return tasksForTodolist = tasks[todoListId].filter((task, indx) => indx <= 2);;
+                return tasksForTodolist = tasksForTodolist?.filter((task, indx) => indx <= 2);;
             default:
                 return tasksForTodolist;
         }
-    }, [filter, todoListId, tasks])
+    }, [filter, tasks])
 
     const taskElements: Array<JSX.Element> | JSX.Element =
-        tasks[todoListId] && tasks[todoListId].length !== 0 ? (
+        tasks && tasks.length !== 0 ? (
             filteredTasks.map((task) => {
                 return <Task
                     key={task.id}
@@ -85,11 +76,11 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
 
     const onUpdateTodolist = useCallback((title: string) => {
-        updateTodolistTitle({id: todoListId, title})
+        updateTodolistTitle({ id: todoListId, title })
     }, [todoListId, updateTodolistTitle])
 
     const onRemoveAllTasks = useCallback(() => {
-        tasks[todoListId].forEach((t) => {
+        tasks?.forEach((t) => {
             dispatch(removeTaskTC(t.id, todoListId))
         })
     }, [dispatch, tasks, todoListId])
