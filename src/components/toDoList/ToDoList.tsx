@@ -2,14 +2,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, List, ButtonProps, Button } from '@mui/material';
 import { TaskStatus } from 'common/enums/enums';
 import { AddItemForm } from 'components/addItemForm/AddItemForm';
-import { ReactNode, FC, memo, useCallback, useState } from 'react';
+import { ReactNode, FC, memo, useCallback } from 'react';
 import { DomainTodolist, FilterStatusType } from './api/todolistsApi.types';
 import { Task } from 'components/task/Task';
 import { EditableSpan } from 'components/editableSpan';
 import { useAppDispatch } from 'modules/store';
-import { changeToDoListFilter } from './model/todolistsSlice';
 import { useRemoveTodolistMutation, useUpdateTodolistTitleMutation } from './api/todolistsApi';
 import { useAddTaskMutation, useDeleteTaskMutation, useGetTasksQuery } from 'components/task/api/tasksApi';
+import { changeFilterTasksHandler } from './model/FilterTasksButtons';
 
 export type ToDoListPropsType = {
     todolist: DomainTodolist
@@ -26,7 +26,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 }: ToDoListPropsType) => {
     const { data } = useGetTasksQuery({ todoListId })
     const tasks = data?.items
-    let [filter, setFilter] = useState(todolist.filter)
+    let filter = todolist.filter
     const entityStatus = todolist.entityStatus;
     const [removeTodolist] = useRemoveTodolistMutation()
     const [updateTodolistTitle] = useUpdateTodolistTitleMutation()
@@ -90,8 +90,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     }, [removeTask, tasks, todoListId])
 
     const onChangeFilterStatus = useCallback((filter: FilterStatusType) => {
-        dispatch(changeToDoListFilter({ id: todoListId, filter }))
-        setFilter(filter)
+        dispatch(changeFilterTasksHandler(filter, todoListId));
     }, [dispatch, todoListId])
 
     const onChooseAllTasks = useCallback(() => {

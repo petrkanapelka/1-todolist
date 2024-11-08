@@ -30,7 +30,6 @@ export const todolistsSlice = createSlice({
     changeToDoListFilter: create.reducer<{ id: string; filter: FilterStatusType }>((state, action) => {
       const todolist = state.find((tl) => tl.id === action.payload.id);
       if (todolist) {
-        debugger
         todolist.filter = action.payload.filter;
       }
     }),
