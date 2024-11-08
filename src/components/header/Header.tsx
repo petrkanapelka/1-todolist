@@ -8,6 +8,7 @@ import { useLogoutMutation } from 'features/auth/api/authApi';
 import { ResultCode } from 'common/enums/enums';
 import { clearTasks } from 'components/task/model/tasksSlice';
 import { clearTodolists } from 'components/toDoList/model/todolistsSlice';
+import { baseApi } from 'app/baseApi';
 
 
 function Header() {
@@ -31,6 +32,9 @@ function Header() {
                 dispatch(clearTodolists())
             }
         })
+            .then(() => {
+                dispatch(baseApi.util.invalidateTags(['Tasks', 'Todolist']))
+            })
     }
 
     return (

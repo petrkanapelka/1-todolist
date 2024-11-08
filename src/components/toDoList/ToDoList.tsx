@@ -7,9 +7,10 @@ import { DomainTodolist, FilterStatusType } from './api/todolistsApi.types';
 import { Task } from 'components/task/Task';
 import { EditableSpan } from 'components/editableSpan';
 import { useAppDispatch } from 'modules/store';
-import { useRemoveTodolistMutation, useUpdateTodolistTitleMutation } from './api/todolistsApi';
+import { todolistsApi, useRemoveTodolistMutation, useUpdateTodolistTitleMutation } from './api/todolistsApi';
 import { useAddTaskMutation, useDeleteTaskMutation, useGetTasksQuery } from 'components/task/api/tasksApi';
 import { changeFilterTasksHandler } from './model/FilterTasksButtons';
+import { RequestStatus } from 'features/app/appSlice';
 
 export type ToDoListPropsType = {
     todolist: DomainTodolist
@@ -74,8 +75,24 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
         addTask({ title, todoListId })
     }, [addTask, todoListId]))
 
+    const updateQueryData = (status: RequestStatus) => {
+        dispatch(
+            todolistsApi.util.updateQueryData('getTodolists', undefined, state => {
+                const index = state.findIndex(tl => tl.id === todoListId)
+                if (index !== -1) {
+                    state[index].entityStatus = status
+                }
+            })
+        )
+    }
+
     const onRemoveTodolist = () => {
+        updateQueryData('loading')
         removeTodolist(todoListId)
+            .unwrap()
+            .catch(() => {
+                updateQueryData('idle')
+            })
     }
 
 
