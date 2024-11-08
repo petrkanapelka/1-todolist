@@ -8,6 +8,7 @@ import { TaskStatus } from "common/enums/enums";
 import { RequestStatus } from "features/app/appSlice";
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "./api/tasksApi";
 import { DomainTask, UpdateTaskDomainModel } from "./api";
+import { TasksSkeleton } from "components/main/ui/skeletons/TasksSkeleton/TasksSkeleton";
 
 
 export type TaskPropsType = {
@@ -17,6 +18,7 @@ export type TaskPropsType = {
     isDone: boolean
     todoListId: string
     entityStatus: RequestStatus
+    isLoading: boolean
 };
 
 const taskStyle = {
@@ -28,7 +30,7 @@ const taskStyle = {
 }
 
 export const Task = memo((props: TaskPropsType) => {
-    const { taskId, todoListId, isDone, title, entityStatus, tasks } = props
+    const { taskId, todoListId, isDone, title, entityStatus, tasks, isLoading } = props
     const [removeTask] = useDeleteTaskMutation()
     const [updateTask] = useUpdateTaskMutation()
 
@@ -71,6 +73,10 @@ export const Task = memo((props: TaskPropsType) => {
             updateTask({ task, model })
         }
     }, [taskId, tasks, updateTask])
+
+    if (isLoading) {
+        return <TasksSkeleton />
+    }
 
     return (
         <ListItem key={taskId} className="task-item" style={taskStyle} >
