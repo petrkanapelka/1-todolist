@@ -4,11 +4,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
 import { EditableSpan } from "components/editableSpan";
-import { useAppDispatch, useAppSelector } from "modules/store";
 import { TaskStatus } from "common/enums/enums";
 import { RequestStatus } from "features/app/appSlice";
-import { removeTaskTC, updateTaskTC } from "./model/tasksThunks";
-import { selectTasks } from "./model/tasksSlice";
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "./api/tasksApi";
 import { DomainTask, UpdateTaskDomainModel } from "./api";
 
@@ -32,8 +29,6 @@ const taskStyle = {
 
 export const Task = memo((props: TaskPropsType) => {
     const { taskId, todoListId, isDone, title, entityStatus, tasks } = props
-    // const tasks = useAppSelector(selectTasks)
-    const dispatch = useAppDispatch()
     const [removeTask] = useDeleteTaskMutation()
     const [updateTask] = useUpdateTaskMutation()
 
