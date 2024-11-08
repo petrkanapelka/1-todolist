@@ -2,7 +2,7 @@ import '../../app/App.css';
 import { Grid, Paper, Container } from "@mui/material";
 import { AddItemForm } from "components/addItemForm/AddItemForm";
 import { ToDoList } from "components/toDoList/ToDoList";
-import {  useAppSelector } from "modules/store";
+import { useAppSelector } from "modules/store";
 import { Navigate } from 'react-router-dom';
 import { Path } from 'common/router/router';
 import { useGetTodolistsQuery, useAddTodolistMutation } from 'components/toDoList/api/todolistsApi';
@@ -30,6 +30,7 @@ function Main() {
                     <ToDoList
                         todoListId={t.id}
                         title={t.title}
+                        todolist={t}
                     />
                 </Paper>
             </Grid>
