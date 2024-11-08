@@ -8,7 +8,7 @@ export const todolistsSlice = createSlice({
   reducers: (create) => ({
     removeTodolist: create.reducer<{ id: string }>((state, action) => {
       const index = state.findIndex((tl) => tl.id === action.payload.id);
-      if (index !== 1) {
+      if (index !== -1) {
         state.splice(index, 1);
       }
     }),
@@ -27,9 +27,10 @@ export const todolistsSlice = createSlice({
         todolist.entityStatus = action.payload.entityStatus;
       }
     }),
-    changeToDoListFilter:create.reducer<{ id: string; filter: FilterStatusType }>((state, action) => {
+    changeToDoListFilter: create.reducer<{ id: string; filter: FilterStatusType }>((state, action) => {
       const todolist = state.find((tl) => tl.id === action.payload.id);
       if (todolist) {
+        debugger
         todolist.filter = action.payload.filter;
       }
     }),
@@ -52,7 +53,7 @@ export const {
   changeTodolistTitle,
   setTodolists,
   clearTodolists,
-  changeToDoListFilter
+  changeToDoListFilter,
 } = todolistsSlice.actions;
 
 export const toDoListsReducer = todolistsSlice.reducer;
