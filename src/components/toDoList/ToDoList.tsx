@@ -10,7 +10,7 @@ import { useAppDispatch } from 'modules/store';
 import { todolistsApi, useRemoveTodolistMutation, useUpdateTodolistTitleMutation } from './api/todolistsApi';
 import { useAddTaskMutation, useDeleteTaskMutation, useGetTasksQuery } from 'components/task/api/tasksApi';
 import { changeFilterTasksHandler } from './model/FilterTasksButtons';
-import { RequestStatus, setAppError } from 'features/app/appSlice';
+import { RequestStatus } from 'features/app/appSlice';
 
 export type ToDoListPropsType = {
     todolist: DomainTodolist
@@ -19,20 +19,13 @@ export type ToDoListPropsType = {
     children?: ReactNode
 };
 
-type ErrorData = {
-    status: number
-    data: {
-        message: string
-    }
-}
-
 export const ToDoList: FC<ToDoListPropsType> = memo(({
     todolist,
     todoListId,
     title,
     children
 }: ToDoListPropsType) => {
-    const { data, isLoading, error } = useGetTasksQuery({ todoListId })
+    const { data, isLoading } = useGetTasksQuery({ todoListId })
     const tasks = data?.items
     let filter = todolist.filter
     const entityStatus = todolist.entityStatus;
@@ -43,14 +36,6 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
     const dispatch = useAppDispatch()
 
-    // if (error) {
-    //     let errMsg = 'Some error occurred';
-    //     if (error && 'data' in error && 'message' in (error.data as { message?: string })) {
-    //         errMsg = (error.data as { message: string }).message;
-    //     }
-    //     dispatch(setAppError({ error: errMsg }));
-    // }
-    
     const filteredTasks = (() => {
         let tasksForTodolist = tasks || [];
         switch (filter) {
