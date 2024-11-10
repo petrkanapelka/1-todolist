@@ -1,0 +1,19 @@
+.pagination {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination * {
+    flex-wrap: nowrap !important;
+}
+
+.totalCount {
+    display: flex;
+    justify-content: right;
+    margin-right: 16px;
+}
+
+.pagination-wrapper {
+    display: flex
+}
