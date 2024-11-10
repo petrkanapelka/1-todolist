@@ -2,15 +2,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, List, ButtonProps, Button } from '@mui/material';
 import { TaskStatus } from 'common/enums/enums';
 import { AddItemForm } from 'components/addItemForm/AddItemForm';
-import { ReactNode, FC, memo, useCallback } from 'react';
+import { ReactNode, FC, memo, useCallback, useState } from 'react';
 import { DomainTodolist, FilterStatusType } from './api/todolistsApi.types';
 import { Task } from 'components/task/Task';
 import { EditableSpan } from 'components/editableSpan';
 import { useAppDispatch } from 'modules/store';
 import { todolistsApi, useRemoveTodolistMutation, useUpdateTodolistTitleMutation } from './api/todolistsApi';
-import { useAddTaskMutation, useDeleteTaskMutation, useGetTasksQuery } from 'components/task/api/tasksApi';
+import { PAGE_SIZE, useAddTaskMutation, useDeleteTaskMutation, useGetTasksQuery } from 'components/task/api/tasksApi';
 import { changeFilterTasksHandler } from './model/FilterTasksButtons';
 import { RequestStatus } from 'features/app/appSlice';
+import { TasksPagination } from './ui/TasksPagination/TasksPagination';
 
 export type ToDoListPropsType = {
     todolist: DomainTodolist
@@ -25,7 +26,8 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     title,
     children
 }: ToDoListPropsType) => {
-    const { data, isLoading } = useGetTasksQuery({ todoListId })
+    const [page, setPage] = useState(1)
+    const { data, isLoading } = useGetTasksQuery({ todoListId, args: { count: PAGE_SIZE, page } })
     const tasks = data?.items
     let filter = todolist.filter
     const entityStatus = todolist.entityStatus;
@@ -178,6 +180,8 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
             <List className="tasks-list">
                 {taskElements}
             </List>
+
+            <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
 
             <UpdateButton
                 disabled={filteredTasks && filteredTasks.length === 0}
