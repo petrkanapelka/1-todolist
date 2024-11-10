@@ -32,7 +32,7 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     title,
     children
 }: ToDoListPropsType) => {
-    const { data, isLoading, isError, error } = useGetTasksQuery({ todoListId })
+    const { data, isLoading, error } = useGetTasksQuery({ todoListId })
     const tasks = data?.items
     let filter = todolist.filter
     const entityStatus = todolist.entityStatus;
@@ -43,17 +43,14 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
     const dispatch = useAppDispatch()
 
-    if (error) {
-        let errMsg = 'Some error occurred'
-        if ('data' in error) {
-            const errData = error.data as ErrorData
-            if ('message' in errData) {
-                errMsg = errData.message as string
-            }
-        }
-        dispatch(setAppError({ error: errMsg }))
-    }
-
+    // if (error) {
+    //     let errMsg = 'Some error occurred';
+    //     if (error && 'data' in error && 'message' in (error.data as { message?: string })) {
+    //         errMsg = (error.data as { message: string }).message;
+    //     }
+    //     dispatch(setAppError({ error: errMsg }));
+    // }
+    
     const filteredTasks = (() => {
         let tasksForTodolist = tasks || [];
         switch (filter) {
