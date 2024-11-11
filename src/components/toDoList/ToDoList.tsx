@@ -74,9 +74,16 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
 
 
 
-    const onAddNewTask = (useCallback((title: string) => {
+    const onAddNewTask = (title: string) => {
+        updateQueryData('loading')
         addTask({ title, todoListId })
-    }, [addTask, todoListId]))
+            .then(() => {
+                updateQueryData("idle");
+            })
+            .catch(() => {
+                updateQueryData("idle");
+            });
+    }
 
     const updateQueryData = (status: RequestStatus) => {
         dispatch(
@@ -99,15 +106,28 @@ export const ToDoList: FC<ToDoListPropsType> = memo(({
     }
 
 
-    const onUpdateTodolist = useCallback((title: string) => {
+    const onUpdateTodolist = (title: string) => {
+        updateQueryData('loading')
         updateTodolistTitle({ id: todoListId, title })
-    }, [todoListId, updateTodolistTitle])
+            .unwrap()
+            .catch(() => {
+                updateQueryData('idle')
+            })
+    }
 
-    const onRemoveAllTasks = useCallback(() => {
+    const onRemoveAllTasks = () => {
         tasks?.forEach((t) => {
+            updateQueryData('loading')
             removeTask({ taskId: t.id, todoListId })
+                .unwrap()
+                .then(() => {
+                    updateQueryData("idle");
+                })
+                .catch(() => {
+                    updateQueryData("idle");
+                });
         })
-    }, [removeTask, tasks, todoListId])
+    }
 
     const onChangeFilterStatus = useCallback((filter: FilterStatusType) => {
         dispatch(changeFilterTasksHandler(filter, todoListId));
