@@ -25,15 +25,17 @@ function Header() {
 
     const onLogOut = () => {
         logout().then(res => {
-            if (res.data?.resultCode === ResultCode.Success) {
+            if (res.data && res.data.resultCode === ResultCode.Success) {
                 dispatch(setIsLoggedIn({ isLoggedIn: false }))
-                localStorage.removeItem('sn-token')
                 dispatch(clearTasks())
                 dispatch(clearTodolists())
             }
         })
             .then(() => {
                 dispatch(baseApi.util.invalidateTags(['Tasks', 'Todolist']))
+            })
+            .finally(() => {
+                localStorage.removeItem('sn-token')
             })
     }
 
