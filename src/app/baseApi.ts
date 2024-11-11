@@ -9,13 +9,16 @@ export const baseApi = createApi({
       prepareHeaders: (headers) => {
         headers.set("API-KEY", `${process.env.REACT_APP_API_KEY}`);
         headers.set("Authorization", `Bearer ${localStorage.getItem("sn-token")}`);
+        return headers;
       },
     })(args, api, extraOptions);
+
     handleError(api, result);
+
     return result;
   },
   endpoints: () => ({}),
   tagTypes: ["Todolist", "Tasks"],
-  refetchOnFocus: true,
+  refetchOnFocus: false,
   refetchOnReconnect: true,
 });
