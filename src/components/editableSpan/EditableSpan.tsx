@@ -59,6 +59,7 @@ export const EditableSpan = memo((props: EditableSpanType) => {
                 error={!!error || inputValue.length >= 20}
             />
             : <span
+                title="Double-click to edit"
                 onTouchStart={touchHandler}
                 onDoubleClick={activeEditeModeHandler}
                 className={isDone ? 'task-done' : 'task'}>{title}
