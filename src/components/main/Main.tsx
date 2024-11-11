@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom';
 import { Path } from 'common/router/router';
 import { useGetTodolistsQuery, useAddTodolistMutation } from 'components/toDoList/api/todolistsApi';
 import { selectIsLoggedIn } from 'features/app/appSlice';
-import { TodolistSkeleton } from './ui/skeletons/TodolistSkeleton/TodolistSkeleton';
+// import { TodolistSkeleton } from './ui/skeletons/TodolistSkeleton/TodolistSkeleton';
 
 
 function Main() {
@@ -27,17 +27,17 @@ function Main() {
 
 
     const mappedToDoLists = todolists ? todolists.map(t => {
-        if (isLoading) {
-            return (
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '32px' }}>
-                    {Array(3)
-                        .fill(null)
-                        .map((_, id) => (
-                            <TodolistSkeleton key={id} />
-                        ))}
-                </div>
-            )
-        }
+        // if (isLoading) {
+        //     return (
+        //         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '32px' }}>
+        //             {Array(3)
+        //                 .fill(null)
+        //                 .map((_, id) => (
+        //                     <TodolistSkeleton key={id} />
+        //                 ))}
+        //         </div>
+        //     )
+        // }
         return (
             <Grid item key={t.id}>
                 <Paper className="paper" elevation={3} sx={{ borderRadius: '10px' }}>
