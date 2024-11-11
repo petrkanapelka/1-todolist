@@ -1,4 +1,4 @@
-import { ChangeEvent, memo, useCallback } from "react";
+import { ChangeEvent, memo } from "react";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
@@ -9,6 +9,8 @@ import { RequestStatus } from "features/app/appSlice";
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "./api/tasksApi";
 import { DomainTask, UpdateTaskDomainModel } from "./api";
 import { TasksSkeleton } from "components/main/ui/skeletons/TasksSkeleton/TasksSkeleton";
+import { todolistsApi } from "components/toDoList/api";
+import { useAppDispatch } from "modules/store";
 
 
 export type TaskPropsType = {
@@ -33,13 +35,34 @@ export const Task = memo((props: TaskPropsType) => {
     const { taskId, todoListId, isDone, title, entityStatus, tasks, isLoading } = props
     const [removeTask] = useDeleteTaskMutation()
     const [updateTask] = useUpdateTaskMutation()
+    const dispatch = useAppDispatch()
+
+
+    const updateQueryData = (status: RequestStatus) => {
+        dispatch(
+            todolistsApi.util.updateQueryData('getTodolists', undefined, state => {
+                const index = state.findIndex(tl => tl.id === todoListId)
+                if (index !== -1) {
+                    state[index].entityStatus = status
+                }
+            })
+        )
+    }
 
 
     const onRemoveTask = () => {
+        updateQueryData("loading");
         removeTask({ taskId, todoListId })
+            .unwrap()
+            .then(() => {
+                updateQueryData("idle");
+            })
+            .catch(() => {
+                updateQueryData("idle");
+            });
     }
 
-    const onChangeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
         const task = tasks.find(task => {
             return task.id === taskId;
         });
@@ -53,11 +76,18 @@ export const Task = memo((props: TaskPropsType) => {
                 priority: task.priority,
                 startDate: task.startDate,
             };
+            updateQueryData("loading")
             updateTask({ task, model })
+                .then(() => {
+                    updateQueryData("idle");
+                })
+                .catch(() => {
+                    updateQueryData("idle");
+                });
         }
-    }, [taskId, tasks, updateTask])
+    }
 
-    const onChangeTaskTitle = useCallback((title: string) => {
+    const onChangeTaskTitle = (title: string) => {
         const task = tasks.find(task => {
             return task.id === taskId;
         });
@@ -70,9 +100,16 @@ export const Task = memo((props: TaskPropsType) => {
                 priority: task.priority,
                 startDate: task.startDate,
             };
+            updateQueryData("loading")
             updateTask({ task, model })
+                .then(() => {
+                    updateQueryData("idle");
+                })
+                .catch(() => {
+                    updateQueryData("idle");
+                });
         }
-    }, [taskId, tasks, updateTask])
+    }
 
     if (isLoading) {
         return <TasksSkeleton />
