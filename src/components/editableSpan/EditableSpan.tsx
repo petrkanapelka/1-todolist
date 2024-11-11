@@ -54,9 +54,9 @@ export const EditableSpan = memo((props: EditableSpanType) => {
                 onBlur={activeEditeModeHandler}
 
                 type='text'
-                helperText={inputValue.length >= 20 ? 'Enter fewer than 20 characters' : error}
-                className={error || inputValue.length >= 20 ? 'error' : ''}
-                error={!!error || inputValue.length >= 20}
+                helperText={inputValue.length >= 25 ? 'Enter fewer than 25 characters' : error}
+                className={error || inputValue.length >= 25 ? 'error' : ''}
+                error={!!error || inputValue.length >= 25}
             />
             : <span
                 title="Double-click to edit"
