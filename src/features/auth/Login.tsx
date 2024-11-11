@@ -28,14 +28,16 @@ export const Login = () => {
     const onSubmit: SubmitHandler<LoginArgs> = data => {
         login(data)
             .then(res => {
-                if (res.data?.resultCode === ResultCode.Success) {
-                    dispatch(setIsLoggedIn({ isLoggedIn: true }))
-                    localStorage.setItem('sn-token', res.data.data.token)
+                if (res.data && res.data.resultCode === ResultCode.Success) {
+                    dispatch(setIsLoggedIn({ isLoggedIn: true }));
+                    localStorage.setItem('sn-token', res.data.data.token);
                 }
             })
+            .catch(error => console.error("Login error:", error))
             .finally(() => {
-                reset()
-            })
+                reset();
+            });
+
     }
 
     if (isLoggedIn) {
@@ -68,18 +70,33 @@ export const Login = () => {
                     </FormLabel>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <FormGroup>
-                            <TextField label="Email" margin="normal" {...register("email", {
-                                required: "Email is required",
-                                pattern: {
-                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                    message: "Invalid email format"
-                                }
-                            })} />
+                            <TextField
+                                label="Email"
+                                margin="normal"
+                                autoComplete="email"
+                                aria-required="true"
+                                aria-invalid={errors.email ? "true" : "false"}
+                                {...register("email", {
+                                    required: "Email is required",
+                                    pattern: {
+                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                        message: "Invalid email format"
+                                    }
+                                })}
+                            />
                             {errors.email && <span className={s.errorMessage}>{errors.email.message}</span>}
-                            <TextField type="password" label="Password" margin="normal" {...register("password", {
-                                required: "Password is required",
-                                minLength: { value: 4, message: "Minimum length is 4" }
-                            })} />
+                            <TextField
+                                type="password"
+                                label="Password"
+                                margin="normal"
+                                {...register("password", {
+                                    required: "Password is required",
+                                    minLength: { value: 4, message: "Minimum length is 4" }
+                                })}
+                                autoComplete="current-password"
+                                aria-required="true"
+                                aria-invalid={errors.password ? "true" : "false"}
+                            />
                             {errors.password && <span className={s.errorMessage}>{errors.password.message}</span>}
                             <FormControlLabel
                                 label={'Remember me'}
