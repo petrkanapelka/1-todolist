@@ -26,7 +26,11 @@ export const handleError = (
         break;
 
       case 400:
-        error = (result.error.data as { message: string }).message;
+        error = (result.error.data as { message: string })?.message || error;
+        break;
+
+      case 500:
+        error = "Internal Server Error. Please try again later or contact support.";
         break;
 
       default:
@@ -36,8 +40,9 @@ export const handleError = (
     api.dispatch(setAppError({ error }));
   }
 
-  if ((result.data as { resultCode: ResultCode }).resultCode === ResultCode.Error) {
-    const messages = (result.data as { messages: string[] }).messages;
+  const resultData = result.data as { resultCode?: ResultCode; messages?: string[] };
+  if (resultData?.resultCode === ResultCode.Error) {
+    const messages = resultData.messages || [];
     error = messages.length ? messages[0] : error;
     api.dispatch(setAppError({ error }));
   }
